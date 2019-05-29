@@ -1,0 +1,34 @@
+{
+	"name": "compassionate-comments",
+	"version": "0.1.0",
+	"description": "Encourages commenters to re-phrase toxic comments to be kind instead.",
+	"author": "Ian Dunn",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"WordPress comments",
+		"toxic",
+		"moderation",
+		"abuse",
+		"bullying"
+	],
+	"homepage": "https://wordpress.org/plugins/compassionate-comments/",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/iandunn/compassionate-comments.git"
+	},
+	"bugs": {
+		"url": "https://github.com/iandunn/compassionate-comments/issues"
+	},
+	"main": "src/index.js",
+	"dependencies": {},
+	"devDependencies": {
+		"@wordpress/scripts": "^3.1.0"
+	},
+	"scripts": {
+		"start": "wp-scripts start",
+		"build": "wp-scripts build",
+		"lint:css": "wp-scripts lint-style '**/*.css'",
+		"lint:js": "wp-scripts lint-js .",
+		"lint:pkg-json": "wp-scripts lint-pkg-json ."
+	}
+}

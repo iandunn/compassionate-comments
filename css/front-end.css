@@ -1,0 +1,31 @@
+.compassionate-comments.is-loading .components-spinner {
+	display: block;
+	float: none;
+	margin: 0 auto;
+}
+
+
+#compassionate-comments__nudge .components-button {
+	margin-right: 1em;
+}
+
+	#compassionate-comments__nudge a {
+		color: #00A0D2;
+	}
+
+	/* todo wow these buttons are ugly. fix them
+	maybe make send-anyway look like a link
+	borders and box-shadows look bad
+	even front itself does
+	*/
+
+	#compassionate-comments__nudge .components-button.is-primary {
+		background-color: #46B450;
+		border-color: #0b420b;
+	}
+
+	#compassionate-comments__nudge .components-button.is-default {
+		background-color: #F56E28;
+		border-color: #bc8521;
+		color: white;
+	}
