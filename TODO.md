@@ -45,6 +45,7 @@
 * fix any todos left in code
 
 * Improve the design
+	* update screenshot
 * update readme.md
 * update readme.txt
 
@@ -61,12 +62,17 @@
 * add to hackerone top targets
 	* remove from exclusions
 * pin to github profile
+* add release date to readme.txt
 * Release 0.1 into WordPress.org plugin repository
 	* setup svn:ignores for things that are only in the dev
+	* add screenshots and banner assets
+	* delete screenshot from git repo and link to w.org CDN instead
+	* create video similar to QNI, link to both readmes - nice to have, not blocker
 * Post about it on your blog, [WP Tavern comments](https://wptavern.com/googles-new-perspective-project-filters-online-comments-based-on-toxicity), etc
 	* there's also https://wordpress.org/plugins/serious-toxic-comments/, which uses TensorFlow's Toxicity model and blocks rather than gives a chance to rephrase
 	* also https://wordpress.org/plugins/sift-ninja/
 * post fyi on a8c discussion
+
 
 
 ## Future
@@ -99,3 +105,7 @@
 	* How to prevent a malicious person sending fake data to the endpoint to distort the results, though? How do other similar systems handle that?
 
 * Let users filter what level of comments they want to see, kind of like slashdot's 1-5 score
+
+* lower api request timeout to 15 seconds b/c user won't wait 30?
+	* https://stackoverflow.com/questions/46946380/fetch-api-request-timeout
+	* https://davidwalsh.name/fetch-timeout

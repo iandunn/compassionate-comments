@@ -5,6 +5,11 @@
 }
 
 
+#compassionate-comments__nudge {
+	max-width: 525px;
+	/* todo test and tweak */
+}
+
 #compassionate-comments__nudge .components-button {
 	margin-right: 1em;
 }
@@ -17,6 +22,9 @@
 	maybe make send-anyway look like a link
 	borders and box-shadows look bad
 	even front itself does
+	maybe just make the border and text green/orange, instead of the background?
+	or maybe just use much lighter hues of green/orange int he background?
+	or maybe have green background for primary button, but white bg w/ orange border/text for default button?
 	*/
 
 	#compassionate-comments__nudge .components-button.is-primary {

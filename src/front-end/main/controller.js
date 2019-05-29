@@ -52,32 +52,89 @@ export class MainController extends Component {
 			loading       : true,
 			// todo maybe don't need separate var for interfaceOpen? can just assume if loading or isToxic?
 		}, () => {
-			// api request
-				// promoise sets loading/error/reponse
+			const { sensitivity } = this.props;
 
-			// curl -H "Content-Type: application/json" --data     '{comment: {text: "what kind of idiot name is foo?"},      languages: ["en"],      requestedAttributes: {TOXICITY:{}} }'     https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=props.key
-			// can use requestedAttributes or other params to minimize size of response and increase speed of it?
+			const data = {
+				comment: {
+					text: document.getElementById( 'comment' ).value,
+						// todo probably use wp.util.sanitize() to strip html tags?,
+				},
 
-			// if there's an error, add to console.error()
-				// will happen if someonne writes comment in unsupported language
-				// although maybe not if passing locale
-				// ****** can't assume that blog locale is same as language that comment written in though, so maybe shouldn't pass it at all, and just let them detect it? ******
-				//
+				languages : [ 'en' ],
+				requestedAttributes : { TOXICITY: {} },
 
+				// read through api docs to see what options are best to use here
+				// minimize response to only stuff you'll use for performance
+			};
 
-			const commentText = document.getElementById( 'comment' ).value;
-			// todo probably use wp.util.sanitize() to strip html tags?
+			let newState = {};
 
-			// tmp
-			this.setState( {
-				//error: 'api creds rejected'
-				loading : false,
-				isToxic : true,
-				//isToxic : false,
+			this.apiRequest( data ).then( data => {
+				try {
+					const score = data.attributeScores.TOXICITY.summaryScore.value;
+
+					newState = { isToxic: score > sensitivity };
+				} catch ( Exception ) {
+					newState = { error: Exception };
+				}
+			} ).catch( error => {
+				console.log( 'error' );
+				console.log(error);
+
+				newState = {
+					//error: `${error.data.status} ${error.code}: ${error.message}`
+						// todo seems like `error` is sometimes a string, so ^ will break
+					error
+						// todo what happens when error is an object though?
+						// it changes based on `parse`, so maybe always object unless `parse: false` ?
+				};
+
+				// maybe need to disable `parse` option so can see the full error details?
+					// but wtf, why isn't the request showing up in the network console?
+
+				console.error( `Compassionate Comments error: ${newState.error}` );
+				// todo i18n/sprintf
+				// maybe don't need state.error anymore? or still do for as a flag to know what to render?
+
+				// what happens if someonne writes comment in unsupported language?
+					// although maybe not if passing locale
+					// ****** can't assume that blog locale is same as language that comment written in though, so maybe shouldn't pass it at all, and just let them detect it? ******
+			} ).finally( () => {
+				/*
+				 * If an error occured, then just submit the comment, since that's safer than potentially
+				 * preventing all comments from working.
+				 */
+				const submittingComment = newState.error || ! newState.isToxic;
+
+				newState.loading       = false;
+				newState.interfaceOpen = ! submittingComment;
+
+				this.setState( newState, () => {
+					if ( submittingComment ) {
+						this.submitComment();
+
+						// todo this works, but the UX is pretty bad b/c of all the flashing
+						// modal pops up for split second, then closes, then page refreshes which causes another flash.
+						// maybe shouldn't pop up the modal unless the API request is taking longer than X seconds?
+					}
+				} );
 			} );
-
-			// if promise returns and comment is ok, call submitComment()
 		} );
+	}
+
+	// todo explain convenience wrapper
+	apiRequest( data ) {
+		const { perspectiveApiKey } = this.props;
+		const url                   = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${ perspectiveApiKey }`;
+
+		const requestParams = {
+			method      : 'POST',
+			body        : JSON.stringify( data ),
+			headers     : new Headers( { 'Content-Type': 'application/json' } ),
+			credentials : 'omit',
+		};
+
+		return fetch( url, requestParams ).then( response => response.json() );
 	}
 
 	/**
