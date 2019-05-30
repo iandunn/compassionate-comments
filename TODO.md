@@ -2,52 +2,12 @@
 
 ## MVP
 
-* convert front-end to react
-	need custom webpack config to handle
-
-* Integrate with [Perspective API](https://www.perspectiveapi.com/) to get real analysis
-	or toxicity -- https://github.com/tensorflow/tfjs-models/tree/master/toxicity
-	toxicity is local, so private and faster
-		er, wait, is it local?
-	perspective is remote, so slower, but more accurate
-	there's already another w.org plugin that uses Toxicity, so use perspective
-
-	* add back-end settings screen in react to add api key
-		export existing options during page render to save time
-		use rest api to save options
-		er, maybe just use existing Discussions settings? that's all needed now
-		will need more in future if add additional options though, and want practice w/ wp-admin screen
-
-		when click save button, 
-			disable button
-			show "saving..."
-				show "saved x min ago [green checkmark icon]" next to it
-				show "failed to save"
-			re-enable save button
-		when change option, clear the "saved/failed" message
-		make all of ^ a reusable component, b/c will want to copy for other plugins
-		see if anything similar exists in G, but not likely
-
-	if api key not defined, then show warning on options screen, plugins screen, maybe other places
-	don't try to moderate
-
-	* maybe enable experimental models
-		prob not, at least for MVP
-		https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md#models
-
-* allow admin to define how sensitive they want to be
-    * slider for sensitivity
-	* show note that this wont retroactively reassigned previous comments
-	* maybe show comment scores on the comments list or when editing individiaual comments  -prob future enhancement
-
-* option to not store comments on G servers
-	* default value should be to not store if blog is private
-	* maybe set it based on whether _post_ is public/private, not blog? or assume if blog is private that all posts are private, even if they're technically set to "publish"
-		does stock WP have a "private" setting for blogs, or is that just WPCOM
-	* maybe have private posts not stored regardless of that setting, so that the setting just covers public posts on a public blog?
+* add back-end settings screen in react to add api key
+	use rest api to save options
 
 * remove default exports from everything
 
+* i18n all files
 * fix any todos left in code
 
 * Improve the design
@@ -60,12 +20,16 @@
 
 ### Stretch goals
 
-* when changing slider, show example comment at that sensitivity, Pull from CSV
-
-
 * show avatar of person replying to, to put human face on it?
 	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
 	or would that backfire? how to make it not awkward?
+
+* reduce bundle sizes
+
+* when submit comment, also submit data on toxicity
+	* it'd be nice to do this now, so that data will already be populated in the future when add features in `Future` section below
+	* not a blocker, though
+
 
 ### Launch
 
@@ -85,6 +49,8 @@
 
 
 ## Future
+
+* show comment scores on the comments list or when editing individiaual comments
 
 * When comment is flagged but reporter submits without editing
 	* Show an icon in All Comments list (etc) to indicate that

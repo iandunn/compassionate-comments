@@ -2,9 +2,9 @@
 
 Why do we have tools to check our spelling, but not to check if we're being kind to each other?
 
-This plugin checks the intent of a comment before it's submitted. If the author is being mean, it will encourage them to think twice, and give them a chance to rephrase their comment to be more kind before they submit it.
+This plugin checks the intent of a comment before it's submitted. If the author is being rude or disrespectful, it will encourage them to think twice, and give them a chance to rephrase their comment to be more kind before they submit it.
 
-Google's [Perspective API](https://www.perspectiveapi.com/) is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis.
+Google's [Perspective API](https://www.perspectiveapi.com/) is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis. You can optionally request that they not store your comments for their future research.
 
 The inspiration for this comes from Tristan Harris' TED talk about [designing technology to reflect human values](https://www.youtube.com/watch?v=D55ctBYF3AY) and [ReThink](http://www.rethinkwords.com/).
 

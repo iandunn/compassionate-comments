@@ -16,11 +16,12 @@ export class MainController extends Component {
 	constructor( props ) {
 		super( props );
 
-		const { perspectiveApiKey, toxicSensitivity } = props;
+		const { perspectiveApiKey, storeComments, toxicSensitivity } = props;
 
 		this.state = {
 			savingSettings: false,
 			perspectiveApiKey,
+			storeComments,
 			toxicSensitivity,
 		};
 
@@ -36,15 +37,20 @@ export class MainController extends Component {
 	}
 
 	render() {
-		const { perspectiveApiKey, savingSettings, toxicSensitivity } = this.state;
+		const { perspectiveApiKey, savingSettings, storeComments, toxicSensitivity } = this.state;
+
+		// todo consider using Context for this instead of passing it down all the time, but that seems pretty clunky in its own right
 
 		return (
 			<MainView
 				handleApiKeyChange={ perspectiveApiKey => this.setState( { perspectiveApiKey } ) }
 				handleSaveSettings={ () => this.saveSettings() }
+				handleStoreCommentsChange={ storeComments => this.setState( { storeComments } ) }
 				handleToxicSensitivityChange={ toxicSensitivity => this.setState( { toxicSensitivity } ) }
+
 				perspectiveApiKey={ perspectiveApiKey }
 				savingSettings={ savingSettings }
+				storeComments={ storeComments }
 				toxicSensitivity={ toxicSensitivity }
 			/>
 		);

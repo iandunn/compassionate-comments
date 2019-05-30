@@ -1,13 +1,14 @@
 /**
  * WordPress dependencies
  */
-import { Button, TextControl, RangeControl } from '@wordpress/components';
+import { Button, RangeControl, ToggleControl, TextControl } from '@wordpress/components';
 import { Fragment }                          from '@wordpress/element';
 import { __ }                                from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
  */
+import { Card }           from '../card';
 import { sampleComments } from './sample-comments';
 
 
@@ -18,19 +19,29 @@ function ApiKey( props ) {
 	const { onChange, apiKey } = props;
 
 	return (
-		<Fragment>
+		<Card title="Perspective API Key">
+			{ ! apiKey &&
+				<p className="notice notice-error">
+					You have not entered an API key yet. This plugin will not work until you enter one.
+				</p>
+			}
+
+			<p>
+				This plugins requires a key for the Perspective API in order to work. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
+			</p>
+
 			<TextControl
 				label="Perspective API Key"
 				value={ apiKey }
 				onChange={ onChange }
+				placeholder="BJfjSyDRq7yoR2PK3DNB3sjkah1Z5ubOCq6HfMn"
 			/>
 
-			<p>
-				docs to get api key - textcontrol
-				link to quickstart but also explanation of what's wrong w/ their instructions
-				warning to restrict api key per domain****
+			<p className="notice notice-warning">
+				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> {}
+				to your server's domain name, IP address, or other unique identifier. If you don't, it's likely that the key will be abused and then disabled.
 			</p>
-		</Fragment>
+		</Card>
 	);
 }
 
@@ -38,11 +49,21 @@ function ApiKey( props ) {
 function Sensitivity( props ) {
 	const { onChange, sensitivity } = props;
 
+	// todo how to deal with duplicate title/labels from rangecontrol and card?
+		// maybe don't pass title to card, and style rangecontrol label inside card?
+		// might be easier to do reverse, and hide the label for rangecontrol
+		// same in other functions
+
+	// todo wanna style the help _ABOVE_ the control
+
 	return (
-		<Fragment>
+		<Card title="Sensitivity">
+			<p>Comment authors are warned when their comment's toxicity score exceeds this number.</p>
+
 			<RangeControl
 				label="Sensitivity"
-				help="Comments that score higher than this number will trigger a warning to the comment author."
+				//help="Comment authors are warned when their comment's toxicity score exceeds this number."    // todo should use this, but style it to go above instead of below?
+				// related: https://github.com/WordPress/gutenberg/issues/15904
 				value={ sensitivity }
 				onChange={ onChange }
 				min={ 0 }
@@ -53,6 +74,76 @@ function Sensitivity( props ) {
 				Example of {sensitivity}% toxic:
 				<blockquote>{ sampleComments[ sensitivity ] }</blockquote>
 			</p>
+
+			<p className="notice notice-info">
+				Changing this will not have any effect retroactively, it will only determine the behavior for new comments.
+			</p>
+		</Card>
+	);
+}
+
+// todo
+function StoreComments( props ) {
+	const { checked, onChange } = props;
+
+	return (
+		<Card title="Store Comments">
+			<p>
+				Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.
+			</p>
+
+			<ToggleControl
+				label="Store Comments"
+				//help="describe here too?"
+				checked={ checked }
+				onChange={ onChange }
+			/>
+
+			<p>
+				If this is disabled, they will still receive and analyze the comment, but have promised not to retain it.
+			</p>
+
+			<p className="notice notice-info">
+				Comments on private posts will never be stored, regardless of this setting.
+				{/* todo is that accurate? need to decide what will actually do. */}
+			</p>
+
+			{/* todo maybe show warning if set to store comments, but blog is set to private/block serarch engines/whatever you can use as indicator that it's private */}
+		</Card>
+	);
+}
+
+//todo
+/*
+	when click save button,
+		disable button
+		show "saving..."
+			show "saved x min ago [green checkmark icon]" next to it
+			show "failed to save"
+		re-enable save button
+	when change option, clear the "saved/failed" message
+	make all of ^ a reusable component, b/c will want to copy for other plugins
+	see if anything similar exists in G, but not likely
+
+ */
+function SaveButton( props ) {
+	const { onClick, lastSave, savingSettings } = props;
+
+	return (
+		<Fragment>
+			<Button
+				isPrimary
+				isBusy={ savingSettings }
+				onClick={ onClick }
+			>
+				Save Settings
+			</Button>
+
+			{ lastSave &&
+				<p>
+					Saved {lastSave}
+				</p>
+			}
 		</Fragment>
 	);
 }
@@ -66,31 +157,46 @@ function Sensitivity( props ) {
  */
 export function MainView( props ) {
 	const {
-		handleApiKeyChange, handleSaveSettings, handleToxicSensitivityChange,
-		perspectiveApiKey, savingSettings, toxicSensitivity
+		storeComments, perspectiveApiKey, savingSettings, toxicSensitivity,
+		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handleToxicSensitivityChange
 	} = props;
+
+	// maybe all these should be wrapped in div instead of fragment? feels bad to have extra/unnecessary wrappers
+		// but also conceptually wrong for an isolated component to assume it's not reusable / used in other contexts / be aware of the container
 
 	return (
 		<Fragment>
-			<ApiKey
-				apiKey={ perspectiveApiKey }
-				onChange={ handleApiKeyChange }
-			/>
+			<p>
+				This plugin checks the intent of a comment before it's submitted. If the author is being rude or disrespectful, it will encourage them to think twice, and give them a chance to rephrase their comment to be more kind before they submit it.
+			</p>
 
-			<Sensitivity
-				sensitivity={ toxicSensitivity }
-				onChange={ handleToxicSensitivityChange }
-			/>
+			<p>
+				Google's <a href="https://www.perspectiveapi.com/">Perspective API</a> is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis.
+			</p>
 
-			<p>other settings</p>
+			<div id="comcon-admin__settings">
+				<ApiKey
+					apiKey={ perspectiveApiKey }
+					onChange={ handleApiKeyChange }
+				/>
 
-			<Button
-				isPrimary
-				isBusy={ savingSettings }
+				<Sensitivity
+					sensitivity={ toxicSensitivity }
+					onChange={ handleToxicSensitivityChange }
+				/>
+
+				<StoreComments
+					checked={ storeComments }
+					onChange={ handleStoreCommentsChange }
+				/>
+			</div>
+
+			<SaveButton
 				onClick={ handleSaveSettings }
-			>
-				Save Settings
-			</Button>
+				lastSave={ '3 minutes ago' }
+				savingSettings={ savingSettings }
+			/>
+			{/* todo lastave dynamic. maybe too much trouble? just do something simpler? user should know if saved or not though, shouldn't have to guess */}
 		</Fragment>
 	);
 }

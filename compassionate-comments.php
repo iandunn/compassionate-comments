@@ -12,7 +12,7 @@ add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\enqueue_front_end_assets'
 
 // if this gets long, probably split it into admin and front-end files, update namespace
 
-// todo add admin_notice on plugins and comcon settings pages, warn if api key not setup, link to settings page
+// todo if api key not defined, then show warning on plugins, link to settings page
 
 //todo
 function register_admin_pages() {
@@ -70,7 +70,7 @@ function enqueue_admin_assets() {
 	wp_enqueue_style(
 		'compassionate-comments-admin',
 		plugins_url( 'css/admin.css', __FILE__ ),
-		array(), // todo
+		array( 'wp-components' ),
 		COMCON_VERSION
 	);
 
@@ -105,33 +105,13 @@ function enqueue_front_end_assets() {
 
 // todo
 function add_inline_script( $handle ) {
-	/*
-	 * todo
-	 *
-	 * need to give users clear instructions about what to do with the google's complicated project-creation/credential-creation flow
-	 * tell them they don't need to go through the cred part, just create project and then create api, skip the wizard that gives you a json file
-	 *
-	 * VERY IMPORTANT TO tell users that they need to restrict api key to their domain, otherwise anyone could use/abuse it, and it'll get shutdown
-	 * link to docs or something to help them restrict by http referrer or whatever is appropriate
-	 *
-	 * follow the instructions in the quickstart guide:
-	 * https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md
-	 * but ignore the .json file they make you download
-	 * then create an api key
-	 * maybe there's a way to avoid that whole flow entirely and just go straight to api key?
-	 *
-	 * document that the altnerative would be proxying the request via a REST API endpoint, which would be very slow
-	 */
-
 	$script_data = sprintf(
 		'var comconOptions = %s;',
 		wp_json_encode( array(
 			'perspectiveApiKey' => get_option( 'comcon_perspective_api_key' ),
 			'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 40 ),
-					// todo add setting for soon. maybe need a get_options() that applies defaults, so its DRY when use this on admin screen too
-						// link to that CSV so they can get a sense of what the values mean
-						// https://raw.githubusercontent.com/conversationai/perspectiveapi/master/example_data/perspective_wikipedia_2k_score_sample_20180829.csv
-						// even better, show actual examples in real time
+			'storeComments'     => get_option( 'comcon_store_comments', true ),
+
 
 			// todo api request needs language, but need to map wp locale to language codes that google uses
 				// need to include glotpress locales.php via submodule with sparse checkout? or via svn?

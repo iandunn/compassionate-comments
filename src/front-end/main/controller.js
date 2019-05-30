@@ -58,6 +58,7 @@ export class MainController extends Component {
 				comment: {
 					text: document.getElementById( 'comment' ).value,
 						// todo probably use wp.util.sanitize() to strip html tags?,
+						// limit is 3k, truncate to that if larger. maybe to consider multibyte chars?
 				},
 
 				languages : [ 'en' ],
@@ -124,8 +125,13 @@ export class MainController extends Component {
 	}
 
 	// todo explain convenience wrapper
+	// using fetch() directly instead of apifetch b/c it's easier for remote requests
+	// see https://github.com/WordPress/gutenberg/pull/15900#issuecomment-497139968
 	apiRequest( data ) {
 		const { perspectiveApiKey } = this.props;
+
+		// todo document that exposing key isn't greay, but altnerative would be proxying the request via a REST API endpoint, which would be very slow
+		// so just warned admins on settings screen to restrict the key to keep it safe
 		const url                   = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${ perspectiveApiKey }`;
 
 		const requestParams = {
@@ -135,6 +141,17 @@ export class MainController extends Component {
 			credentials : 'omit',
 
 			doNotStore : true, // tmp for testing, don't wanna pollute their data with testing stuff. is there a way to set this automatically?
+				// todo set based on storeComments setting - need to flip it though, b/c of naming problem - https://github.com/conversationai/perspectiveapi/issues/58
+				// but always set to true (don't store) when it's a private post
+				// also try to automatically set to true when it's a dev environment, but how to detect that?
+					// maybe don't, but disage the "store" setting in your test site?
+
+				//			* default value should be to not store if blog is private - that'd be set in php
+				//* maybe set it based on whether _post_ is public/private, not blog?
+				// or assume if blog is private that all posts are private, even if they're technically set to "publish"
+				//	does stock WP have a "private" setting for blogs, or is that just WPCOM. don't think so, maybe just use "search engine visibility" instead
+				//* maybe have private posts not stored regardless of that setting, so that the setting just covers public posts on a public blog?
+
 		};
 
 		return fetch( url, requestParams ).then( response => response.json() );

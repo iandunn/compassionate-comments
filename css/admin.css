@@ -1,7 +1,69 @@
+/* todo rename to comcon-admin__descriptor */
+
+#compassionate-comments-settings .components-base-control__label {
+	font-weight: bold;
+	font-size: 1.4em;
+
+	/* todo maybe hide this if it's inside a card? */
+}
+
 #compassionate-comments-settings blockquote {
 	/* todo refine this */
 
-	padding: 3px 5px 2px 5px;
-	margin: 0 1px;
+	padding: 3px 10px 2px;
+	margin: 5px 1px 0;
 	background: rgba( 0, 0, 0, .07 );
+	font-style: italic;
+}
+
+#comcon-admin__settings {
+	margin-bottom: 2em;
+}
+
+	@media screen and ( min-width: 700px ) {
+		#comcon-admin__settings {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-gap: 20px;
+		}
+	}
+
+
+/*
+ * Card
+ *
+ * Styles mostly borrowed from `Modal`
+ *
+ * See https://github.com/WordPress/gutenberg/issues/15921.
+ */
+.comcon-components__card {
+	margin-bottom: 2em;
+	border: 1px solid #e2e4e7;
+	background: #fff;
+	box-shadow: 0 2px 8px rgba( 25, 30, 35, .2 );
+}
+
+	@media screen and ( min-width: 700px ) {
+		.comcon-components__card {
+			margin-bottom: 0;
+		}
+	}
+
+.comcon-components__card-header {
+	padding: 1em;
+	margin: 0;
+	border-bottom: 1px solid #e2e4e7;
+}
+
+.comcon-components__card-content {
+	padding: 1em;
+}
+
+.comcon-components__card-content .components-base-control__label {
+	display: none; /* This is a duplicate of the Card title. */
+		/* todo is there a better way to solve ^ ? see comments in view */
+}
+
+.comcon-components__card-content .notice {
+	border-top: 1px solid rgba( 0, 0, 0, .05 );
 }

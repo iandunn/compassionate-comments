@@ -1,5 +1,6 @@
 /*
- * These are sample comments pulled from Wikipedia discussions and scored by Perspective based on their toxicity.
+ * These are sample comments pulled from Wikipedia discussions that have been scored by Perspective based on their
+ * toxicity.
  *
  * Needless to say, many of them are disgustingly racist, insulting, obnoxious, etc.
  *
