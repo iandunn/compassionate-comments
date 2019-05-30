@@ -127,7 +127,7 @@ function add_inline_script( $handle ) {
 		'var comconOptions = %s;',
 		wp_json_encode( array(
 			'perspectiveApiKey' => get_option( 'comcon_perspective_api_key' ),
-			'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 70 ),
+			'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 40 ),
 					// todo add setting for soon. maybe need a get_options() that applies defaults, so its DRY when use this on admin screen too
 						// link to that CSV so they can get a sense of what the values mean
 						// https://raw.githubusercontent.com/conversationai/perspectiveapi/master/example_data/perspective_wikipedia_2k_score_sample_20180829.csv

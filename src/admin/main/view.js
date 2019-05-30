@@ -45,7 +45,7 @@ function Sensitivity( props ) {
 				help="Comments that score higher than this number will trigger a warning to the comment author."
 				value={ sensitivity }
 				onChange={ onChange }
-				min={ 1 }
+				min={ 0 }
 				max={ 100 }
 			/>
 
