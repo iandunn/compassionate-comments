@@ -77,7 +77,7 @@ function Toxic( props ) {
  *
  * @return {Element}
  */
-function View( props ) {
+export function MainView( props ) {
 	const { handleSubmitAnyway, handleRephraseComment, interfaceOpen, loading, handleModalClose, isToxic } = props;
 
 	let title,
@@ -119,5 +119,3 @@ function View( props ) {
 		</Modal>
 	);
 }
-
-export default View;

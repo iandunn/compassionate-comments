@@ -13,7 +13,7 @@ import { __ }        from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import View from './view';
+import { MainView } from './view';
 
 /**
  * Manage the state for the main interface.
@@ -169,7 +169,7 @@ export class MainController extends Component {
 		// legit comments t
 
 		return (
-			<View
+			<MainView
 				handleSubmitAnyway={ this.submitComment }
 				handleRephraseComment={ () => this.setState( { interfaceOpen: false } ) }
 				handleModalClose={ () => this.setState( { interfaceOpen: false } ) }
