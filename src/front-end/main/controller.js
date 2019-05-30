@@ -132,6 +132,8 @@ export class MainController extends Component {
 			body        : JSON.stringify( data ),
 			headers     : new Headers( { 'Content-Type': 'application/json' } ),
 			credentials : 'omit',
+
+			doNotStore : true, // tmp for testing, don't wanna pollute their data with testing stuff. is there a way to set this automatically?
 		};
 
 		return fetch( url, requestParams ).then( response => response.json() );
@@ -168,10 +170,8 @@ export class MainController extends Component {
 		return (
 			<View
 				handleSubmitAnyway={ this.submitComment }
-				//handleRephraseComment={ this.setState( { interfaceOpen: false } ) }
-				//handleModalClose={ this.setState( { interfaceOpen: false } ) }
-					// wtf modal instantly closes and triggeres re-render when uncomment these
-					// has to do w/ unexpected interation w/  the `return null` above?
+				handleRephraseComment={ () => this.setState( { interfaceOpen: false } ) }
+				handleModalClose={ () => this.setState( { interfaceOpen: false } ) }
 				interfaceOpen={ interfaceOpen }
 				loading={ loading }
 				isToxic={ isToxic }

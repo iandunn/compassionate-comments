@@ -41,6 +41,9 @@
 
 * option to not store comments on G servers
 	* default value should be to not store if blog is private
+	* maybe set it based on whether _post_ is public/private, not blog? or assume if blog is private that all posts are private, even if they're technically set to "publish"
+		does stock WP have a "private" setting for blogs, or is that just WPCOM
+	* maybe have private posts not stored regardless of that setting, so that the setting just covers public posts on a public blog?
 
 * fix any todos left in code
 
@@ -61,7 +64,6 @@
 
 * add to hackerone top targets
 	* remove from exclusions
-* pin to github profile
 * add release date to readme.txt
 * Release 0.1 into WordPress.org plugin repository
 	* setup svn:ignores for things that are only in the dev
