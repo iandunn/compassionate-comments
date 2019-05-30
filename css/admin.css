@@ -1,0 +1,7 @@
+#compassionate-comments-settings blockquote {
+	/* todo refine this */
+
+	padding: 3px 5px 2px 5px;
+	margin: 0 1px;
+	background: rgba( 0, 0, 0, .07 );
+}

@@ -2,8 +2,9 @@
 
 namespace Compassionate_Comments;
 
-add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\enqueue_front_end_assets' );
+add_action( 'admin_menu',            __NAMESPACe__ . '\register_admin_pages' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_admin_assets' );
+add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\enqueue_front_end_assets' );
 
 // todo make sure aware of what ^ gets done for each context (admin, front end, api, etc), don't want to loaod unnecessary stuff
 
@@ -11,8 +12,52 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_admin_assets' );
 
 // if this gets long, probably split it into admin and front-end files, update namespace
 
+// todo add admin_notice on plugins and comcon settings pages, warn if api key not setup, link to settings page
+
+//todo
+function register_admin_pages() {
+	add_submenu_page(
+		'options-general.php',
+		__( 'Compassionate Comments', 'compassionate-comments' ),
+		__( 'Compassionate Comments', 'compassionate-comments' ),
+		'manage_options',
+		'compassionate-comments',
+		__NAMESPACE__ . '\render_settings_page'
+	);
+}
+
+//todo
+// need to render something from server just in case js broken
+function render_settings_page() {
+	// todo i18n everything
+
+	?>
+
+	<div class="wrap">
+		<h1>
+			<?php _e( 'Compassionate Comments', 'compassionate-comments' ); ?>
+		</h1>
+
+		<form method="post" action="options.php">
+			<div id="compassionate-comments-settings">
+				<p>Loading...</p>
+
+				<p>If this takes more than a few seconds, there may be some JavaScript errors in your browser console.</p>
+
+				<!-- todo is it good to give user technical details like that? -->
+			</div>
+		</form>
+	</div>
+
+	<?php
+}
+
 // todo
 function enqueue_admin_assets() {
+	if ( 'settings_page_compassionate-comments' !== get_current_screen()->base ) {
+		return;
+	}
+
 	wp_enqueue_script(
 		'compassionate-comments-admin',
 		plugins_url( 'build/admin.js', __FILE__ ),
@@ -29,9 +74,9 @@ function enqueue_admin_assets() {
 		COMCON_VERSION
 	);
 
-	// todo add any inline scripts?
-		// admin will need initial values of settings
+	add_inline_script( 'compassionate-comments-admin' );
 }
+
 
 // todo
 function enqueue_front_end_assets() {
@@ -55,7 +100,11 @@ function enqueue_front_end_assets() {
 		true // Not needed until submit comment form, so no reason to block rendering.
 	);
 
+	add_inline_script( 'compassionate-comments-front' );
+}
 
+// todo
+function add_inline_script( $handle ) {
 	/*
 	 * todo
 	 *
@@ -78,9 +127,11 @@ function enqueue_front_end_assets() {
 		'var comconOptions = %s;',
 		wp_json_encode( array(
 			'perspectiveApiKey' => get_option( 'comcon_perspective_api_key' ),
-			'sensitivity'       => '.70', // todo add setting for soon. maybe need a get_options() that applies defaults, so its DRY when use this on admin screen too
-											// link to that CSV so they can get a sense of what the values mean
-											// https://raw.githubusercontent.com/conversationai/perspectiveapi/master/example_data/perspective_wikipedia_2k_score_sample_20180829.csv
+			'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 70 ),
+					// todo add setting for soon. maybe need a get_options() that applies defaults, so its DRY when use this on admin screen too
+						// link to that CSV so they can get a sense of what the values mean
+						// https://raw.githubusercontent.com/conversationai/perspectiveapi/master/example_data/perspective_wikipedia_2k_score_sample_20180829.csv
+						// even better, show actual examples in real time
 
 			// todo api request needs language, but need to map wp locale to language codes that google uses
 				// need to include glotpress locales.php via submodule with sparse checkout? or via svn?
@@ -102,5 +153,5 @@ function enqueue_front_end_assets() {
 		) )
 	);
 
-	wp_add_inline_script( 'compassionate-comments-front', $script_data, 'before' );
+	wp_add_inline_script( $handle, $script_data, 'before' );
 }

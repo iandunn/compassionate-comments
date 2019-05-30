@@ -52,7 +52,7 @@ export class MainController extends Component {
 			loading       : true,
 			// todo maybe don't need separate var for interfaceOpen? can just assume if loading or isToxic?
 		}, () => {
-			const { sensitivity } = this.props;
+			const { toxicSensitivity } = this.props;
 
 			const data = {
 				comment: {
@@ -73,7 +73,8 @@ export class MainController extends Component {
 				try {
 					const score = data.attributeScores.TOXICITY.summaryScore.value;
 
-					newState = { isToxic: score > sensitivity };
+					newState = { isToxic: score > toxicSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
+					// todo test ^ still works
 				} catch ( Exception ) {
 					newState = { error: Exception };
 				}

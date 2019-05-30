@@ -36,6 +36,7 @@
 		https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md#models
 
 * allow admin to define how sensitive they want to be
+    * slider for sensitivity
 	* show note that this wont retroactively reassigned previous comments
 	* maybe show comment scores on the comments list or when editing individiaual comments  -prob future enhancement
 
@@ -45,16 +46,22 @@
 		does stock WP have a "private" setting for blogs, or is that just WPCOM
 	* maybe have private posts not stored regardless of that setting, so that the setting just covers public posts on a public blog?
 
+* remove default exports from everything
+
 * fix any todos left in code
 
 * Improve the design
 	* update screenshot
+	* look at https://woocommerce.github.io/woocommerce-admin/#/?id=dev-docs for inspiration
 * update readme.md
 * update readme.txt
 
 
 
 ### Stretch goals
+
+* when changing slider, show example comment at that sensitivity, Pull from CSV
+
 
 * show avatar of person replying to, to put human face on it?
 	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
@@ -74,7 +81,7 @@
 	* there's also https://wordpress.org/plugins/serious-toxic-comments/, which uses TensorFlow's Toxicity model and blocks rather than gives a chance to rephrase
 	* also https://wordpress.org/plugins/sift-ninja/
 * post fyi on a8c discussion
-
+* Add comment to #262-meta that this probably better example of admin interface than QNI
 
 
 ## Future
@@ -93,6 +100,8 @@
 
 * Add way to report false positives back to Perspective, if they accept that kind of feedback
 	* > Users can leverage the [...] ‘SuggestCommentScore’ method to submit corrections to improve Perspective over time.
+	* maybe Let commenters report false positives too
+	* but how to take into account that different sites have different sensitivity?
 
 * Give the user details on what type of problem was detecting (sarcasm, insults, etc), and highlight the words that were flagged
 	* look at `spanScores` in api response, need to enable `spanAnnotations` option in api requst
