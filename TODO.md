@@ -2,9 +2,6 @@
 
 ## MVP
 
-* add back-end settings screen in react to add api key
-	use rest api to save options
-
 * remove default exports from everything
 
 * i18n all files

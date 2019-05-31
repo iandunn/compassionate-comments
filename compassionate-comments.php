@@ -2,9 +2,11 @@
 
 namespace Compassionate_Comments;
 
+
 add_action( 'admin_init',            __NAMESPACE__ . '\register_settings' );
 add_action( 'rest_api_init',         __NAMESPACE__ . '\register_settings' );
 add_action( 'admin_menu',            __NAMESPACE__ . '\register_admin_pages' );
+add_action( 'admin_notices',         __NAMESPACE__ . '\notify_key_missing' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_admin_assets' );
 add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\enqueue_front_end_assets' );
 
@@ -62,6 +64,30 @@ function register_admin_pages() {
 		'compassionate-comments',
 		__NAMESPACE__ . '\render_settings_page'
 	);
+}
+
+// todo
+function notify_key_missing() {
+	if ( ! in_array( get_current_screen()->base, array( 'plugins', 'edit-comments' ) ) ) {
+		return;
+	}
+
+	if ( ! empty( get_option( 'comcon_perspective_api_key' ) )) {
+		return;
+	}
+
+	?>
+
+	<div class="notice notice-error">
+		<p>
+			<?php echo sprintf(
+				__( 'Compassionate Comments will not start working until you <a href="%s">configure an API key</a>.', 'compassionate-comments' ),
+				admin_url( 'options-general.php?page=compassionate-comments' )
+			); ?>
+		</p>
+	</div>
+
+	<?php
 }
 
 //todo

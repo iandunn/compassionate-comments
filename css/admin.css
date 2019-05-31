@@ -14,16 +14,25 @@
 	margin: 5px 1px 0;
 	background: rgba( 0, 0, 0, .07 );
 	font-style: italic;
+	word-break: break-word;
 }
 
 #comcon-admin__settings {
 	margin-bottom: 2em;
 }
 
-	@media screen and ( min-width: 700px ) {
+	@media screen and ( min-width: 800px ) {
 		#comcon-admin__settings {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
+			grid-gap: 20px;
+		}
+	}
+
+	@media screen and ( min-width: 1400px ) {
+		#comcon-admin__settings {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
 			grid-gap: 20px;
 		}
 	}
@@ -43,7 +52,7 @@
 	box-shadow: 0 2px 8px rgba( 25, 30, 35, .2 );
 }
 
-	@media screen and ( min-width: 700px ) {
+	@media screen and ( min-width: 800px ) {
 		.comcon-components__card {
 			margin-bottom: 0;
 		}
