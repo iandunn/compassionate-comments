@@ -23,10 +23,6 @@
 
 * reduce bundle sizes
 
-* when submit comment, also submit data on toxicity
-	* it'd be nice to do this now, so that data will already be populated in the future when add features in `Future` section below
-	* not a blocker, though
-
 
 ### Launch
 
@@ -42,24 +38,20 @@
 	* there's also https://wordpress.org/plugins/serious-toxic-comments/, which uses TensorFlow's Toxicity model and blocks rather than gives a chance to rephrase
 	* also https://wordpress.org/plugins/sift-ninja/
 * post fyi on a8c discussion
-* Add comment to #262-meta that this probably better example of admin interface than QNI
+
 
 
 ## Future
 
-* show comment scores on the comments list or when editing individiaual comments
+* show comment scores on the comments list and/or when editing individiaual comments
+	* make color red if it's above the sensitivity threshhold, and green if it's below
 
-* When comment is flagged but reporter submits without editing
-	* Show an icon in All Comments list (etc) to indicate that
-	* Add option to let admins automatically moderate these comments
-* also add commentmeta when comment was flaged but edited and no longer flagged, show different type of icon in comments list
+* Add option to let admins automatically moderate comments that were submitted anyway, even though they're above the sensitivity threshold
 
 * have a test button on the wp-admin to help users know if credentials setup correctly
 	* send an existing comment (if there are some) or a fallback hardcoded comment
+		* probably set donotstore to true so that test comment doesn't get stored and distort Perspective's data
 	* show successful results or error
-
-* maybe have gradations, rather than just toxic or not toxic?
-	* e.g., at 40% user is shown warning, at 80% user is blocked from publishing until edits to below 80%?
 
 * Add way to report false positives back to Perspective, if they accept that kind of feedback
 	* > Users can leverage the [...] ‘SuggestCommentScore’ method to submit corrections to improve Perspective over time.
@@ -79,7 +71,12 @@
 	* How to prevent a malicious person sending fake data to the endpoint to distort the results, though? How do other similar systems handle that?
 
 * Let users filter what level of comments they want to see, kind of like slashdot's 1-5 score
+	* maybe not, since the Tune chrome extension already exists
+	* but maybe worth it so that users don't have to install something
 
 * lower api request timeout to 15 seconds b/c user won't wait 30?
 	* https://stackoverflow.com/questions/46946380/fetch-api-request-timeout
 	* https://davidwalsh.name/fetch-timeout
+
+* maybe have gradations, rather than just toxic or not toxic?
+	* e.g., at 40% user is shown warning, at 80% user is blocked from publishing until edits to below 80%?

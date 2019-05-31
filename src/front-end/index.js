@@ -25,6 +25,7 @@ import { MainController as CompassionateComments } from './main/controller';
 		// This isn't a post, or the post doesn't have comments enabled.
 		if ( ! commentForm ) {
 			return;
+			// todo test
 		}
 
 		if ( ! props.perspectiveApiKey ) {

@@ -3,12 +3,16 @@
 namespace Compassionate_Comments;
 
 
+// Admin
 add_action( 'admin_init',            __NAMESPACE__ . '\register_settings' );
 add_action( 'rest_api_init',         __NAMESPACE__ . '\register_settings' );
 add_action( 'admin_menu',            __NAMESPACE__ . '\register_admin_pages' );
 add_action( 'admin_notices',         __NAMESPACE__ . '\notify_key_missing' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_admin_assets' );
-add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\enqueue_front_end_assets' );
+
+// Front end
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_front_end_assets' );
+add_filter( 'preprocess_comment', __NAMESPACE__ . '\inject_comment_meta' );
 
 
 // todo make sure aware of what ^ gets done for each context (admin, front end, api, etc), don't want to loaod unnecessary stuff
@@ -80,10 +84,10 @@ function notify_key_missing() {
 
 	<div class="notice notice-error">
 		<p>
-			<?php echo sprintf(
+			<?php echo wp_kses_data( sprintf(
 				__( 'Compassionate Comments will not start working until you <a href="%s">configure an API key</a>.', 'compassionate-comments' ),
 				admin_url( 'options-general.php?page=compassionate-comments' )
-			); ?>
+			) ); ?>
 		</p>
 	</div>
 
@@ -198,4 +202,31 @@ function add_inline_script( $handle ) {
 	);
 
 	wp_add_inline_script( $handle, $script_data, 'before' );
+}
+
+// todo
+// todo refactor this if https://core.trac.wordpress.org/ticket/47447 is merged
+function inject_comment_meta( $comment_data ) {
+	/*
+	 * Arguably at this point we should parse the timestamp out of the key, and store it in the `meta_value` field
+	 * instead, so that all values would have a consistent `meta_key` of `comcon_perspective_score`. That would
+	 * allow querying them with `meta_key = 'comcon_perspective_score'` rather than `meta_key LIKE
+	 * 'comcon_perspective_score%'`.
+	 *
+	 * However, `wp_insert_comment` assigns the `meta_key` based on the key in the `comment_meta` array, and can't
+	 * arrays can't have duplicate keys, so we couldn't have multiple entries per comment like we need.
+	 *
+	 * There are some benefits of doing it this way too, like being able to do efficient meta queries against
+	 * `meta_value`, since it only contains the score. We can always parse the timestamp out of the key name if
+	 * needed, or even query against it with something like `WHERE SUBSTRING( meta_key, 25 ) > 1559320234144`.
+	 */
+	if ( ! empty( $_POST[ 'comcon_comment_meta'] ) ) {
+		foreach ( $_POST['comcon_comment_meta'] as $key => $value ) {
+			if ( 'comcon_perspective_score_' === substr( $key, 0, 25 ) ) {
+				$comment_data['comment_meta'][ $key ] = (float) $value;
+			}
+		}
+	}
+
+	return $comment_data;
 }

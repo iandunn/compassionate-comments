@@ -22,15 +22,16 @@ export class MainController extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.state = {
+		// Save default state so we can easily reset back to it when needed.
+		this.defaultState = {
 			error         : false,
 			interfaceOpen : false,
-			// todo rename ^ ?
+			// todo rename ^, "interface" is artifact from QNI. this is something more like warningAuthor
 			loading       : false,
 			isToxic       : false,
-
-			// todo reset defaults
 		};
+
+		this.state = this.defaultState;
 
 		this.analyzeComment = this.analyzeComment.bind( this );
 		props.commentForm.addEventListener( 'submit', this.analyzeComment );
@@ -70,12 +71,12 @@ export class MainController extends Component {
 
 			let newState = {};
 
-			this.apiRequest( data ).then( data => {
+			this.remoteApiRequest( data ).then( data => {
 				try {
 					const score = data.attributeScores.TOXICITY.summaryScore.value;
+					newState    = { isToxic: score > toxicSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
 
-					newState = { isToxic: score > toxicSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
-					// todo test ^ still works
+					this.logScore( score );
 				} catch ( Exception ) {
 					newState = { error: Exception };
 				}
@@ -129,7 +130,7 @@ export class MainController extends Component {
 	// todo explain convenience wrapper
 	// using fetch() directly instead of apifetch b/c it's easier for remote requests
 	// see https://github.com/WordPress/gutenberg/pull/15900#issuecomment-497139968
-	apiRequest( data ) {
+	remoteApiRequest( data ) {
 		const { perspectiveApiKey } = this.props;
 
 		// todo document that exposing key isn't greay, but altnerative would be proxying the request via a REST API endpoint, which would be very slow
@@ -159,6 +160,30 @@ export class MainController extends Component {
 		return fetch( url, requestParams ).then( response => response.json() );
 	}
 
+	// todo
+	// logs each score for a comment
+	// intentionally not overwriting any previous ones, want to have a record of how many times they edited and see how score changed
+	logScore( score ) {
+		const { commentForm } = this.props;
+		const logEntry        = document.createElement( 'input' );
+		const entryId         = `comcon_perspective_score_${ Date.now() }`;
+
+		/*
+		 * The `comcon_` prefix is added because, in the future, Core might automatically insert values that scripts
+		 * add to the standard `comment_meta` field.
+		 *
+		 * See https://core.trac.wordpress.org/47447.
+		 *
+		 * If that happens, then `Compassionate_Comments\inject_comment_meta()` would insert the values for a second
+		 * time. So the prefix future-proofs this against that possibility.
+		 */
+		logEntry.name  = `comcon_comment_meta[${entryId}]`;
+		logEntry.type  = 'hidden';
+		logEntry.value = score;
+
+		commentForm.appendChild( logEntry );
+	}
+
 	/**
 	 * Submit a comment despite the compassion nudge
 	 *
@@ -183,6 +208,7 @@ export class MainController extends Component {
 		if ( ! interfaceOpen || error ) {
 			return null;
 		}
+		// should ^ be inside MainView instead of here?
 
 		// need to show spinner to all comments, not just toxic ones
 		// legit comments t
@@ -190,8 +216,8 @@ export class MainController extends Component {
 		return (
 			<MainView
 				handleSubmitAnyway={ this.submitComment }
-				handleRephraseComment={ () => this.setState( { interfaceOpen: false } ) }
-				handleModalClose={ () => this.setState( { interfaceOpen: false } ) }
+				handleRephraseComment={ () => this.setState( { ...this.defaultState } ) }
+				handleModalClose={ () => this.setState( { ...this.defaultState } ) }
 				interfaceOpen={ interfaceOpen }
 				loading={ loading }
 				isToxic={ isToxic }
