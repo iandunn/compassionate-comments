@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { apiFetch }  from '@wordpress/api-fetch';
 import { Component } from '@wordpress/element';
 
 /**
@@ -30,9 +31,34 @@ export class MainController extends Component {
 			// or maybe this is a smell that i'm doing something wrong?
 	}
 
+	//todo
 	saveSettings() {
 		this.setState( { savingSettings: true }, () => {
-			// apiFetch call to update settings based on this.state
+			const { apiFetch } = wp;
+				// todo this shouldn't be necessary since imported above, but otherwise it's undefined
+			const { perspectiveApiKey, storeComments, toxicSensitivity } = this.state;
+
+			const fetchParams = {
+				path   : '/wp/v2/settings',
+				method : 'PUT',
+				data   : {
+					'comcon_perspective_api_key' : perspectiveApiKey,
+					'comcon_toxic_sensitivity'   : toxicSensitivity,
+					'comcon_store_comments'      : storeComments,
+				}
+			};
+
+			apiFetch( fetchParams ).then( data => {
+				// what to do here? nothing? can just skip this then?
+				// oh, probably update the state.lastupdated thingy
+
+			} ).catch( error => {
+				console.error( `Compassionate Comments error: ${error.data.status} ${error.code}: ${error.message}` );
+				// todo is it possible that error will ever just be a string rather than this object?
+
+			} ).finally( () => {
+				this.setState( { savingSettings: false } );
+			} );
 		} );
 	}
 
@@ -43,10 +69,10 @@ export class MainController extends Component {
 
 		return (
 			<MainView
-				handleApiKeyChange={ perspectiveApiKey => this.setState( { perspectiveApiKey } ) }
+				handleApiKeyChange={           perspectiveApiKey => this.setState( { perspectiveApiKey } ) }
+				handleStoreCommentsChange={    storeComments     => this.setState( { storeComments     } ) }
+				handleToxicSensitivityChange={ toxicSensitivity  => this.setState( { toxicSensitivity  } ) }
 				handleSaveSettings={ () => this.saveSettings() }
-				handleStoreCommentsChange={ storeComments => this.setState( { storeComments } ) }
-				handleToxicSensitivityChange={ toxicSensitivity => this.setState( { toxicSensitivity } ) }
 
 				perspectiveApiKey={ perspectiveApiKey }
 				savingSettings={ savingSettings }

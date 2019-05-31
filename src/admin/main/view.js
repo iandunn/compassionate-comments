@@ -64,10 +64,12 @@ function Sensitivity( props ) {
 				label="Sensitivity"
 				//help="Comment authors are warned when their comment's toxicity score exceeds this number."    // todo should use this, but style it to go above instead of below?
 				// related: https://github.com/WordPress/gutenberg/issues/15904
-				value={ sensitivity }
+				initialPosition={ sensitivity }
+					// todo ^ is supposed to be default value, but without setting this the thumb is positioned in middle no matter what. probably bug, but didn't reproduce in other context
 				onChange={ onChange }
 				min={ 0 }
 				max={ 100 }
+				value={ sensitivity }
 			/>
 
 			<p>
@@ -85,6 +87,8 @@ function Sensitivity( props ) {
 // todo
 function StoreComments( props ) {
 	const { checked, onChange } = props;
+
+	// todo clarify title that this stores comments on Perspective servers, not this local wp server
 
 	return (
 		<Card title="Store Comments">
@@ -125,6 +129,7 @@ function StoreComments( props ) {
 	make all of ^ a reusable component, b/c will want to copy for other plugins
 	see if anything similar exists in G, but not likely
 
+	maybe button should always be disabled, but then enable it when state changes, then disable again once saved to db?
  */
 function SaveButton( props ) {
 	const { onClick, lastSave, savingSettings } = props;
@@ -139,9 +144,13 @@ function SaveButton( props ) {
 				Save Settings
 			</Button>
 
-			{ lastSave &&
+			{ savingSettings &&
+				<p>Saving...</p>
+			}
+
+			{ ! savingSettings &&
 				<p>
-					Saved {lastSave}
+					Saved { lastSave }
 				</p>
 			}
 		</Fragment>

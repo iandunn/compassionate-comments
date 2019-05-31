@@ -59,11 +59,16 @@
 	padding: 1em;
 }
 
+.comcon-components__card-content p:first-child {
+	margin-top: 0;
+}
+
 .comcon-components__card-content .components-base-control__label {
 	display: none; /* This is a duplicate of the Card title. */
 		/* todo is there a better way to solve ^ ? see comments in view */
 }
 
 .comcon-components__card-content .notice {
+	margin-top: 20px;
 	border-top: 1px solid rgba( 0, 0, 0, .05 );
 }

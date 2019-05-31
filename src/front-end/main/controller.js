@@ -79,6 +79,7 @@ export class MainController extends Component {
 				} catch ( Exception ) {
 					newState = { error: Exception };
 				}
+
 			} ).catch( error => {
 				console.log( 'error' );
 				console.log(error);
@@ -101,6 +102,7 @@ export class MainController extends Component {
 				// what happens if someonne writes comment in unsupported language?
 					// although maybe not if passing locale
 					// ****** can't assume that blog locale is same as language that comment written in though, so maybe shouldn't pass it at all, and just let them detect it? ******
+
 			} ).finally( () => {
 				/*
 				 * If an error occured, then just submit the comment, since that's safer than potentially

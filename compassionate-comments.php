@@ -2,9 +2,12 @@
 
 namespace Compassionate_Comments;
 
-add_action( 'admin_menu',            __NAMESPACe__ . '\register_admin_pages' );
+add_action( 'admin_init',            __NAMESPACE__ . '\register_settings' );
+add_action( 'rest_api_init',         __NAMESPACE__ . '\register_settings' );
+add_action( 'admin_menu',            __NAMESPACE__ . '\register_admin_pages' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_admin_assets' );
 add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\enqueue_front_end_assets' );
+
 
 // todo make sure aware of what ^ gets done for each context (admin, front end, api, etc), don't want to loaod unnecessary stuff
 
@@ -13,6 +16,41 @@ add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\enqueue_front_end_assets'
 // if this gets long, probably split it into admin and front-end files, update namespace
 
 // todo if api key not defined, then show warning on plugins, link to settings page
+
+// todo
+function register_settings() {
+	register_setting(
+		'compassionate-comments',
+		'comcon_perspective_api_key',
+		array(
+			'type'              => 'string',
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'sanitize_text_field',
+		)
+	);
+
+	register_setting(
+		'compassionate-comments',
+		'comcon_toxic_sensitivity',
+		array(
+			'type'              => 'integer',
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'absint',
+		)
+	);
+
+	register_setting(
+		'compassionate-comments',
+		'comcon_store_comments',
+		array(
+			'type'              => 'boolean',
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'wp_validate_boolean',
+		)
+	);
+
+	// todo want to set default values here? i guess it doesn't really matter b/c only ever using this to update, not read, but still
+}
 
 //todo
 function register_admin_pages() {
