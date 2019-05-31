@@ -20,15 +20,15 @@ function ApiKey( props ) {
 
 	return (
 		<Card title="Perspective API Key">
+			<p>
+				Your API key allows the plugin to use the Perspective API in order to analyze comments for toxicity.
+			</p>
+
 			{ ! apiKey &&
 				<p className="notice notice-error">
-					You have not entered an API key yet. This plugin will not work until you enter one.
+					You have not entered an API key yet. This plugin will not work until you do. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
 				</p>
 			}
-
-			<p>
-				This plugins requires a key for the Perspective API in order to work. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
-			</p>
 
 			<TextControl
 				label="Perspective API Key"
@@ -39,7 +39,7 @@ function ApiKey( props ) {
 
 			<p className="notice notice-warning">
 				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> {}
-				to your server's domain name, IP address, or other unique identifier. If you don't, it's likely that the key will be abused and then disabled.
+				to your server's domain name, IP address, or other unique identifier. If you don't, it's likely that the key will be abused and the plugin will stop working.
 			</p>
 		</Card>
 	);
