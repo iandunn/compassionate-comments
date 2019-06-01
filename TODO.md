@@ -38,7 +38,12 @@
 	* there's also https://wordpress.org/plugins/serious-toxic-comments/, which uses TensorFlow's Toxicity model and blocks rather than gives a chance to rephrase
 	* also https://wordpress.org/plugins/sift-ninja/
 * post fyi on a8c discussion
-
+* propose for all the Make blogs?
+	* propse to make/comm first, then if works well propose for others
+		* ask andrea for gut check first, b/c power dynamic / conflict of interest
+	* set api key for whole network via filter, store in config
+	* disable for systems and security sites
+* let jjj know might be something interesting for bbpress, but Serious Toxic Comments plugin might be better fit b/c don't need remote API
 
 
 ## Future

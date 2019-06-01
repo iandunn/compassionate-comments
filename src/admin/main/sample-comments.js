@@ -2,7 +2,7 @@
  * These are sample comments pulled from Wikipedia discussions that have been scored by Perspective based on their
  * toxicity.
  *
- * Needless to say, many of them are disgustingly racist, insulting, obnoxious, etc.
+ * Needless to say, many of them are disgustingly racist, vulgar, insulting, obnoxious, etc.
  *
  * They're used on the Settings screen when administrators change the `sensitivity` setting, so that they can
  * understand what the number they chose means, and set a level that's appropriate for their context.

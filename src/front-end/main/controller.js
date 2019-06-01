@@ -54,25 +54,10 @@ export class MainController extends Component {
 			// todo maybe don't need separate var for interfaceOpen? can just assume if loading or isToxic?
 		}, () => {
 			const { toxicSensitivity } = this.props;
+			const comment              = document.getElementById( 'comment' ).value;
+			let newState               = {};
 
-			const data = {
-				comment: {
-					text: document.getElementById( 'comment' ).value,
-						// todo probably use wp.util.sanitize() to strip html tags?,
-						// limit is 3k, truncate to that if larger. maybe to consider multibyte chars?
-				},
-
-				languages : [ 'en' ],
-					// maybe don't send this at all, bcause have no way of knowing what language the comment was written in
-					// could be different than the blog locale, so just let Google auto-detect?
-
-				requestedAttributes : { TOXICITY: {} },
-			};
-			// probably move all of ^ into the remoteApiRequest wrapper, except for the comment text
-
-			let newState = {};
-
-			this.remoteApiRequest( data ).then( data => {
+			this.sendScoreRequest( comment ).then( data => {
 				try {
 					const score = data.attributeScores.TOXICITY.summaryScore.value;
 					newState    = { isToxic: score > toxicSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
@@ -131,8 +116,22 @@ export class MainController extends Component {
 	// todo explain convenience wrapper
 	// using fetch() directly instead of apifetch b/c it's easier for remote requests
 	// see https://github.com/WordPress/gutenberg/pull/15900#issuecomment-497139968
-	remoteApiRequest( data ) {
+	sendScoreRequest( commentText ) {
 		const { perspectiveApiKey } = this.props;
+
+		const data = {
+			comment: {
+				text: commentText,
+					// todo probably use wp.util.sanitize() to strip html tags?,
+					// limit is 3k, truncate to that if larger. maybe to consider multibyte chars?
+			},
+
+			languages : [ 'en' ],
+				// maybe don't send this at all, bcause have no way of knowing what language the comment was written in
+				// could be different than the blog locale, so just let Google auto-detect?
+
+			requestedAttributes : { TOXICITY: {} },
+		};
 
 		// todo document that exposing key isn't greay, but altnerative would be proxying the request via a REST API endpoint, which would be very slow
 		// so just warned admins on settings screen to restrict the key to keep it safe
