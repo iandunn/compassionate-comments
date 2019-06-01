@@ -119,6 +119,11 @@ export class MainController extends Component {
 	sendScoreRequest( commentText ) {
 		const { perspectiveApiKey } = this.props;
 
+		/*
+		 * The `languages` parameter is intentionally _not_ set, because we have no way of knowing what language
+		 * the comment is written in. On many sites it could easily be a different language than `get_locate()`.
+		 * Perspective will automatically detect the language when an explicit value isn't passed.
+		 */
 		const data = {
 			comment: {
 				text: commentText,
@@ -126,14 +131,10 @@ export class MainController extends Component {
 					// limit is 3k, truncate to that if larger. maybe to consider multibyte chars?
 			},
 
-			languages : [ 'en' ],
-				// maybe don't send this at all, bcause have no way of knowing what language the comment was written in
-				// could be different than the blog locale, so just let Google auto-detect?
-
 			requestedAttributes : { TOXICITY: {} },
 		};
 
-		// todo document that exposing key isn't greay, but altnerative would be proxying the request via a REST API endpoint, which would be very slow
+		// todo document that exposing key isn't great, but alternative would be proxying the request via a REST API endpoint, which would be very slow
 		// so just warned admins on settings screen to restrict the key to keep it safe
 		const url = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${ perspectiveApiKey }`;
 

@@ -196,7 +196,7 @@ function SaveButton( props ) {
  */
 export function MainView( props ) {
 	const {
-		storeComments, perspectiveApiKey, savingSettings, siteIsPublic, toxicSensitivity,
+		languageSupported, perspectiveApiKey, savingSettings, siteIsPublic, storeComments, toxicSensitivity,
 		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handleToxicSensitivityChange
 	} = props;
 
@@ -212,6 +212,20 @@ export function MainView( props ) {
 			<p>
 				Google's <a href="https://www.perspectiveapi.com/">Perspective API</a> is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis.
 			</p>
+
+			{ ! languageSupported &&
+				<Fragment>
+					<span className="wp-header-end">
+						{/* This hidden element prevents WP from moving the notice below up into the typical admin_notice area. */}
+					</span>
+
+					<div className="notice notice-warning">
+						<p>
+							The Perspective API can only analyze comments written in English, French, and Spanish. Comments written in other languages will be submitted without any analysis or content warnings.
+						</p>
+					</div>
+				</Fragment>
+			}
 
 			<div id="comcon-admin__settings">
 				<ApiKey

@@ -177,6 +177,13 @@ function enqueue_front_end_assets() {
 function add_inline_script( $handle ) {
 	global $post;
 
+	/*
+	 * For the `TOXICITY` model as of 5/31/2019.
+	 *
+	 * See https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md#production-toxicity-models
+	 */
+	$supported_languages = array( 'en', 'es', 'fr' );
+
 	$options = array(
 		'perspectiveApiKey' => get_option( 'comcon_perspective_api_key', '' ),
 		'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 40 ),
@@ -184,37 +191,23 @@ function add_inline_script( $handle ) {
 		'isTestEnvironment' => is_test_environment(),
 
 		/*
+		 * This is fuzzy, since it's common for the site locale to be in English even when the `post_content` and
+		 * comments are in another language, and it's also possible to have the site locale in an unsupported
+		 * language and have comments in a supported language. It's simple and good enough for most cases, though.
+		 */
+		'languageSupported' => in_array( substr( get_locale(), 0, 2 ), $supported_languages ),
+
+		/*
 		 * In Multisite, Core keeps site-specific option in sync with `wp_blogs.public`, so checking this
 		 * works for both single-site and Multisite.
 		 */
 		'siteIsPublic' => (bool) get_option( 'blog_public' ),
-
-
-		// todo api request needs language, but need to map wp locale to language codes that google uses
-			// need to include glotpress locales.php via submodule with sparse checkout? or via svn?
-			// w.org directory doesn't support svn:externals, would need in git repo anyway
-			// api expects "A list of ISO 631-1 two-letter language codes "
-
-		// does perspective api support all languages? can detect is language isn't detected and show error on settings screen, and have front end return early?
-		/*
-		 * Production Model	Supported Languages
-			TOXICITY	en, fr, es
-			SEVERE_TOXICITY	en, fr, es
-		 */
-
-		// add something to readme about supported languages
-
-		// show warning in admin and disable plugin entirely if language not supported?
-			// don't disable b/c comments can be written in different language, but maybe show warning so that admin is aware
-
-		// can get those automatically though? don't wanna hardcode a safelist that'll get outdated and block people from using it even though the api supports its
-			// maybe just show warning in admin screen if blog locate doesn't match one of the hardcoded list, instead of blocking?
-			// it's possible to have the blog locale set to english but commenters writing in spanish, etc
 	);
 
 	// If the entire site is private, ask Perspective to never store comments.
 	$options['storeComments'] = $options['siteIsPublic'] ? get_option( 'comcon_store_comments', true ) : false;
 
+	// todo rename "options" to something more accurate, but what? "data" is too vague.
 	$options = apply_filters( 'comcon_options', $options, $handle, $post );
 
 	$script_data = sprintf(

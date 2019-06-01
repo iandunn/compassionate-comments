@@ -61,6 +61,8 @@
 * show comment scores on the comments list and/or when editing individiaual comments
 	* make color red if it's above the sensitivity threshhold, and green if it's below
 
+* Update list of supported languages every ~6 months.
+
 
 ### Low Impact and/or High Effort
 
