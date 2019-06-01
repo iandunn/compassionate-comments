@@ -2,6 +2,10 @@
 
 ## MVP
 
+* maybe move compassionatecomments.php to `src` folder, so there isn't any real code in the root folder?
+	* odd to have php in "js" folder, but it's not named "js", it's named "source". but "source" as opposed to "build", and php isn't built (thank God).
+	* precedence in gutenberg dynamic blocks w/ php render
+
 * fix any todos left in code
 
 * Improve the design
@@ -59,6 +63,9 @@
 	* make color red if it's above the sensitivity threshhold, and green if it's below
 
 * Update list of supported languages every ~6 months.
+
+* Switch to SASS once wp-scripts supports it
+	* https://github.com/WordPress/gutenberg/issues/14801
 
 
 ### Low Impact and/or High Effort

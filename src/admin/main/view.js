@@ -161,47 +161,19 @@ function StoreCommentsDisabled( props ) {
 }
 
 //todo
-/*
-	when click save button,
-		disable button
-		show "saving..."
-			show "saved x min ago [green checkmark icon]" next to it
-			show "failed to save"
-		re-enable save button
-	when change option, clear the "saved/failed" message
-	make all of ^ a reusable component, b/c will want to copy for other plugins
-	see if anything similar exists in G, but not likely
-
-	maybe button should always be disabled, but then enable it when state changes, then disable again once saved to db?
- */
 function SaveButton( props ) {
-	const { onClick, lastSave, savingSettings } = props;
+	const { onClick, savingSettings } = props;
 
 	return (
 		<Fragment>
 			<Button
 				isPrimary
+				disabled={ savingSettings }
 				isBusy={ savingSettings }
 				onClick={ onClick }
 			>
 				{ __( 'Save Settings', 'compassionate-comments' ) }
 			</Button>
-
-			{ savingSettings &&
-				<p>
-					{ __( 'Saving...', 'compassionate-comments' ) }
-				</p>
-			}
-
-			{ ! savingSettings &&
-				<p>
-					{/* Translators: %s is a relative time, like "3 minutes ago". */}
-					{ sprintf(
-						__( 'Saved %s', 'compassionate-comments' ),
-						lastSave
-					) }
-				</p>
-			}
 		</Fragment>
 	);
 }
@@ -278,10 +250,8 @@ export function MainView( props ) {
 
 			<SaveButton
 				onClick={ handleSaveSettings }
-				lastSave={ '3 minutes ago' }
 				savingSettings={ savingSettings }
 			/>
-			{/* todo lastave dynamic. maybe too much trouble? just do something simpler? user should know if saved or not though, shouldn't have to guess */}
 		</Fragment>
 	);
 }
