@@ -7,6 +7,9 @@
 namespace Compassionate_Comments\Bin\Prune_Sample_Comments;
 use WP_CLI;
 
+defined( 'WP_CLI' ) || die();
+
+
 /**
  * The script runner.
  *
@@ -81,6 +84,9 @@ function main( $file, $args ) {
 
 /**
  * Print usage instructions if the script wasn't called correctly.
+ *
+ * This is intended for users incorrectly calling it from the command line, as opposed to the `die()` at the start
+ * of the file, which is intended to prevent loading directly via an HTTP request.
  *
  * @param string $file
  * @param array $args
