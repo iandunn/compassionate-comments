@@ -97,8 +97,6 @@ function notify_key_missing() {
 //todo
 // need to render something from server just in case js broken
 function render_settings_page() {
-	// todo i18n everything
-
 	?>
 
 	<div class="wrap">
@@ -108,9 +106,9 @@ function render_settings_page() {
 
 		<form method="post" action="options.php">
 			<div id="compassionate-comments-settings">
-				<p>Loading...</p>
+				<p><?php _e( 'Loading...', 'compassionate-comments' ); ?></p>
 
-				<p>If this takes more than a few seconds, there may be some JavaScript errors in your browser console.</p>
+				<p><?php _e( 'If this takes more than a few seconds, there may be some JavaScript errors in your browser console.', 'compassionate-comments' ); ?></p>
 
 				<!-- todo is it good to give user technical details like that? -->
 			</div>

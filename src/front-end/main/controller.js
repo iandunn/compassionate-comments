@@ -1,8 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
-import { __ }        from '@wordpress/i18n';
+import { Component }   from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
 // todo audit ^
 // todo change to import
 
@@ -82,8 +82,10 @@ export class MainController extends Component {
 				// maybe need to disable `parse` option so can see the full error details?
 					// but wtf, why isn't the request showing up in the network console?
 
-				console.error( `Compassionate Comments error: ${newState.error}` );
-				// todo i18n/sprintf
+				console.error( sprintf(
+					__( 'Compassionate Comments error: %s', 'compassionate-comments' ),
+					newState.error
+				) );
 				// maybe don't need state.error anymore? or still do for as a flag to know what to render?
 
 				// what happens if someonne writes comment in unsupported language?

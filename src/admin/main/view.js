@@ -2,8 +2,8 @@
  * WordPress dependencies
  */
 import { Button, RangeControl, ToggleControl, TextControl } from '@wordpress/components';
-import { Fragment }                          from '@wordpress/element';
-import { __ }                                from '@wordpress/i18n';
+import { Fragment } from '@wordpress/element';
+import { __ }       from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
@@ -21,11 +21,12 @@ function ApiKey( props ) {
 	return (
 		<Card title="Perspective API Key">
 			<p>
-				Your API key allows Compassionate Comments to use the Perspective API in order to analyze comments for toxicity.
+				{ __( 'Your API key allows Compassionate Comments to use the Perspective API in order to analyze comments for toxicity.', 'compassionate-comments' ) }
 			</p>
 
 			{ ! apiKey &&
 				<p className="notice notice-error">
+					{/* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 					You have not entered an API key yet, and this plugin can't work until you do. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
 				</p>
 			}
@@ -38,6 +39,7 @@ function ApiKey( props ) {
 			/>
 
 			<p className="notice notice-warning">
+				{/* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> {}
 				to your server's domain name, IP address, or other unique identifier. If you don't, it's likely that the key will be abused and the plugin will stop working.
 			</p>
@@ -58,7 +60,9 @@ function Sensitivity( props ) {
 
 	return (
 		<Card title="Sensitivity">
-			<p>Comment authors are warned when their comment's toxicity score exceeds this number.</p>
+			<p>
+				{ __( "Comment authors are warned when their comment's toxicity score exceeds this number.", 'compassionate-comments' ) }
+			</p>
 
 			<RangeControl
 				label="Sensitivity"
@@ -73,12 +77,16 @@ function Sensitivity( props ) {
 			/>
 
 			<p>
-				Example of {sensitivity}% toxic:
+				{ sprintf(
+					// Translators: %s is a number between 0 and 100.
+					__( 'Example of %s%% toxic:', 'compassionate-comments' ),
+					sensitivity
+				) }
 				<blockquote>{ sampleComments[ sensitivity ] }</blockquote>
 			</p>
 
 			<p className="notice notice-info">
-				Changing this will not have any effect retroactively, it will only determine the behavior for new comments.
+				{ __( 'Changing this will not have any effect retroactively, it will only determine the behavior for new comments.', 'compassionate-comments' ) }
 			</p>
 		</Card>
 	);
@@ -93,7 +101,7 @@ function StoreComments( props ) {
 	return (
 		<Card title="Store Comments">
 			<p>
-				Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.
+				{ __( 'Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.', 'compassionate-comments' ) }
 			</p>
 
 			<ToggleControl
@@ -106,11 +114,15 @@ function StoreComments( props ) {
 			{/* todo why is ^ not styled correctly in core trunk environment, but is in latest stable environment? */}
 
 			<p>
-				If this is disabled, they will still receive and analyze the comment, but have promised to discard it after they've finished analyzing it, rather than retaining it.
+				{ __(
+					"If this is disabled, they will still receive and analyze the comment, but have promised to discard it after they've finished analyzing it, rather than retaining it.",
+					'compassionate-comments'
+				) }
 			</p>
 
 			<p className="notice notice-info">
-				Comments on private posts will never be stored, regardless of this setting.
+				{ __( 'Comments on private posts will never be stored, regardless of this setting.', 'compassionate-comments' ) }
+
 				{/* todo phrase that more accurately, like,
 				we will always ask the api to disacard comments that belong to private posts, regardless of this setting
 				*/}
@@ -127,7 +139,7 @@ function StoreCommentsDisabled( props ) {
 	return (
 		<Card title="Store Comments">
 			<p>
-				Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.
+				{ __( 'Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.', 'compassionate-comments' ) }
 			</p>
 
 			{/* todo add disabled field? but component just ignnores is. maybe open ticket that it should pass props to input field*/}
@@ -140,6 +152,7 @@ function StoreCommentsDisabled( props ) {
 			{/* todo why is ^ not styled correctly in core trunk environment, but is in latest stable environment? */}
 
 			<p className="notice notice-info">
+				{/* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 				Because <a href="options-reading.php">your site is marked as private</a>, we will always ask Perspective to discard your comments after they've analyzed them.
 				{/* todo might need to epxlain it's the "search engine" setting, b/c that's not obvious */}
 			</p>
@@ -171,16 +184,22 @@ function SaveButton( props ) {
 				isBusy={ savingSettings }
 				onClick={ onClick }
 			>
-				Save Settings
+				{ __( 'Save Settings', 'compassionate-comments' ) }
 			</Button>
 
 			{ savingSettings &&
-				<p>Saving...</p>
+				<p>
+					{ __( 'Saving...', 'compassionate-comments' ) }
+				</p>
 			}
 
 			{ ! savingSettings &&
 				<p>
-					Saved { lastSave }
+					{/* Translators: %s is a relative time, like "3 minutes ago". */}
+					{ sprintf(
+						__( 'Saved %s', 'compassionate-comments' ),
+						lastSave
+					) }
 				</p>
 			}
 		</Fragment>
@@ -206,10 +225,14 @@ export function MainView( props ) {
 	return (
 		<Fragment>
 			<p>
-				This plugin checks the intent of a comment before it's submitted. If the author is being rude or disrespectful, it will encourage them to think twice, and give them a chance to rephrase their comment to be more kind before they submit it.
+				{ __(
+					"This plugin checks the intent of a comment before it's submitted. If the author is being rude or disrespectful, it will encourage them to think twice, and give them a chance to rephrase their comment to be more kind before they submit it.",
+					'compassionate-comments'
+				) }
 			</p>
 
 			<p>
+				{/* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 				Google's <a href="https://www.perspectiveapi.com/">Perspective API</a> is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis.
 			</p>
 
@@ -221,7 +244,10 @@ export function MainView( props ) {
 
 					<div className="notice notice-warning">
 						<p>
-							The Perspective API can only analyze comments written in English, French, and Spanish. Comments written in other languages will be submitted without any analysis or content warnings.
+							{ __(
+								'The Perspective API can only analyze comments written in English, French, and Spanish. Comments written in other languages will be submitted without any analysis or content warnings.',
+								'compassionate-comments'
+							) }
 						</p>
 					</div>
 				</Fragment>

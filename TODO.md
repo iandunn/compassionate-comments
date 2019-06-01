@@ -2,9 +2,6 @@
 
 ## MVP
 
-* remove default exports from everything
-
-* i18n all files
 * fix any todos left in code
 
 * Improve the design
