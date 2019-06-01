@@ -21,12 +21,12 @@ function ApiKey( props ) {
 	return (
 		<Card title="Perspective API Key">
 			<p>
-				Your API key allows the plugin to use the Perspective API in order to analyze comments for toxicity.
+				Your API key allows Compassionate Comments to use the Perspective API in order to analyze comments for toxicity.
 			</p>
 
 			{ ! apiKey &&
 				<p className="notice notice-error">
-					You have not entered an API key yet. This plugin will not work until you do. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
+					You have not entered an API key yet, and this plugin can't work until you do. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
 				</p>
 			}
 
@@ -103,16 +103,46 @@ function StoreComments( props ) {
 				onChange={ onChange }
 			/>
 
+			{/* todo why is ^ not styled correctly in core trunk environment, but is in latest stable environment? */}
+
 			<p>
-				If this is disabled, they will still receive and analyze the comment, but have promised not to retain it.
+				If this is disabled, they will still receive and analyze the comment, but have promised to discard it after they've finished analyzing it, rather than retaining it.
 			</p>
 
 			<p className="notice notice-info">
 				Comments on private posts will never be stored, regardless of this setting.
-				{/* todo is that accurate? need to decide what will actually do. */}
+				{/* todo phrase that more accurately, like,
+				we will always ask the api to disacard comments that belong to private posts, regardless of this setting
+				*/}
+			</p>
+		</Card>
+	);
+}
+
+
+// todo
+function StoreCommentsDisabled( props ) {
+	// todo clarify title that this stores comments on Perspective servers, not this local wp server
+
+	return (
+		<Card title="Store Comments">
+			<p>
+				Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.
 			</p>
 
-			{/* todo maybe show warning if set to store comments, but blog is set to private/block serarch engines/whatever you can use as indicator that it's private */}
+			{/* todo add disabled field? but component just ignnores is. maybe open ticket that it should pass props to input field*/}
+			<ToggleControl
+				label="Store Comments"
+				//help="describe here too?"
+				checked={ false }
+			/>
+
+			{/* todo why is ^ not styled correctly in core trunk environment, but is in latest stable environment? */}
+
+			<p className="notice notice-info">
+				Because <a href="options-reading.php">your site is marked as private</a>, we will always ask Perspective to discard your comments after they've analyzed them.
+				{/* todo might need to epxlain it's the "search engine" setting, b/c that's not obvious */}
+			</p>
 		</Card>
 	);
 }
@@ -166,7 +196,7 @@ function SaveButton( props ) {
  */
 export function MainView( props ) {
 	const {
-		storeComments, perspectiveApiKey, savingSettings, toxicSensitivity,
+		storeComments, perspectiveApiKey, savingSettings, siteIsPublic, toxicSensitivity,
 		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handleToxicSensitivityChange
 	} = props;
 
@@ -194,10 +224,16 @@ export function MainView( props ) {
 					onChange={ handleToxicSensitivityChange }
 				/>
 
-				<StoreComments
-					checked={ storeComments }
-					onChange={ handleStoreCommentsChange }
-				/>
+				{ siteIsPublic &&
+					<StoreComments
+						checked={ storeComments }
+						onChange={ handleStoreCommentsChange }
+					/>
+				}
+
+				{ ! siteIsPublic &&
+					<StoreCommentsDisabled />
+				}
 			</div>
 
 			<SaveButton

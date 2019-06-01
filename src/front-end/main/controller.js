@@ -63,11 +63,12 @@ export class MainController extends Component {
 				},
 
 				languages : [ 'en' ],
-				requestedAttributes : { TOXICITY: {} },
+					// maybe don't send this at all, bcause have no way of knowing what language the comment was written in
+					// could be different than the blog locale, so just let Google auto-detect?
 
-				// read through api docs to see what options are best to use here
-				// minimize response to only stuff you'll use for performance
+				requestedAttributes : { TOXICITY: {} },
 			};
+			// probably move all of ^ into the remoteApiRequest wrapper, except for the comment text
 
 			let newState = {};
 
@@ -135,29 +136,44 @@ export class MainController extends Component {
 
 		// todo document that exposing key isn't greay, but altnerative would be proxying the request via a REST API endpoint, which would be very slow
 		// so just warned admins on settings screen to restrict the key to keep it safe
-		const url                   = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${ perspectiveApiKey }`;
+		const url = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${ perspectiveApiKey }`;
+
+		data.doNotStore = this.doNotStore();
 
 		const requestParams = {
 			method      : 'POST',
 			body        : JSON.stringify( data ),
 			headers     : new Headers( { 'Content-Type': 'application/json' } ),
 			credentials : 'omit',
-
-			doNotStore : true, // tmp for testing, don't wanna pollute their data with testing stuff. is there a way to set this automatically?
-				// todo set based on storeComments setting - need to flip it though, b/c of naming problem - https://github.com/conversationai/perspectiveapi/issues/58
-				// but always set to true (don't store) when it's a private post
-				// also try to automatically set to true when it's a dev environment, but how to detect that?
-					// maybe don't, but disage the "store" setting in your test site?
-
-				//			* default value should be to not store if blog is private - that'd be set in php
-				//* maybe set it based on whether _post_ is public/private, not blog?
-				// or assume if blog is private that all posts are private, even if they're technically set to "publish"
-				//	does stock WP have a "private" setting for blogs, or is that just WPCOM. don't think so, maybe just use "search engine visibility" instead
-				//* maybe have private posts not stored regardless of that setting, so that the setting just covers public posts on a public blog?
-
 		};
 
 		return fetch( url, requestParams ).then( response => response.json() );
+	}
+
+	// todo
+	doNotStore() {
+		const { isTestEnvironment, postIsPublic, siteIsPublic, storeComments } = this.props;
+
+		/*
+		 * Flip the setting because our internal version is the opposite, for better UX.
+		 *
+		 * See https://github.com/conversationai/perspectiveapi/issues/58.
+		 */
+		let doNotStore = ! storeComments;
+
+		if ( storeComments ) {
+			/*
+			 * Storing private posts/comments would violate privacy expectations, and storing comments from test
+			 * environments would distort Perspective's data set.
+			 */
+			if ( isTestEnvironment || ! siteIsPublic || ! postIsPublic ) {
+				doNotStore = true;
+			}
+
+			// todo test all these paths
+		}
+
+		return doNotStore;
 	}
 
 	// todo

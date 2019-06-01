@@ -63,6 +63,7 @@ export class MainController extends Component {
 	}
 
 	render() {
+		const { siteIsPublic } = this.props;
 		const { perspectiveApiKey, savingSettings, storeComments, toxicSensitivity } = this.state;
 
 		// todo consider using Context for this instead of passing it down all the time, but that seems pretty clunky in its own right
@@ -77,6 +78,7 @@ export class MainController extends Component {
 				perspectiveApiKey={ perspectiveApiKey }
 				savingSettings={ savingSettings }
 				storeComments={ storeComments }
+				siteIsPublic={ siteIsPublic }
 				toxicSensitivity={ toxicSensitivity }
 			/>
 		);

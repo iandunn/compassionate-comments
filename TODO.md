@@ -43,15 +43,23 @@
 
 ## Future
 
-* show comment scores on the comments list and/or when editing individiaual comments
-	* make color red if it's above the sensitivity threshhold, and green if it's below
+### High Impact and/or Low Effort
 
-* Add option to let admins automatically moderate comments that were submitted anyway, even though they're above the sensitivity threshold
+* Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
 
 * have a test button on the wp-admin to help users know if credentials setup correctly
 	* send an existing comment (if there are some) or a fallback hardcoded comment
 		* probably set donotstore to true so that test comment doesn't get stored and distort Perspective's data
 	* show successful results or error
+	* probaly want to share the code between front and back ends at this point
+
+* show comment scores on the comments list and/or when editing individiaual comments
+	* make color red if it's above the sensitivity threshhold, and green if it's below
+
+
+### Low Impact and/or High Effort
+
+* have setting to not send comments to Perspective at all for private sites/posts, rather than sending them with `doNotTrack`
 
 * Add way to report false positives back to Perspective, if they accept that kind of feedback
 	* > Users can leverage the [...] ‘SuggestCommentScore’ method to submit corrections to improve Perspective over time.
@@ -80,3 +88,12 @@
 
 * maybe have gradations, rather than just toxic or not toxic?
 	* e.g., at 40% user is shown warning, at 80% user is blocked from publishing until edits to below 80%?
+
+* Add option to not scan comments of logged-in users
+	* maybe also let choose which roles get scanned
+
+* Warn admin when Perspective quota exceeded
+	* Those are currently available in the Cloud Console, but not (easily) accessible via API
+	* https://github.com/conversationai/perspectiveapi/issues/6
+
+* Consider sending `context` request param in future, once it actually impacts the score

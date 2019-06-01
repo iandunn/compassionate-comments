@@ -1,7 +1,7 @@
 <?php
 
 namespace Compassionate_Comments;
-
+use WP_Post;
 
 // Admin
 add_action( 'admin_init',            __NAMESPACE__ . '\register_settings' );
@@ -148,10 +148,12 @@ function enqueue_admin_assets() {
 
 // todo
 function enqueue_front_end_assets() {
-	// todo return early if all comments are disabled
-		// can't detect that, b/c setting just controls default, and they could be enabled on individual pages?
+	global $post;
 
-	// check build size of css and js, make sure not too bad
+	if ( ! $post instanceof WP_Post || 'open' !== $post->comment_status ) {
+		return;
+		// todo test
+	}
 
 	wp_enqueue_style(
 		'compassionate-comments-front',
@@ -173,35 +175,63 @@ function enqueue_front_end_assets() {
 
 // todo
 function add_inline_script( $handle ) {
+	global $post;
+
+	$options = array(
+		'perspectiveApiKey' => get_option( 'comcon_perspective_api_key', '' ),
+		'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 40 ),
+		'postIsPublic'      => $post instanceof WP_Post && 'publish' === $post->post_status,
+		'isTestEnvironment' => is_test_environment(),
+
+		/*
+		 * In Multisite, Core keeps site-specific option in sync with `wp_blogs.public`, so checking this
+		 * works for both single-site and Multisite.
+		 */
+		'siteIsPublic' => (bool) get_option( 'blog_public' ),
+
+
+		// todo api request needs language, but need to map wp locale to language codes that google uses
+			// need to include glotpress locales.php via submodule with sparse checkout? or via svn?
+			// w.org directory doesn't support svn:externals, would need in git repo anyway
+			// api expects "A list of ISO 631-1 two-letter language codes "
+
+		// does perspective api support all languages? can detect is language isn't detected and show error on settings screen, and have front end return early?
+		/*
+		 * Production Model	Supported Languages
+			TOXICITY	en, fr, es
+			SEVERE_TOXICITY	en, fr, es
+		 */
+
+		// add something to readme about supported languages
+
+		// show warning in admin and disable plugin entirely if language not supported?
+			// don't disable b/c comments can be written in different language, but maybe show warning so that admin is aware
+
+		// can get those automatically though? don't wanna hardcode a safelist that'll get outdated and block people from using it even though the api supports its
+			// maybe just show warning in admin screen if blog locate doesn't match one of the hardcoded list, instead of blocking?
+			// it's possible to have the blog locale set to english but commenters writing in spanish, etc
+	);
+
+	// If the entire site is private, ask Perspective to never store comments.
+	$options['storeComments'] = $options['siteIsPublic'] ? get_option( 'comcon_store_comments', true ) : false;
+
+	$options = apply_filters( 'comcon_options', $options, $handle, $post );
+
 	$script_data = sprintf(
 		'var comconOptions = %s;',
-		wp_json_encode( array(
-			'perspectiveApiKey' => get_option( 'comcon_perspective_api_key' ),
-			'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 40 ),
-			'storeComments'     => get_option( 'comcon_store_comments', true ),
-
-
-			// todo api request needs language, but need to map wp locale to language codes that google uses
-				// need to include glotpress locales.php via submodule with sparse checkout? or via svn?
-				// w.org directory doesn't support svn:externals, would need in git repo anyway
-				// api expects "A list of ISO 631-1 two-letter language codes "
-
-			// does perspective api support all languages? can detect is language isn't detected and show error on settings screen, and have front end return early?
-			/*
-			 * Production Model	Supported Languages
-				TOXICITY	en, fr, es
-				SEVERE_TOXICITY	en, fr, es
-			 */
-
-			// add something to readme about supported languages
-
-			// can get those automatically though? don't wanna hardcode a safelist that'll get outdated and block people from using it even though the api supports its
-				// maybe just show warning in admin screen if blog locate doesn't match one of the hardcoded list, instead of blocking?
-				// it's possible to have the blog locale set to english but commenters writing in spanish, etc
-		) )
+		wp_json_encode( $options )
 	);
 
 	wp_add_inline_script( $handle, $script_data, 'before' );
+}
+
+//todo
+function is_test_environment() {
+	$hostname_parts   = explode( '.', wp_parse_url( site_url(), PHP_URL_HOST ) );
+	$top_level_domain = end( $hostname_parts );
+	$test_tlds        = array( 'test', 'localhost', 'local' );
+
+	return in_array( $top_level_domain, $test_tlds, true );
 }
 
 // todo
