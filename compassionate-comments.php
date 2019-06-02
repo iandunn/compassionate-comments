@@ -32,6 +32,7 @@ function register_settings() {
 			'type'              => 'string',
 			'show_in_rest'      => true,
 			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '',
 		)
 	);
 
@@ -42,6 +43,7 @@ function register_settings() {
 			'type'              => 'integer',
 			'show_in_rest'      => true,
 			'sanitize_callback' => 'absint',
+			'default'           => 40,
 		)
 	);
 
@@ -52,10 +54,9 @@ function register_settings() {
 			'type'              => 'boolean',
 			'show_in_rest'      => true,
 			'sanitize_callback' => 'wp_validate_boolean',
+			'default'           => true,
 		)
 	);
-
-	// todo want to set default values here? i guess it doesn't really matter b/c only ever using this to update, not read, but still
 }
 
 //todo
@@ -183,8 +184,8 @@ function add_inline_script( $handle ) {
 	$supported_languages = array( 'en', 'es', 'fr' );
 
 	$options = array(
-		'perspectiveApiKey'      => get_option( 'comcon_perspective_api_key',     '' ),
-		'perspectiveSensitivity' => get_option( 'comcon_perspective_sensitivity', 40 ),
+		'perspectiveApiKey'      => get_option( 'comcon_perspective_api_key' ),
+		'perspectiveSensitivity' => get_option( 'comcon_perspective_sensitivity'),
 		'postIsPublic'           => $post instanceof WP_Post && 'publish' === $post->post_status,
 		'isTestEnvironment'      => is_test_environment(),
 
@@ -203,7 +204,7 @@ function add_inline_script( $handle ) {
 	);
 
 	// If the entire site is private, ask Perspective to never store comments.
-	$options['perspectiveStoreComments'] = $options['siteIsPublic'] ? get_option( 'comcon_perspective_store_comments', true ) : false;
+	$options['perspectiveStoreComments'] = $options['siteIsPublic'] ? get_option( 'comcon_perspective_store_comments' ) : false;
 
 	// todo rename "options" to something more accurate, but what? "data" is too vague.
 	$options = apply_filters( 'comcon_options', $options, $handle, $post );
