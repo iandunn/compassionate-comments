@@ -4,7 +4,7 @@
  * Prune the sample comments from the Perspective project down to the minimum data we need for the Settings screen.
  */
 
-namespace Compassionate_Comments\Bin\Prune_Sample_Comments;
+namespace Compassionate_Comments\Admin\Prune_Sample_Comments;
 use WP_CLI;
 
 defined( 'WP_CLI' ) || die();
@@ -75,7 +75,7 @@ function main( $file, $args ) {
 	file_put_contents( $output_file, $output );
 
 	WP_CLI::line( sprintf(
-		"Output array to `bin/%s`. You can now manually merge that into `src/admin/main/sample-comments.js`.",
+		"Output array to `./%s`. You can now manually merge that into `./sample-comments.js`.",
 		basename( $output_file )
 	) );
 

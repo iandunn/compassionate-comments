@@ -13,8 +13,8 @@ module.exports = {
 	...defaultConfig,
 
 	entry : {
-		'front-end' : './src/front-end/index',
-		'admin'     : './src/admin/index',
+		'admin'     : './admin/index',
+		'front-end' : './front-end/index',
 
 		// todo is this needed? if so, open an issue b/c wp-scripts should detect this common pattern and support it without needing custom config
 		// just need to establish a convention for naming admin/front-end

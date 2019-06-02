@@ -23,7 +23,6 @@ define( 'COMCON_REQUIRED_WP_VERSION',  '5.0' );  // Because of Gutenberg compone
  */
 function comcon_requirements_met() {
 	global $wp_version;
-	require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 
 	if ( version_compare( PHP_VERSION, COMCON_REQUIRED_PHP_VERSION, '<' ) ) {
 		return false;
@@ -42,7 +41,7 @@ function comcon_requirements_met() {
 function comcon_requirements_error() {
 	global $wp_version;
 
-	require_once( dirname( __FILE__ ) . '/views/requirements-error.php' );
+	require_once( dirname( __FILE__ ) . '/admin/requirements-error.php' );
 }
 
 /*
@@ -52,7 +51,22 @@ function comcon_requirements_error() {
  * Otherwise older PHP installations could crash when trying to parse it.
  */
 if ( comcon_requirements_met() ) {
-	require_once( dirname( __FILE__ ) . '/compassionate-comments.php' );
+	require_once( dirname( __FILE__ ) . '/common/common.php' );
+
+	/*
+	 * This isn't really what `wp_is_json_request()` is meant for, but it's the best option until
+	 * https://core.trac.wordpress.org/ticket/42061 is resolved.
+	 *
+	 * @todo Replace with `wp_doing_rest()` (or whatever) once that's available on minimum required WP version.
+	 */
+	if ( is_admin() || wp_is_json_request() ) {
+		require_once( dirname( __FILE__ ) . '/admin/admin.php' );
+	} else {
+		// todo does ^ guaranttet this this is only front end? not really, what can you check instead?
+		// no, it'll load for cron too.
+
+		require_once( dirname( __FILE__ ) . '/front-end/front-end.php' );
+	}
 } else {
 	add_action( 'admin_notices', 'COMCON_requirements_error' );
 }

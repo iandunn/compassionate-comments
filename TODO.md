@@ -2,14 +2,6 @@
 
 ## MVP
 
-maybe use a single options field instead of multiple?
-	but then when setting via rest api it's harder b/c have to set full thing instead of one at a time
-		not a problem b/c always have them at hand anyway?
-
-* maybe move compassionatecomments.php to `src` folder, so there isn't any real code in the root folder?
-	* odd to have php in "js" folder, but it's not named "js", it's named "source". but "source" as opposed to "build", and php isn't built (thank God).
-	* precedence in gutenberg dynamic blocks w/ php render
-
 * fix any todos left in code
 
 * lint php, js, css
@@ -85,6 +77,16 @@ let user choose between perspective and tensorflow toxicity, so have offline opt
 
 
 ### Low Impact and/or High Effort
+
+* have a stats dashboard that shows the impact of the plugin
+	use some nifty js data visualization thingy
+	look at `commentmeta` table
+		% comments that scored high enough to trigger warning, but submitted anyway
+			this will be distorted if change sensitivity level, so maybe only analyzie comments since the last change in level
+		% comments that scored high enough to trigger warning, then resubmitted w/ a lower score
+			also show average delta between first score and second (e.g., "of commenters that chose to make comment more kind, the toxicity level decreased from average of 64% to average of 33%")
+	average toxicity score across all comments
+	average score of comments below sensitivity threshold, and avg of those above it
 
 * have setting to not send comments to Perspective at all for private sites/posts, rather than sending them with `doNotTrack`
 
