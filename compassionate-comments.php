@@ -205,6 +205,19 @@ function add_inline_script( $handle ) {
 	// If the entire site is private, ask Perspective to never store comments.
 	$options['storeComments'] = $options['siteIsPublic'] ? get_option( 'comcon_store_comments', true ) : false;
 
+	// explain getting here instead of from DOM b/c themes put in different places
+	// what if theme doesn't display avatars at all? should still display them here?
+		// todo wait, if that's true the can't get ID reliably either in order to match up w/ the ones you're outputting here, right?
+			//wp_list_comments() should standardize it, right? so can just grab from dom.
+	// 				test
+//	if ( $post instanceof WP_Post ) {
+//		$options['avatars']['post'] = get_avatar_url( $post->post_author, array( 'default' => '404' ) );
+//
+//		$comments = get_comments( array( 'post_ID' => $post->ID ) );
+//		// for each comment
+////			$options['avatars']['comments'][ $comment->id ] = get_avatar_url( $comment->post_author, array( 'default' => '404' ) );
+//	}
+
 	// todo rename "options" to something more accurate, but what? "data" is too vague.
 	$options = apply_filters( 'comcon_options', $options, $handle, $post );
 

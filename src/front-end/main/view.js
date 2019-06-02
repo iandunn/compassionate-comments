@@ -16,6 +16,47 @@ import { __, sprintf }            from '@wordpress/i18n';
 function Toxic( props ) {
 	const { handleSubmitAnyway, handleRephraseComment } = props;
 
+	const replyParent       = document.getElementById( 'respond' ).parentNode;
+	const replyingToComment = replyParent.classList.contains( 'comment' );
+
+	let parentAuthorAvatarUrl, parentAuthorName;
+
+	if ( replyingToComment ) {
+		// can't assume all themes output, so just need to look for an image where href*= gravatar.com
+		parentAuthorAvatarUrl = replyParent.parentNode.querySelector( 'img.avatar' )[0].src;
+
+		// only want to show avatar if it's one the user uploadoed though, b/c it has to be their actual face to make an impact
+			// don't want to show default avatars. is there a way to detect that from url?
+				// if not, maybe can in some other way, like by making a request like `get_avatar( $user, array( 'default' => '404' ) )`, and comparing the urls to see if they match?
+					// have to make sure size etc ignored
+
+		// maybe don't pull avatar/name from the DOM, b/c themes inconsistent?
+			// maybe pull from REST API after page loados (but before the commit submission is attempted), and then match w/ comment IDs you pull from DOM?
+
+		// get post w/ _embed to get comments? otherwise would just get latest comment
+		// or can pass `parent` param?
+
+		// oh, actually can export the comment author avatars too
+			// what about caching? they should be flushed when new comments are added
+
+		// modularize this
+
+		// maybe move all this to controller and pass in as prop - probably better that way
+
+		// wrap in try?
+		// todo handle if false or whatever b/c theme not outputting or b/c author doesn't have one
+
+		// can detect if it's mystery man rather than real photo? if so then don't display
+
+		parentAuthorName      = parentComment && '';
+	} else {
+
+		// only some themes show the author avatar, and they might show them in different places, sigh
+		// maybe use rest api to fetch. oh, just output from php
+		parentAuthorAvatarUrl = parentComment && '';
+		parentAuthorName      = parentComment && '';
+	}
+
 	//rename func to be more descriptive?
 
 	// todo g component js/css too heavy for the little bits that you use?
@@ -51,6 +92,10 @@ function Toxic( props ) {
 						'https://www.edutopia.org/blog/assuming-positive-intent-laura-thomas'
 					) }
 				</RawHTML>
+
+				{ parentComment && parentAuthorAvatarUrl &&
+					<img src={ parentAuthorAvatarUrl } alt={ parentAuthorName } />
+				}
 			</p>
 
 			<p>
