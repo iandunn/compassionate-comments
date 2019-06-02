@@ -2,6 +2,8 @@
 
 ## MVP
 
+rename api key and sensitiveity to scope to perspective, in case add Toxicity in future
+
 * maybe move compassionatecomments.php to `src` folder, so there isn't any real code in the root folder?
 	* odd to have php in "js" folder, but it's not named "js", it's named "source". but "source" as opposed to "build", and php isn't built (thank God).
 	* precedence in gutenberg dynamic blocks w/ php render
@@ -13,16 +15,6 @@
 	* look at https://woocommerce.github.io/woocommerce-admin/#/?id=dev-docs for inspiration
 * update readme.md
 * update readme.txt
-
-
-
-### Stretch goals
-
-* show avatar of person replying to, to put human face on it?
-	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
-	or would that backfire? how to make it not awkward?
-
-* reduce bundle sizes
 
 
 ### Launch
@@ -50,6 +42,14 @@
 ## Future
 
 ### High Impact and/or Low Effort
+
+let user choose between perspective and tensorflow toxicity, so have offline option
+
+* show avatar of person replying to, to put human face on it?
+	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
+	or would that backfire? how to make it not awkward?
+
+* reduce bundle sizes
 
 * Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
 
