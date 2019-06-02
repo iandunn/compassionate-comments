@@ -6,9 +6,6 @@
 
 * lint php, js, css
 
-* Improve the design
-	* update screenshot
-	* look at https://woocommerce.github.io/woocommerce-admin/#/?id=dev-docs for inspiration
 * update readme.md
 * update readme.txt
 

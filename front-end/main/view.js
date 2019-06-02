@@ -32,7 +32,7 @@ function Toxic( props ) {
 		<div id="compassionate-comments__nudge">
 			<p>
 				{ __(
-					'It looks like your comment is likely to be interpreted as being rude, disrespectful, or having negative intentions.',
+					'It looks like your comment is likely to be interpreted as rude or disrespectful.',
 					'compassionate-comments'
 				) }
 			</p>
@@ -53,17 +53,13 @@ function Toxic( props ) {
 				</RawHTML>
 			</p>
 
-			<p>
-				{ __( 'If you feel like your words are already kind, feel free to submit them anyway.', 'compassionate-comments' ) }
-			</p>
-
 			<Button isPrimary name="cc_rephrase_comment" onClick={ handleRephraseComment }>
-				{ __( 'Edit comment', 'compassionate-comments' ) }
+				{ __( 'Edit Comment', 'compassionate-comments' ) }
 			</Button>
 
 			{/* todo add isBusy to button when submitting comment? or not necessary b/c it'll be done via php? */}
 			<Button isDefault isDestructive name="cc_submit_anyway" onClick={ handleSubmitAnyway }>
-				{ __( 'Publish comment as-is', 'compassionate-comments' ) }
+				{ __( 'Submit Anyway', 'compassionate-comments' ) }
 			</Button>
 		</div>
 	);
