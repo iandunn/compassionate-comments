@@ -37,7 +37,7 @@ function register_settings() {
 
 	register_setting(
 		'compassionate-comments',
-		'comcon_toxic_sensitivity',
+		'comcon_perspective_sensitivity',
 		array(
 			'type'              => 'integer',
 			'show_in_rest'      => true,
@@ -47,7 +47,7 @@ function register_settings() {
 
 	register_setting(
 		'compassionate-comments',
-		'comcon_store_comments',
+		'comcon_perspective_store_comments',
 		array(
 			'type'              => 'boolean',
 			'show_in_rest'      => true,
@@ -183,10 +183,10 @@ function add_inline_script( $handle ) {
 	$supported_languages = array( 'en', 'es', 'fr' );
 
 	$options = array(
-		'perspectiveApiKey' => get_option( 'comcon_perspective_api_key', '' ),
-		'toxicSensitivity'  => get_option( 'comcon_toxic_sensitivity', 40 ),
-		'postIsPublic'      => $post instanceof WP_Post && 'publish' === $post->post_status,
-		'isTestEnvironment' => is_test_environment(),
+		'perspectiveApiKey'      => get_option( 'comcon_perspective_api_key',     '' ),
+		'perspectiveSensitivity' => get_option( 'comcon_perspective_sensitivity', 40 ),
+		'postIsPublic'           => $post instanceof WP_Post && 'publish' === $post->post_status,
+		'isTestEnvironment'      => is_test_environment(),
 
 		/*
 		 * This is fuzzy, since it's common for the site locale to be in English even when the `post_content` and
@@ -203,7 +203,7 @@ function add_inline_script( $handle ) {
 	);
 
 	// If the entire site is private, ask Perspective to never store comments.
-	$options['storeComments'] = $options['siteIsPublic'] ? get_option( 'comcon_store_comments', true ) : false;
+	$options['perspectiveStoreComments'] = $options['siteIsPublic'] ? get_option( 'comcon_perspective_store_comments', true ) : false;
 
 	// todo rename "options" to something more accurate, but what? "data" is too vague.
 	$options = apply_filters( 'comcon_options', $options, $handle, $post );

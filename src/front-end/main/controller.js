@@ -53,14 +53,14 @@ export class MainController extends Component {
 			loading       : true,
 			// todo maybe don't need separate var for interfaceOpen? can just assume if loading or isToxic?
 		}, () => {
-			const { toxicSensitivity } = this.props;
+			const { perspectiveSensitivity } = this.props;
 			const comment              = document.getElementById( 'comment' ).value;
 			let newState               = {};
 
 			this.sendScoreRequest( comment ).then( data => {
 				try {
 					const score = data.attributeScores.TOXICITY.summaryScore.value;
-					newState    = { isToxic: score > toxicSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
+					newState    = { isToxic: score > perspectiveSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
 
 					this.logScore( score );
 				} catch ( Exception ) {
@@ -154,16 +154,16 @@ export class MainController extends Component {
 
 	// todo
 	doNotStore() {
-		const { isTestEnvironment, postIsPublic, siteIsPublic, storeComments } = this.props;
+		const { isTestEnvironment, postIsPublic, siteIsPublic, perspectiveStoreComments } = this.props;
 
 		/*
 		 * Flip the setting because our internal version is the opposite, for better UX.
 		 *
 		 * See https://github.com/conversationai/perspectiveapi/issues/58.
 		 */
-		let doNotStore = ! storeComments;
+		let doNotStore = ! perspectiveStoreComments;
 
-		if ( storeComments ) {
+		if ( perspectiveStoreComments ) {
 			/*
 			 * Storing private posts/comments would violate privacy expectations, and storing comments from test
 			 * environments would distort Perspective's data set.

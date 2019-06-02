@@ -187,8 +187,8 @@ function SaveButton( props ) {
  */
 export function MainView( props ) {
 	const {
-		languageSupported, perspectiveApiKey, savingSettings, siteIsPublic, storeComments, toxicSensitivity,
-		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handleToxicSensitivityChange
+		languageSupported, perspectiveApiKey, savingSettings, siteIsPublic, perspectiveStoreComments, perspectiveSensitivity,
+		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handlePerspectiveSensitivityChange
 	} = props;
 
 	// maybe all these should be wrapped in div instead of fragment? feels bad to have extra/unnecessary wrappers
@@ -232,13 +232,13 @@ export function MainView( props ) {
 				/>
 
 				<Sensitivity
-					sensitivity={ toxicSensitivity }
-					onChange={ handleToxicSensitivityChange }
+					sensitivity={ perspectiveSensitivity }
+					onChange={ handlePerspectiveSensitivityChange }
 				/>
 
 				{ siteIsPublic &&
 					<StoreComments
-						checked={ storeComments }
+						checked={ perspectiveStoreComments }
 						onChange={ handleStoreCommentsChange }
 					/>
 				}

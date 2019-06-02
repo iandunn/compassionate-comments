@@ -17,13 +17,13 @@ export class MainController extends Component {
 	constructor( props ) {
 		super( props );
 
-		const { perspectiveApiKey, storeComments, toxicSensitivity } = props;
+		const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = props;
 
 		this.state = {
 			savingSettings: false,
 			perspectiveApiKey,
-			storeComments,
-			toxicSensitivity,
+			perspectiveStoreComments,
+			perspectiveSensitivity,
 		};
 
 		// ^ feels weird b/c then you have props.sensitivity and state.sensitivity and they don't match
@@ -36,21 +36,20 @@ export class MainController extends Component {
 		this.setState( { savingSettings: true }, () => {
 			const { apiFetch } = wp;
 				// todo this shouldn't be necessary since imported above, but otherwise it's undefined
-			const { perspectiveApiKey, storeComments, toxicSensitivity } = this.state;
+			const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 
 			const fetchParams = {
 				path   : '/wp/v2/settings',
 				method : 'PUT',
 				data   : {
-					'comcon_perspective_api_key' : perspectiveApiKey,
-					'comcon_toxic_sensitivity'   : toxicSensitivity,
-					'comcon_store_comments'      : storeComments,
+					'comcon_perspective_api_key'        : perspectiveApiKey,
+					'comcon_perspective_sensitivity'    : perspectiveSensitivity,
+					'comcon_perspective_store_comments' : perspectiveStoreComments,
 				}
 			};
 
 			apiFetch( fetchParams ).then( data => {
 				// what to do here? nothing? can just skip this then?
-				// oh, probably update the state.lastupdated thingy
 
 			} ).catch( error => {
 				console.error( `Compassionate Comments error: ${error.data.status} ${error.code}: ${error.message}` );
@@ -64,23 +63,23 @@ export class MainController extends Component {
 
 	render() {
 		const { languageSupported, siteIsPublic } = this.props;
-		const { perspectiveApiKey, savingSettings, storeComments, toxicSensitivity } = this.state;
+		const { perspectiveApiKey, savingSettings, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 
 		// todo consider using Context for this instead of passing it down all the time, but that seems pretty clunky in its own right
 
 		return (
 			<MainView
-				handleApiKeyChange={           perspectiveApiKey => this.setState( { perspectiveApiKey } ) }
-				handleStoreCommentsChange={    storeComments     => this.setState( { storeComments     } ) }
-				handleToxicSensitivityChange={ toxicSensitivity  => this.setState( { toxicSensitivity  } ) }
+				handleApiKeyChange={                 perspectiveApiKey        => this.setState( { perspectiveApiKey        } ) }
+				handleStoreCommentsChange={          perspectiveStoreComments => this.setState( { perspectiveStoreComments } ) }
+				handlePerspectiveSensitivityChange={ perspectiveSensitivity   => this.setState( { perspectiveSensitivity   } ) }
 				handleSaveSettings={ () => this.saveSettings() }
 
 				languageSupported={ languageSupported }
 				perspectiveApiKey={ perspectiveApiKey }
 				savingSettings={ savingSettings }
-				storeComments={ storeComments }
+				perspectiveStoreComments={ perspectiveStoreComments }
 				siteIsPublic={ siteIsPublic }
-				toxicSensitivity={ toxicSensitivity }
+				perspectiveSensitivity={ perspectiveSensitivity }
 			/>
 		);
 	}

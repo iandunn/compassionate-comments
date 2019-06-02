@@ -2,27 +2,23 @@
 
 ## MVP
 
+maybe use a single options field instead of multiple?
+	but then when setting via rest api it's harder b/c have to set full thing instead of one at a time
+		not a problem b/c always have them at hand anyway?
+
 * maybe move compassionatecomments.php to `src` folder, so there isn't any real code in the root folder?
 	* odd to have php in "js" folder, but it's not named "js", it's named "source". but "source" as opposed to "build", and php isn't built (thank God).
 	* precedence in gutenberg dynamic blocks w/ php render
 
 * fix any todos left in code
 
+* lint php, js, css
+
 * Improve the design
 	* update screenshot
 	* look at https://woocommerce.github.io/woocommerce-admin/#/?id=dev-docs for inspiration
 * update readme.md
 * update readme.txt
-
-
-
-### Stretch goals
-
-* show avatar of person replying to, to put human face on it?
-	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
-	or would that backfire? how to make it not awkward?
-
-* reduce bundle sizes
 
 
 ### Launch
@@ -35,7 +31,11 @@
 	* add screenshots and banner assets
 	* delete screenshot from git repo and link to w.org CDN instead
 	* create video similar to QNI, link to both readmes - nice to have, not blocker
-* Post about it on your blog, [WP Tavern comments](https://wptavern.com/googles-new-perspective-project-filters-online-comments-based-on-toxicity), etc
+* install on iandunn.name even though don't need it, just to dogfood / catch bugs
+* Post about it on your blog
+	* just about the plugin concept/launch, not the react stuff, that'll be separate post
+	* https://iandunn.name/wordpress/wp-admin/post.php?post=2436&action=edit
+* comment on [WP Tavern comments](https://wptavern.com/googles-new-perspective-project-filters-online-comments-based-on-toxicity), etc
 	* there's also https://wordpress.org/plugins/serious-toxic-comments/, which uses TensorFlow's Toxicity model and blocks rather than gives a chance to rephrase
 	* also https://wordpress.org/plugins/sift-ninja/
 * post fyi on a8c discussion
@@ -50,6 +50,22 @@
 ## Future
 
 ### High Impact and/or Low Effort
+
+add some "saved" text or something next to save button, b/c happens so fast that user doesn't have any visual feedback
+	make it fade out after 5-10 seconds?
+	or just have permenant "saved x minutess ago" that updates real time?
+	or have a permenant "there are unsaved changes" / "all changes have been saved" thing? - tried that and it became a rabbit hole, so probably do one of the simpler options above
+		mostly complex b/c have to track original state after last save if want it to be perfect.
+			otherwise making change and undoing it would say it's unsaved, even though it's actually the asme values
+			could have simpler version though that just tracks if a change has been made, that would cover most cases, just wouldn't be perfect, maybe good enough, at least for first version, can iterate later to improve if think of a simple way
+
+let user choose between perspective and tensorflow toxicity, so have offline option
+
+* show avatar of person replying to, to put human face on it?
+	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
+	or would that backfire? how to make it not awkward?
+
+* reduce bundle sizes
 
 * Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
 
