@@ -42,6 +42,13 @@ export class MainController extends Component {
 	 * @param {object} event
 	 */
 	analyzeComment( event ) {
+		try {
+			const elementExists = document.getElementById( 'comment' ).value;
+		} catch ( Exception ) {
+			consoleError( Exception );
+			return;
+		}
+
 		event.preventDefault();
 
 		this.setState( {
@@ -49,8 +56,8 @@ export class MainController extends Component {
 			loading       : true,
 		}, () => {
 			const { perspectiveSensitivity } = this.props;
-			const comment              = document.getElementById( 'comment' ).value;
-			let newState               = {};
+			const comment                    = document.getElementById( 'comment' ).value;
+			let newState                     = {};
 
 			this.sendScoreRequest( comment ).then( data => {
 				try {
@@ -194,7 +201,11 @@ export class MainController extends Component {
 		 *
 		 * todo test ^ again using props.form, might be possible to simplify this
 		 */
-		document.createElement( 'form' ).submit.call( document.getElementById( 'commentform' ) );
+		try {
+			document.createElement( 'form' ).submit.call( document.getElementById( 'commentform' ) );
+		} catch ( Exception ) {
+			consoleError( Exception );
+		}
 	}
 
 	render() {
