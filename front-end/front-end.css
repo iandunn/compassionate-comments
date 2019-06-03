@@ -30,16 +30,15 @@
 	*/
 
 	#compassionate-comments__nudge .components-button.is-primary {
-		background-color: rgba(121, 195, 121, 0.1);
+		background-color: rgba( 50, 133, 64, 0.82 );
 		border-color: #0b420b;
-		color: #15631e;
+		color: white;
 		text-shadow: none;
 		font-weight: normal;
 	}
 
 	#compassionate-comments__nudge .components-button.is-default {
-		background-color: #e9a9351f;
-		border-color: #F56E28;
-		color: #F56E28;
 		font-weight: normal;
+		text-decoration: none;
+		color: #e79500;
 	}

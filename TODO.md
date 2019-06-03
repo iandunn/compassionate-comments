@@ -19,7 +19,6 @@
 	* setup svn:ignores for things that are only in the dev
 	* add screenshots and banner assets
 	* delete screenshot from git repo and link to w.org CDN instead
-	* create video similar to QNI, link to both readmes - nice to have, not blocker
 * install on iandunn.name even though don't need it, just to dogfood / catch bugs
 * Post about it on your blog
 	* just about the plugin concept/launch, not the react stuff, that'll be separate post
@@ -34,6 +33,13 @@
 	* set api key for whole network via filter, store in config
 	* disable for systems and security sites
 * let jjj know might be something interesting for bbpress, but Serious Toxic Comments plugin might be better fit b/c don't need remote API
+
+#### Stretch goals
+
+* create w.org banner image - maybe just solid bg color, heart icon, and "Compassionate Comments". maybe add a subtitle too to explain what it does in ~6 words.
+	* find an example of a good design and copy it, don't try to create from scratch yourself
+* create video similar to QNI, link to both readmes - nice to have, not blocker
+
 
 
 ## Future

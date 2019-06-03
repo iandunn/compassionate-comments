@@ -21,7 +21,7 @@ Google's free [Perspective API](https://www.perspectiveapi.com/) is used to dete
 
 The Perspective API can only analyze comments written in English, French, and Spanish. Comments written in other languages will be submitted without any analysis or content warnings.
 
-The inspiration for this comes from Tristan Harris' TED talk about [designing technology to reflect human values](https://www.youtube.com/watch?v=D55ctBYF3AY) and [ReThink](http://www.rethinkwords.com/).
+The inspiration for this comes from Tristan Harris' TED talk about [designing technology to reflect human values](https://www.youtube.com/watch?v=D55ctBYF3AY) and from [ReThink](http://www.rethinkwords.com/).
 
 You can [report bugs and contribute on GitHub](https://github.com/iandunn/compassionate-comments).
 

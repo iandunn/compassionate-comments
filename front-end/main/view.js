@@ -58,7 +58,7 @@ function Toxic( props ) {
 			</Button>
 
 			{/* todo add isBusy to button when submitting comment? or not necessary b/c it'll be done via php? */}
-			<Button isDefault isDestructive name="cc_submit_anyway" onClick={ handleSubmitAnyway }>
+			<Button isDefault isDestructive isLink name="cc_submit_anyway" onClick={ handleSubmitAnyway }>
 				{ __( 'Submit Anyway', 'compassionate-comments' ) }
 			</Button>
 		</div>
