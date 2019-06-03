@@ -19,7 +19,7 @@ function enqueue_assets() {
 	wp_enqueue_style(
 		'compassionate-comments-front',
 		plugins_url( 'front-end.css', __FILE__ ),
-		array( 'wp-components' ), // todo anything else?
+		array( 'wp-components' ),
 		COMCON_VERSION
 	);
 
@@ -37,7 +37,6 @@ function enqueue_assets() {
 
 // todo
 // todo refactor this if https://core.trac.wordpress.org/ticket/47447 is merged
-// todo is inject front end or back-end?
 function inject_comment_meta( $comment_data ) {
 	/*
 	 * Arguably at this point we should parse the timestamp out of the key, and store it in the `meta_value` field

@@ -18,10 +18,6 @@ function Toxic( props ) {
 
 	//rename func to be more descriptive?
 
-	// todo g component js/css too heavy for the little bits that you use?
-		// do really wanna use modal though, don't wanna reinvent that wheel
-
-
 	// todo refine messaging. what would be the most effective way to communicate this to someone who's generally kind but angry/frustrated?
 		// maybe link to good article about assuming the person they're replying to has positive intent
 		//  what does rethink say?
@@ -29,7 +25,7 @@ function Toxic( props ) {
 	// more descriptive name than "nudge" ?
 
 	return (
-		<div id="compassionate-comments__nudge">
+		<div id="comcon-front-end__nudge">
 			<p>
 				{ __(
 					'It looks like your comment is likely to be interpreted as rude or disrespectful.',
@@ -57,7 +53,10 @@ function Toxic( props ) {
 				{ __( 'Edit Comment', 'compassionate-comments' ) }
 			</Button>
 
-			{/* todo add isBusy to button when submitting comment? or not necessary b/c it'll be done via php? */}
+			{/* todo add isBusy to button when submitting comment? or not necessary b/c it'll be done via php?
+			not strictly necessary, but it'd be nice since to show a spinner or something b/c it could take a few seconds
+			isBusy doesn't seem to work, but not sure why, maybe b/c front end, or maybe b/c isLink?
+			*/}
 			<Button isDefault isDestructive isLink name="cc_submit_anyway" onClick={ handleSubmitAnyway }>
 				{ __( 'Submit Anyway', 'compassionate-comments' ) }
 			</Button>
@@ -80,7 +79,7 @@ export function MainView( props ) {
 	} = props;
 
 	let title,
-	    modalClasses = [ 'compassionate-comments' ];
+	    modalClasses = [ 'comcon-front-end' ];
 
 	if ( ! interfaceOpen ) {
 		return null;

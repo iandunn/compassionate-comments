@@ -13,7 +13,7 @@ import { MainController as CompassionateCommentsAdmin } from './main/controller'
 	 * Initialize the app.
 	 */
 	function init() {
-		const container = document.getElementById( 'compassionate-comments-settings' );
+		const container = document.getElementById( 'comcon-admin' );
 		const props     = { ...comconOptions };
 
 		render(

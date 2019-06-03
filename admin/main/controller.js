@@ -65,8 +65,6 @@ export class MainController extends Component {
 		const { languageSupported, siteIsPublic } = this.props;
 		const { perspectiveApiKey, savingSettings, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 
-		// todo consider using Context for this instead of passing it down all the time, but that seems pretty clunky in its own right
-
 		return (
 			<MainView
 				handleApiKeyChange={                 perspectiveApiKey        => this.setState( { perspectiveApiKey        } ) }

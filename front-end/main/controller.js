@@ -3,17 +3,12 @@
  */
 import { Component }   from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-// todo audit ^
-// todo change to import
-
-// todo refactor this if not big enouhg for maincont/mainview? or maybe leave so room to grow?
-
-// todo go through every line in file and audit
 
 /**
  * Internal dependencies
  */
 import { MainView } from './view';
+
 
 /**
  * Manage the state for the main interface.
@@ -51,7 +46,6 @@ export class MainController extends Component {
 		this.setState( {
 			interfaceOpen : true,
 			loading       : true,
-			// todo maybe don't need separate var for interfaceOpen? can just assume if loading or isToxic?
 		}, () => {
 			const { perspectiveSensitivity } = this.props;
 			const comment              = document.getElementById( 'comment' ).value;
@@ -68,9 +62,6 @@ export class MainController extends Component {
 				}
 
 			} ).catch( error => {
-				console.log( 'error' );
-				console.log(error);
-
 				newState = {
 					//error: `${error.data.status} ${error.code}: ${error.message}`
 						// todo seems like `error` is sometimes a string, so ^ will break
@@ -130,6 +121,7 @@ export class MainController extends Component {
 			comment: {
 				text: commentText,
 					// todo probably use wp.util.sanitize() to strip html tags?,
+					// not a security issue, but api might not expect to see html and might disort the score
 					// limit is 3k, truncate to that if larger. maybe to consider multibyte chars?
 			},
 
@@ -214,7 +206,7 @@ export class MainController extends Component {
 		 * We can't just call form.submit(), because Core names the input button #submit, which overrides
 		 * the handler.
 		 *
-		 * todo test ^ again using props.form
+		 * todo test ^ again using props.form, might be possible to simplify this
 		 */
 		document.createElement( 'form' ).submit.call( document.getElementById( 'commentform' ) );
 	}

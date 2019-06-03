@@ -1,35 +1,24 @@
-/* todo rename to comcon-front__descriptor */
-
-.compassionate-comments.is-loading .components-spinner {
+.comcon-front-end.is-loading .components-spinner {
 	display: block;
 	float: none;
 	margin: 0 auto;
 }
 
 
-#compassionate-comments__nudge {
+#comcon-front-end__nudge {
 	max-width: 525px;
-	/* todo test and tweak */
+	/* todo tweak */
 }
 
-#compassionate-comments__nudge .components-button {
+#comcon-front-end__nudge .components-button {
 	margin-right: 1em;
 }
 
-	#compassionate-comments__nudge a {
+	#comcon-front-end__nudge a {
 		color: #00A0D2;
 	}
 
-	/* todo wow these buttons are ugly. fix them
-	maybe make send-anyway look like a link
-	borders and box-shadows look bad
-	even front itself does
-	maybe just make the border and text green/orange, instead of the background?
-	or maybe just use much lighter hues of green/orange int he background?
-	or maybe have green background for primary button, but white bg w/ orange border/text for default button?
-	*/
-
-	#compassionate-comments__nudge .components-button.is-primary {
+	#comcon-front-end__nudge .components-button.is-primary {
 		background-color: rgba( 50, 133, 64, 0.82 );
 		border-color: #0b420b;
 		color: white;
@@ -37,7 +26,7 @@
 		font-weight: normal;
 	}
 
-	#compassionate-comments__nudge .components-button.is-default {
+	#comcon-front-end__nudge .components-button.is-default {
 		font-weight: normal;
 		text-decoration: none;
 		color: #e79500;

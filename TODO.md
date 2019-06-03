@@ -6,8 +6,6 @@
 
 * lint php, js, css
 
-* update readme.md
-* update readme.txt
 
 
 ### Launch
@@ -129,3 +127,5 @@ let user choose between perspective and tensorflow toxicity, so have offline opt
 	* https://github.com/conversationai/perspectiveapi/issues/6
 
 * Consider sending `context` request param in future, once it actually impacts the score
+
+* Consider using React Context instead of passing props/state down several layers, but that seems pretty clunky in its own right too.

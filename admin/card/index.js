@@ -8,7 +8,7 @@ import { withInstanceId, compose } from '@wordpress/compose';
  *
  * This basically mimics a ModalFrame, since that's pretty close to a generic card already.
  *
- * @todo remove this when/if https://github.com/WordPress/gutenberg/issues/15921 is resolved.
+ * @todo Migrate to Gutenberg component if one is introduced by https://github.com/WordPress/gutenberg/issues/15921.
  *
  * @param {Array} props
  *
@@ -21,12 +21,12 @@ function Card( props ) {
 		// if not, could get rid of the compose/instanceid bloat
 
 	return (
-		<div className="comcon-components__card" aria-labelledby={ `components-modal-header-${ instanceId }` }>
-			<h2 id={ `comcon-components__card-header-${ instanceId }` } className="comcon-components__card-header">
+		<div className="comcon-admin__card" aria-labelledby={ `components-modal-header-${ instanceId }` }>
+			<h2 id={ `comcon-admin__card-header-${ instanceId }` } className="comcon-admin__card-header">
 				{ title }
 			</h2>
 
-			<div className="comcon-components__card-content">
+			<div className="comcon-admin__card-content">
 				{ children }
 			</div>
 		</div>

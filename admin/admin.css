@@ -1,13 +1,11 @@
-/* todo rename to comcon-admin__descriptor */
-
-#compassionate-comments-settings .components-base-control__label {
+#comcon-admin .components-base-control__label {
 	font-weight: bold;
 	font-size: 1.4em;
 
 	/* todo maybe hide this if it's inside a card? */
 }
 
-#compassionate-comments-settings blockquote {
+#comcon-admin blockquote {
 	/* todo refine this */
 
 	min-height: 8em; /* Always be as big as will be needed for the largest quote, since otherwise the rapid resizing while sliding the control is visually jarring. */
@@ -53,7 +51,7 @@
  *
  * See https://github.com/WordPress/gutenberg/issues/15921.
  */
-.comcon-components__card {
+.comcon-admin__card {
 	margin-bottom: 2em;
 	border: 1px solid #e2e4e7;
 	background: #fff;
@@ -61,31 +59,31 @@
 }
 
 	@media screen and ( min-width: 800px ) {
-		.comcon-components__card {
+		.comcon-admin__card {
 			margin-bottom: 0;
 		}
 	}
 
-.comcon-components__card-header {
+.comcon-admin__card-header {
 	padding: 1em;
 	margin: 0;
 	border-bottom: 1px solid #e2e4e7;
 }
 
-.comcon-components__card-content {
+.comcon-admin__card-content {
 	padding: 1em;
 }
 
-.comcon-components__card-content p:first-child {
+.comcon-admin__card-content p:first-child {
 	margin-top: 0;
 }
 
-.comcon-components__card-content .components-base-control__label {
+.comcon-admin__card-content .components-base-control__label {
 	display: none; /* This is a duplicate of the Card title. */
 		/* todo is there a better way to solve ^ ? see comments in view */
 }
 
-.comcon-components__card-content .notice {
+.comcon-admin__card-content .notice {
 	margin-top: 20px;
 	border-top: 1px solid rgba( 0, 0, 0, .05 );
 }

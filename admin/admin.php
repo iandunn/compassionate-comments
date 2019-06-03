@@ -61,6 +61,9 @@ function register_pages() {
 //todo
 // need to render something from server just in case js broken
 function render_settings_page() {
+	// todo move this to a view file? maybe main/view.php ?
+		// no b/c mainview is rendered into a part of this.
+	// maybe just admin/wrap.php or admin/container.php or something like that
 	?>
 
 	<div class="wrap">
@@ -68,8 +71,8 @@ function render_settings_page() {
 			<?php _e( 'Compassionate Comments', 'compassionate-comments' ); ?>
 		</h1>
 
-		<form method="post" action="options.php">
-			<div id="compassionate-comments-settings">
+		<form>
+			<div id="comcon-admin">
 				<p><?php _e( 'Loading...', 'compassionate-comments' ); ?></p>
 
 				<p><?php _e( 'If this takes more than a few seconds, there may be some JavaScript errors in your browser console.', 'compassionate-comments' ); ?></p>
@@ -123,7 +126,6 @@ function enqueue_assets() {
 		'compassionate-comments-admin',
 		plugins_url( 'build/admin.js', __DIR__ ),
 		json_decode( file_get_contents( dirname( __DIR__ ) . '/build/admin.deps.json' ) ),
-		// todo why does ^ contain wp-polyfill? is it automatic, or b/c i triggered it w/ something?
 		COMCON_VERSION,
 		true // Not needed until submit comment form, so no reason to block rendering.
 	);

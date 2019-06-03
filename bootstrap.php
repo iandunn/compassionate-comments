@@ -14,7 +14,6 @@ defined( 'WPINC' ) or die;
 define( 'COMCON_VERSION',              '0.1' );
 define( 'COMCON_REQUIRED_PHP_VERSION', '5.6' );  // Because of WordPress minimum requirements.
 define( 'COMCON_REQUIRED_WP_VERSION',  '5.0' );  // Because of Gutenberg components.
-// todo test that it works in wp 5.0, might need later version?
 
 
 /**

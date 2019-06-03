@@ -12,8 +12,6 @@ import { Card }        from '../card';
 import { Sensitivity } from '../sensitivity';
 
 
-// i18n
-
 // todo
 function ApiKey( props ) {
 	const { onChange, apiKey } = props;

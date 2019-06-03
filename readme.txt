@@ -8,7 +8,7 @@ Tested up to:      5.2
 Stable tag:        0.1
 License:           GPLv2 or later
 
-Encourages commenters to re-phrase toxic comments to be kind instead.
+Encourages authors of toxic comments to re-phrase them to be more kind instead.
 
 
 == Description ==
@@ -28,19 +28,14 @@ You can [report bugs and contribute on GitHub](https://github.com/iandunn/compas
 
 == Frequently Asked Questions ==
 
-= ? =
-
-??
-
-
 = Is this plugin secure? =
 I've done my best to ensure that it is, but just in case I missed anything [I also offer a security bounty](https://hackerone.com/iandunn-projects/) for any vulnerabilities that can be found and privately disclosed in any of my plugins.
 
 
 == Screenshots ==
 
-1. The warning a commenter is shown when submitting a mean comment.
-2. The settings in wp-admin.
+1. The warning a comment author is shown when submitting a toxic comment.
+2. The wp-admin settings screen.
 
 
 == Changelog ==
