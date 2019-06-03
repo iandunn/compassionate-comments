@@ -7,7 +7,8 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { MainView } from './view';
+import { MainView }     from './view';
+import { consoleError } from '../../common/common';
 
 
 /**
@@ -62,28 +63,13 @@ export class MainController extends Component {
 				}
 
 			} ).catch( error => {
-				newState = {
-					//error: `${error.data.status} ${error.code}: ${error.message}`
-						// todo seems like `error` is sometimes a string, so ^ will break
-					error
-						// todo what happens when error is an object though?
-						// it changes based on `parse`, so maybe always object unless `parse: false` ?
-				};
-
-				// maybe need to disable `parse` option so can see the full error details?
-					// but wtf, why isn't the request showing up in the network console?
-
-				console.error( sprintf(
-					__( 'Compassionate Comments error: %s', 'compassionate-comments' ),
-					newState.error
-				) );
-				// maybe don't need state.error anymore? or still do for as a flag to know what to render?
-
-				// what happens if someonne writes comment in unsupported language?
-					// although maybe not if passing locale
-					// ****** can't assume that blog locale is same as language that comment written in though, so maybe shouldn't pass it at all, and just let them detect it? ******
+				newState = { error };
 
 			} ).finally( () => {
+				if ( newState.error ) {
+					consoleError( newState.error );
+				}
+
 				/*
 				 * If an error occured, then just submit the comment, since that's safer than potentially
 				 * preventing all comments from working.

@@ -7,7 +7,8 @@ import { Component } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { MainView } from './view';
+import { MainView }     from './view';
+import { consoleError } from '../../common/common';
 
 
 /**
@@ -52,8 +53,7 @@ export class MainController extends Component {
 				// what to do here? nothing? can just skip this then?
 
 			} ).catch( error => {
-				console.error( `Compassionate Comments error: ${error.data.status} ${error.code}: ${error.message}` );
-				// todo is it possible that error will ever just be a string rather than this object?
+				consoleError( error );
 
 			} ).finally( () => {
 				this.setState( { savingSettings: false } );

@@ -8,6 +8,7 @@ import { __ }                    from '@wordpress/i18n';
  * Internal dependencies
  */
 import { MainController as CompassionateComments } from './main/controller';
+import { consoleError }                            from '../common/common';
 
 ( function() {
 	/**
@@ -28,7 +29,7 @@ import { MainController as CompassionateComments } from './main/controller';
 		}
 
 		if ( ! props.perspectiveApiKey ) {
-			console.error( __( 'Compassionate Comments: Missing key for Perspective API. Please visit the settings screen to enter it.', 'compassionate-comments' ) );
+			consoleError( __( 'Missing key for Perspective API. Please visit the settings screen to enter it.', 'compassionate-comments' ) );
 			return;
 		}
 
