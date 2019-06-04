@@ -10,7 +10,9 @@ add_action( 'admin_notices',         __NAMESPACE__ . '\notify_key_missing' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
 
 
-// todo
+/**
+ * Register the settings for the Settings screen and REST API.
+ */
 function register_settings() {
 	register_setting(
 		'compassionate-comments',
@@ -46,7 +48,9 @@ function register_settings() {
 	);
 }
 
-//todo
+/**
+ * Register the wp-admin pages.
+ */
 function register_pages() {
 	add_submenu_page(
 		'options-general.php',
@@ -58,8 +62,11 @@ function register_pages() {
 	);
 }
 
-//todo
-// need to render something from server just in case js broken
+/**
+ * Render the initial markup for the Settings screen.
+ *
+ * Once JavaScript loads, the content will be replaced with the React view.
+ */
 function render_settings_page() {
 	// todo move this to a view file? maybe main/view.php ?
 		// no b/c mainview is rendered into a part of this.
@@ -77,7 +84,7 @@ function render_settings_page() {
 
 				<p><?php _e( 'If this takes more than a few seconds, there may be some JavaScript errors in your browser console.', 'compassionate-comments' ); ?></p>
 
-				<!-- todo is it good to give user technical details like that? -->
+				<?php // todo it's probably not best practice to give user technical details like that? but what else to tell them? ?>
 			</div>
 		</form>
 	</div>
@@ -85,7 +92,9 @@ function render_settings_page() {
 	<?php
 }
 
-// todo
+/**
+ * Display an admin notice on the Plugins/Comments screens when the API key is not set.
+ */
 function notify_key_missing() {
 	if ( ! in_array( get_current_screen()->base, array( 'plugins', 'edit-comments' ) ) ) {
 		return;
@@ -109,7 +118,9 @@ function notify_key_missing() {
 	<?php
 }
 
-// todo
+/**
+ * Enqueue the script and stylesheet.
+ */
 function enqueue_assets() {
 	if ( 'settings_page_compassionate-comments' !== get_current_screen()->base ) {
 		return;

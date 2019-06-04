@@ -64,7 +64,6 @@ function Toxic( props ) {
 	);
 }
 
-
 /**
  * Render the view for the main interface.
  *

@@ -41,7 +41,7 @@ I've done my best to ensure that it is, but just in case I missed anything [I al
 == Changelog ==
 
 
-= v0.1 (todo add date) =
+= v0.1 (2019-06-03) =
 * [NEW] Initial release
 
 

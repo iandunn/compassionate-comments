@@ -4,7 +4,14 @@ namespace Compassionate_Comments\Common;
 use WP_Post;
 
 
-// todo
+/**
+ * Add the plugin options data to the enqueued scripts so it's accessible by JavaScript.
+ *
+ * This is used instead of a REST API request, so that the data is available immediately, rather than the user
+ * having to wait for the request to complete.
+ *
+ * @param string $handle
+ */
 function add_inline_script( $handle ) {
 	global $post;
 
@@ -49,7 +56,16 @@ function add_inline_script( $handle ) {
 	wp_add_inline_script( $handle, $script_data, 'before' );
 }
 
-//todo
+/**
+ * Determine if the current site is a testing environment.
+ *
+ * This is used when determining the `doNotStore` parameter for the Perspective API request, in order to avoid
+ * distorting their data set with test comments.
+ *
+ * It's simplistic, but works well enough for now.
+ *
+ * @return bool
+ */
 function is_test_environment() {
 	$hostname_parts   = explode( '.', wp_parse_url( site_url(), PHP_URL_HOST ) );
 	$top_level_domain = end( $hostname_parts );

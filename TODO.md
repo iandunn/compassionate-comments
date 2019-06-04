@@ -2,11 +2,7 @@
 
 ## MVP
 
-* fix any todos left in code
-
 * lint php, js, css
-
-
 
 ### Launch
 
@@ -38,6 +34,11 @@
 	* find an example of a good design and copy it, don't try to create from scratch yourself
 * create video similar to QNI, link to both readmes - nice to have, not blocker
 
+
+
+## Next Minor
+
+* fix minor todos left in code, or move them to this file if not worth fixing now
 
 
 ## Future

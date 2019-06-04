@@ -8,7 +8,9 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
 add_filter( 'preprocess_comment', __NAMESPACE__ . '\inject_comment_meta' );
 
 
-// todo
+/**
+ * Enqueue the script and stylesheet.
+ */
 function enqueue_assets() {
 	global $post;
 
@@ -34,9 +36,15 @@ function enqueue_assets() {
 	add_inline_script( 'compassionate-comments-front' );
 }
 
-
-// todo
-// todo refactor this if https://core.trac.wordpress.org/ticket/47447 is merged
+/**
+ * Inject comment metadata from `$_POST` into the database.
+ *
+ * @todo Refactor this if https://core.trac.wordpress.org/ticket/47447 is merged.
+ *
+ * @param array $comment_data
+ *
+ * @return array
+ */
 function inject_comment_meta( $comment_data ) {
 	/*
 	 * Arguably at this point we should parse the timestamp out of the key, and store it in the `meta_value` field

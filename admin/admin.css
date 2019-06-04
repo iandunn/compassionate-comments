@@ -6,8 +6,6 @@
 }
 
 #comcon-admin blockquote {
-	/* todo refine this */
-
 	min-height: 8em; /* Always be as big as will be needed for the largest quote, since otherwise the rapid resizing while sliding the control is visually jarring. */
 
 		/* todo that's 4 lines of text, which works at desktop but not lower. maybe use media queries of JS to set to right height based on how many lines X chars would take up in the current size? calc() or something? */
@@ -16,9 +14,9 @@
 
 		probably not an elegant way to do this, maybe just stick w/ 8em since it's big enough for all breakpoints. not perfect but simple.
 		*/
-	padding: 3px 10px 2px;
+	padding: 7px 8px;
 	margin: 5px 1px 0;
-	background: rgba( 0, 0, 0, .07 );
+	background: rgba( 0, 0, 0, .05 );
 	font-style: italic;
 	word-break: break-word;
 }

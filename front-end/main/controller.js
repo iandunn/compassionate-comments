@@ -12,7 +12,7 @@ import { consoleError } from '../../common/common';
 
 
 /**
- * Manage the state for the main interface.
+ * Manage the state and logic for the main interface.
  */
 export class MainController extends Component {
 	constructor( props ) {
@@ -99,9 +99,18 @@ export class MainController extends Component {
 		} );
 	}
 
-	// todo explain convenience wrapper
-	// using fetch() directly instead of apifetch b/c it's easier for remote requests
-	// see https://github.com/WordPress/gutenberg/pull/15900#issuecomment-497139968
+	/**
+	 * Send a request to the Perspective API to analyse a comment.
+	 *
+	 * This uses `fetch()` directly instead of `apifetch()`, because the latter is only intended for interacting
+	 * with WP REST API endpoints, and there are lots of difficulties making it work with arbitrary APIs.
+	 *
+	 * See https://github.com/WordPress/gutenberg/pull/15900#issuecomment-497139968.
+	 *
+	 * @param {string} commentText
+	 *
+	 * @return {Promise}
+	 */
 	sendScoreRequest( commentText ) {
 		const { perspectiveApiKey } = this.props;
 
@@ -114,15 +123,21 @@ export class MainController extends Component {
 			comment: {
 				text: commentText,
 					// todo probably use wp.util.sanitize() to strip html tags?,
-					// not a security issue, but api might not expect to see html and might disort the score
-					// limit is 3k, truncate to that if larger. maybe to consider multibyte chars?
+					// not a security issue, but api might not expect to see html and might distort the score
+
+					// also limit is 3k, truncate to that if larger.
+						// probably need to consider multibyte chars
 			},
 
 			requestedAttributes : { TOXICITY: {} },
 		};
 
-		// todo document that exposing key isn't great, but alternative would be proxying the request via a REST API endpoint, which would be very slow
-		// so just warned admins on settings screen to restrict the key to keep it safe
+		/*
+		 * Exposing the key to visitors in the browser like this isn't ideal, but the alternative is to proxy the
+		 * request through a REST API endpoint on the server, which would be much slower, and add extra
+		 * code/complexity. To mitigate the risk, a strong warning is shown on the Settings screen, asking the
+		 * admin to restrict the key to their server.
+		 */
 		const url = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${ perspectiveApiKey }`;
 
 		data.doNotStore = this.doNotStore();
@@ -137,7 +152,9 @@ export class MainController extends Component {
 		return fetch( url, requestParams ).then( response => response.json() );
 	}
 
-	// todo
+	/*
+	 * Determine the `doNotStore` setting for the Perspective API request.
+	 */
 	doNotStore() {
 		const { isTestEnvironment, postIsPublic, siteIsPublic, perspectiveStoreComments } = this.props;
 
@@ -156,16 +173,23 @@ export class MainController extends Component {
 			if ( isTestEnvironment || ! siteIsPublic || ! postIsPublic ) {
 				doNotStore = true;
 			}
-
-			// todo test all these paths
 		}
 
 		return doNotStore;
 	}
 
-	// todo
-	// logs each score for a comment
-	// intentionally not overwriting any previous ones, want to have a record of how many times they edited and see how score changed
+	/**
+	 * Log the comment's score(s) in the database for stats.
+	 *
+	 * This isn't used yet, but future versions may add a stats dashboard, so the site owner can see the impact
+	 * that the plugin has had, and fine-tune their Sensitivity setting.
+	 *
+	 * This intentionally doesn't overwrite previous scores when the comment author chooses to edit their comment,
+	 * so that the stats can show how often authors make that choice, and the delta between the `before` and `after`
+	 * scores.
+	 *
+	 * @param {float} score
+	 */
 	logScore( score ) {
 		const { commentForm } = this.props;
 		const logEntry        = document.createElement( 'input' );
@@ -193,7 +217,7 @@ export class MainController extends Component {
 	 * @param {object} event
 	 */
 	submitComment( event ) {
-		// can be static?
+		// todo can be static unless below changes
 
 		/*
 		 * We can't just call form.submit(), because Core names the input button #submit, which overrides
@@ -215,10 +239,7 @@ export class MainController extends Component {
 		if ( ! interfaceOpen || error ) {
 			return null;
 		}
-		// should ^ be inside MainView instead of here?
-
-		// need to show spinner to all comments, not just toxic ones
-		// legit comments t
+		// todo should ^ be inside MainView instead of here?
 
 		return (
 			<MainView

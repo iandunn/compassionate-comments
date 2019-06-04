@@ -11,8 +11,13 @@ import { __ }       from '@wordpress/i18n';
 import { Card }        from '../card';
 import { Sensitivity } from '../sensitivity';
 
-
-// todo
+/**
+ * Render the view for the API Key setting.
+ *
+ * @param {Array} props
+ *
+ * @return {Element}
+ */
 function ApiKey( props ) {
 	const { onChange, apiKey } = props;
 
@@ -45,8 +50,15 @@ function ApiKey( props ) {
 	);
 }
 
-
-// todo
+/**
+ * Render the view for the Store Comments setting.
+ *
+ * See `StoreCommentsDisabled` for when the setting is automatically disabled.
+ *
+ * @param {Array} props
+ *
+ * @return {Element}
+ */
 function StoreComments( props ) {
 	const { checked, onChange } = props;
 
@@ -85,8 +97,15 @@ function StoreComments( props ) {
 	);
 }
 
-
-// todo
+/**
+ * Render the view for when the Store Comments setting is automatically disabled.
+ *
+ * See `StoreComments` for when the setting is not disabled.
+ *
+ * @param {Array} props
+ *
+ * @return {Element}
+ */
 function StoreCommentsDisabled( props ) {
 	// todo clarify title that this stores comments on Perspective servers, not this local wp server
 
@@ -114,7 +133,13 @@ function StoreCommentsDisabled( props ) {
 	);
 }
 
-//todo
+/**
+ * Render the view for the Save Settings button.
+ *
+ * @param {Array} props
+ *
+ * @return {Element}
+ */
 function SaveButton( props ) {
 	const { onClick, savingSettings } = props;
 

@@ -12,7 +12,7 @@ import { consoleError } from '../../common/common';
 
 
 /**
- * Manage the state for the main interface.
+ * Manage the state and logic for the main interface.
  */
 export class MainController extends Component {
 	constructor( props ) {
@@ -32,11 +32,13 @@ export class MainController extends Component {
 			// or maybe this is a smell that i'm doing something wrong?
 	}
 
-	//todo
+	/**
+	 * Save the current settings to the database via the REST API.
+	 */
 	saveSettings() {
 		this.setState( { savingSettings: true }, () => {
 			const { apiFetch } = wp;
-				// todo this shouldn't be necessary since imported above, but otherwise it's undefined
+				// todo this shouldn't be necessary since imported above, but otherwise it's undefined. file bug report, or you're doing something wrong?
 			const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 
 			const fetchParams = {

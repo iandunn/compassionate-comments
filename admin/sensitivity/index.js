@@ -11,7 +11,13 @@ import { Card }           from '../card';
 import { sampleComments } from './sample-comments';
 
 
-// todo
+/**
+ * Render the the Sensitivity setting.
+ *
+ * @param {Array} props
+ *
+ * @return {Element}
+ */
 export function Sensitivity( props ) {
 	const { onChange, sensitivity } = props;
 
