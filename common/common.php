@@ -33,7 +33,7 @@ function add_inline_script( $handle ) {
 		 * comments are in another language, and it's also possible to have the site locale in an unsupported
 		 * language and have comments in a supported language. It's simple and good enough for most cases, though.
 		 */
-		'languageSupported' => in_array( substr( get_locale(), 0, 2 ), $supported_languages ),
+		'languageSupported' => in_array( substr( get_locale(), 0, 2 ), $supported_languages, true ),
 
 		/*
 		 * In Multisite, Core keeps site-specific option in sync with `wp_blogs.public`, so checking this

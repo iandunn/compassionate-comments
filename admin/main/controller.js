@@ -21,13 +21,13 @@ export class MainController extends Component {
 		const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = props;
 
 		this.state = {
-			savingSettings: false,
+			savingSettings : false,
 			perspectiveApiKey,
 			perspectiveStoreComments,
 			perspectiveSensitivity,
 		};
 
-		// ^ feels weird b/c then you have props.sensitivity and state.sensitivity and they don't match
+		// todo ^ feels weird b/c then you have props.sensitivity and state.sensitivity and they don't match
 			// maybe that's ok though?
 			// or maybe this is a smell that i'm doing something wrong?
 	}
@@ -45,10 +45,10 @@ export class MainController extends Component {
 				path   : '/wp/v2/settings',
 				method : 'PUT',
 				data   : {
-					'comcon_perspective_api_key'        : perspectiveApiKey,
-					'comcon_perspective_sensitivity'    : perspectiveSensitivity,
-					'comcon_perspective_store_comments' : perspectiveStoreComments,
-				}
+					comcon_perspective_api_key        : perspectiveApiKey,
+					comcon_perspective_sensitivity    : perspectiveSensitivity,
+					comcon_perspective_store_comments : perspectiveStoreComments,
+				},
 			};
 
 			apiFetch( fetchParams ).then( data => {

@@ -1,8 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Component }   from '@wordpress/element';
-import { __, sprintf } from '@wordpress/i18n';
+import { Component } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -43,7 +42,8 @@ export class MainController extends Component {
 	 */
 	analyzeComment( event ) {
 		try {
-			const elementExists = document.getElementById( 'comment' ).value;
+			// Intentionally not using the value, just making sure it exists so it can be used in the callback below.
+			document.getElementById( 'comment' ).value;
 		} catch ( Exception ) {
 			consoleError( Exception );
 			return;
@@ -62,7 +62,7 @@ export class MainController extends Component {
 			this.sendScoreRequest( comment ).then( data => {
 				try {
 					const score = data.attributeScores.TOXICITY.summaryScore.value;
-					newState    = { isToxic: score > perspectiveSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
+					newState    = { isToxic : score > perspectiveSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
 
 					this.logScore( score );
 				} catch ( Exception ) {
@@ -120,8 +120,8 @@ export class MainController extends Component {
 		 * Perspective will automatically detect the language when an explicit value isn't passed.
 		 */
 		const data = {
-			comment: {
-				text: commentText,
+			comment : {
+				text : commentText,
 					// todo probably use wp.util.sanitize() to strip html tags?,
 					// not a security issue, but api might not expect to see html and might distort the score
 
@@ -152,7 +152,7 @@ export class MainController extends Component {
 		return fetch( url, requestParams ).then( response => response.json() );
 	}
 
-	/*
+	/**
 	 * Determine the `doNotStore` setting for the Perspective API request.
 	 */
 	doNotStore() {
@@ -204,7 +204,7 @@ export class MainController extends Component {
 		 * If that happens, then `Compassionate_Comments\inject_comment_meta()` would insert the values for a second
 		 * time. So the prefix future-proofs this against that possibility.
 		 */
-		logEntry.name  = `comcon_comment_meta[${entryId}]`;
+		logEntry.name  = `comcon_comment_meta[${ entryId }]`;
 		logEntry.type  = 'hidden';
 		logEntry.value = score;
 

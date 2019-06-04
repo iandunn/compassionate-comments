@@ -59,7 +59,7 @@ function inject_comment_meta( $comment_data ) {
 	 * `meta_value`, since it only contains the score. We can always parse the timestamp out of the key name if
 	 * needed, or even query against it with something like `WHERE SUBSTRING( meta_key, 25 ) > 1559320234144`.
 	 */
-	if ( ! empty( $_POST[ 'comcon_comment_meta'] ) ) {
+	if ( ! empty( $_POST['comcon_comment_meta'] ) ) {
 		foreach ( $_POST['comcon_comment_meta'] as $key => $value ) {
 			if ( 'comcon_perspective_score_' === substr( $key, 0, 25 ) ) {
 				$comment_data['comment_meta'][ $key ] = (float) $value;

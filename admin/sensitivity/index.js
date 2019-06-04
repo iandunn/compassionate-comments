@@ -5,7 +5,7 @@ import { RangeControl } from '@wordpress/components';
 import { __, sprintf }  from '@wordpress/i18n';
 
 /**
- * Internal dependencies.
+ * Internal dependencies
  */
 import { Card }           from '../card';
 import { sampleComments } from './sample-comments';
@@ -38,7 +38,7 @@ export function Sensitivity( props ) {
 			<RangeControl
 				label="Sensitivity"
 				//help="Comment authors are warned when their comment's toxicity score exceeds this number."    // todo should use this, but style it to go above instead of below?
-				// related: https://github.com/WordPress/gutenberg/issues/15904
+					// related: https://github.com/WordPress/gutenberg/issues/15904
 				initialPosition={ sensitivity }
 					// todo ^ is supposed to be default value, but without setting this the thumb is positioned in middle no matter what. probably bug, but didn't reproduce in other context
 				onChange={ onChange }

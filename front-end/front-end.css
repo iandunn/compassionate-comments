@@ -4,7 +4,6 @@
 	margin: 0 auto;
 }
 
-
 #comcon-front-end__nudge {
 	max-width: 525px;
 }
@@ -13,20 +12,20 @@
 	margin-right: 1em;
 }
 
-	#comcon-front-end__nudge a {
-		color: #00A0D2;
-	}
+#comcon-front-end__nudge a {
+	color: #00a0d2;
+}
 
-	#comcon-front-end__nudge .components-button.is-primary {
-		background-color: rgba( 50, 133, 64, 0.82 );
-		border-color: #0b420b;
-		color: white;
-		text-shadow: none;
-		font-weight: normal;
-	}
+#comcon-front-end__nudge .components-button.is-primary {
+	background-color: rgba( 50, 133, 64, 0.82 );
+	border-color: #0b420b;
+	color: #ffffff;
+	text-shadow: none;
+	font-weight: 400;
+}
 
-	#comcon-front-end__nudge .components-button.is-default {
-		font-weight: normal;
-		text-decoration: none;
-		color: #e79500;
-	}
+#comcon-front-end__nudge .components-button.is-default {
+	font-weight: 400;
+	text-decoration: none;
+	color: #e79500;
+}

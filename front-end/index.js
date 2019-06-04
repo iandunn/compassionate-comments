@@ -20,7 +20,7 @@ import { consoleError }                            from '../common/common';
 
 		const props = {
 			commentForm,
-			...comconOptions
+			...comconOptions,
 		};
 
 		// This isn't a post, or the post doesn't have comments enabled.
@@ -39,7 +39,7 @@ import { consoleError }                            from '../common/common';
 		 *
 		 * See https://github.com/WordPress/gutenberg/issues/15875.
 		 */
-		document.getElementsByTagName( 'body' )[0].appendChild( container );
+		document.getElementsByTagName( 'body' )[ 0 ].appendChild( container );
 		renderApp( container, props );
 	}
 

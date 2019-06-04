@@ -2,7 +2,6 @@
 
 ## MVP
 
-* lint php, js, css
 
 ### Launch
 

@@ -1,5 +1,8 @@
+/*
+ * Main component.
+ */
 #comcon-admin .components-base-control__label {
-	font-weight: bold;
+	font-weight: 700;
 	font-size: 1.4em;
 
 	/* todo maybe hide this if it's inside a card? */
@@ -43,7 +46,7 @@
 
 
 /*
- * Card
+ * Card component.
  *
  * Styles mostly borrowed from `Modal`
  *
@@ -78,7 +81,7 @@
 
 .comcon-admin__card-content .components-base-control__label {
 	display: none; /* This is a duplicate of the Card title. */
-		/* todo is there a better way to solve ^ ? see comments in view */
+	/* todo is there a better way to solve ^ ? see comments in view */
 }
 
 .comcon-admin__card-content .notice {

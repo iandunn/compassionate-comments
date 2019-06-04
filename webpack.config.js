@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-const path = require('path');
+const path = require( 'path' );
 
 /**
  * WordPress dependencies

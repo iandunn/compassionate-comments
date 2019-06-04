@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { Button, Modal, Spinner } from '@wordpress/components';
-import { Fragment, RawHTML }      from '@wordpress/element';
+import { RawHTML }                from '@wordpress/element';
 import { __, sprintf }            from '@wordpress/i18n';
 
 
@@ -53,10 +53,10 @@ function Toxic( props ) {
 				{ __( 'Edit Comment', 'compassionate-comments' ) }
 			</Button>
 
-			{/* todo add isBusy to button when submitting comment? or not necessary b/c it'll be done via php?
+			{ /* todo add isBusy to button when submitting comment? or not necessary b/c it'll be done via php?
 			not strictly necessary, but it'd be nice since to show a spinner or something b/c it could take a few seconds
 			isBusy doesn't seem to work, but not sure why, maybe b/c front end, or maybe b/c isLink?
-			*/}
+			*/ }
 			<Button isDefault isDestructive isLink name="cc_submit_anyway" onClick={ handleSubmitAnyway }>
 				{ __( 'Submit Anyway', 'compassionate-comments' ) }
 			</Button>
@@ -74,11 +74,11 @@ function Toxic( props ) {
 export function MainView( props ) {
 	const {
 		interfaceOpen, loading, isToxic,
-		handleModalClose, handleRephraseComment, handleSubmitAnyway
+		handleModalClose, handleRephraseComment, handleSubmitAnyway,
 	} = props;
 
-	let title,
-	    modalClasses = [ 'comcon-front-end' ];
+	const modalClasses = [ 'comcon-front-end' ];
+	let title;
 
 	if ( ! interfaceOpen ) {
 		return null;

@@ -70,19 +70,26 @@ function register_pages() {
 function render_settings_page() {
 	// todo move this to a view file? maybe main/view.php ?
 		// no b/c mainview is rendered into a part of this.
-	// maybe just admin/wrap.php or admin/container.php or something like that
+	// maybe just admin/wrap.php or admin/container.php or something like that.
 	?>
 
 	<div class="wrap">
 		<h1>
-			<?php _e( 'Compassionate Comments', 'compassionate-comments' ); ?>
+			<?php esc_html_e( 'Compassionate Comments', 'compassionate-comments' ); ?>
 		</h1>
 
 		<form>
 			<div id="comcon-admin">
-				<p><?php _e( 'Loading...', 'compassionate-comments' ); ?></p>
+				<p>
+					<?php esc_html_e( 'Loading...', 'compassionate-comments' ); ?>
+				</p>
 
-				<p><?php _e( 'If this takes more than a few seconds, there may be some JavaScript errors in your browser console.', 'compassionate-comments' ); ?></p>
+				<p>
+					<?php esc_html_e(
+						'If this takes more than a few seconds, there may be some JavaScript errors in your browser console.',
+						'compassionate-comments'
+					); ?>
+				</p>
 
 				<?php // todo it's probably not best practice to give user technical details like that? but what else to tell them? ?>
 			</div>
@@ -96,11 +103,11 @@ function render_settings_page() {
  * Display an admin notice on the Plugins/Comments screens when the API key is not set.
  */
 function notify_key_missing() {
-	if ( ! in_array( get_current_screen()->base, array( 'plugins', 'edit-comments' ) ) ) {
+	if ( ! in_array( get_current_screen()->base, array( 'plugins', 'edit-comments' ), true ) ) {
 		return;
 	}
 
-	if ( ! empty( get_option( 'comcon_perspective_api_key' ) )) {
+	if ( ! empty( get_option( 'comcon_perspective_api_key' ) ) ) {
 		return;
 	}
 
