@@ -29,30 +29,35 @@
 
 #### Stretch goals
 
-* create w.org banner image - maybe just solid bg color, heart icon, and "Compassionate Comments". maybe add a subtitle too to explain what it does in ~6 words.
-	* find an example of a good design and copy it, don't try to create from scratch yourself
 * create video similar to QNI, link to both readmes - nice to have, not blocker
 
 
 
 ## Next Minor
 
+* can't restrict key b/c request comes from browser and referrer can be forged, so gonna have to proxy through rest api endpoint :(
 * fix minor todos left in code, or move them to this file if not worth fixing now
-
-
-## Future
-
-### High Impact and/or Low Effort
-
-add some "saved" text or something next to save button, b/c happens so fast that user doesn't have any visual feedback
+* add some "saved" text or something next to save button, b/c happens so fast that user doesn't have any visual feedback
 	make it fade out after 5-10 seconds?
 	or just have permenant "saved x minutess ago" that updates real time?
 	or have a permenant "there are unsaved changes" / "all changes have been saved" thing? - tried that and it became a rabbit hole, so probably do one of the simpler options above
 		mostly complex b/c have to track original state after last save if want it to be perfect.
 			otherwise making change and undoing it would say it's unsaved, even though it's actually the asme values
 			could have simpler version though that just tracks if a change has been made, that would cover most cases, just wouldn't be perfect, maybe good enough, at least for first version, can iterate later to improve if think of a simple way
+* have a test button on the wp-admin to help users know if credentials setup correctly
+	* send an existing comment (if there are some) or a fallback hardcoded comment
+		* probably set donotstore to true so that test comment doesn't get stored and distort Perspective's data
+	* show successful results or error
+	* probaly want to share the code between front and back ends at this point
+* show comment scores on the comments list and/or when editing individiaual comments
+	* make color red if it's above the sensitivity threshhold, and green if it's below
 
-let user choose between perspective and tensorflow toxicity, so have offline option
+
+## Future
+
+### High Impact and/or Low Effort
+
+* let user choose between perspective and tensorflow toxicity, so have offline option
 
 * show avatar of person replying to, to put human face on it?
 	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
@@ -61,15 +66,6 @@ let user choose between perspective and tensorflow toxicity, so have offline opt
 * reduce bundle sizes
 
 * Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
-
-* have a test button on the wp-admin to help users know if credentials setup correctly
-	* send an existing comment (if there are some) or a fallback hardcoded comment
-		* probably set donotstore to true so that test comment doesn't get stored and distort Perspective's data
-	* show successful results or error
-	* probaly want to share the code between front and back ends at this point
-
-* show comment scores on the comments list and/or when editing individiaual comments
-	* make color red if it's above the sensitivity threshhold, and green if it's below
 
 * Update list of supported languages every ~6 months.
 
