@@ -18,11 +18,13 @@ The inspiration for this comes from Tristan Harris' TED talk about [designing te
 
 If you just want to **use** the plugin, you can [install the packaged version](https://wordpress.org/plugins/compassionate-comments/) from the WordPress.org plugin repository.
 
-If you want to **develop** the plugin, then follow these steps to setup the development version:
+If you want to **contribute to** the plugin, then follow these steps to setup the development version:
 
 * `git clone https://github.com/iandunn/compassionate-comments.git`
 * `cd compassionate-comments`
 * `npm install`
 * `npm start`
 
-After the initial setup, you only need to run `npm start`. To build the distributed version, run `npm run build`.
+After the initial setup, simply run `npm start` while you're editing files.
+
+To build the distributed version, run `npm run build`.

@@ -28,6 +28,20 @@ You can [report bugs and contribute on GitHub](https://github.com/iandunn/compas
 
 == Frequently Asked Questions ==
 
+= Why isn't the prompt showing when I type a rude comment? =
+
+That might be expected behavior, if the comment score is lower than the Sensitivity setting.
+
+If the score is higher, try opening your browser's error console, click the `Perserve logs` checkbox, and then submit the rude comment. Check if any errors appear in the console. Also check the Network tab to see if any XHR requests failed.
+
+If you see errors and you're not sure how to fix them, [open a support request](https://wordpress.org/support/plugin/compassionate-comments/) and copy/paste the exact errors there.
+
+Don't forget to delete any test comments you made :)
+
+= How can I edit the JavaScript files? =
+
+Unfortunately modern JavaScript conventions make this more difficult than editing PHP, but there are instructions in [the GitHub repository](https://github.com/iandunn/compassionate-comments).
+
 = Is this plugin secure? =
 I've done my best to ensure that it is, but just in case I missed anything [I also offer a security bounty](https://hackerone.com/iandunn-projects/) for any vulnerabilities that can be found and privately disclosed in any of my plugins.
 

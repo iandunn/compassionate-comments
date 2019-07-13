@@ -1,6 +1,7 @@
 <?php
 
 namespace Compassionate_Comments\Common;
+	// ^ should just be Compassionate_Comments, since it applies to both. then admin/frontend can just `use Compassaionate_Comments`. that's more logical
 use WP_Post;
 
 

@@ -5,38 +5,37 @@
 
 ### Launch
 
-* add to hackerone top targets
-	* remove from exclusions
-* add release date to readme.txt
-* Release 0.1 into WordPress.org plugin repository
-	* setup svn:ignores for things that are only in the dev
-	* add screenshots and banner assets
-	* delete screenshot from git repo and link to w.org CDN instead
 * install on iandunn.name even though don't need it, just to dogfood / catch bugs
+	* wtf it's working on iandunn.name but not fightingforalostcause.net, not obvious why
+		maybe need to clone git repo to production so can troubleshoot, or at least step through debug in browser dev tools
+
 * Post about it on your blog
 	* just about the plugin concept/launch, not the react stuff, that'll be separate post
 	* https://iandunn.name/wordpress/wp-admin/post.php?post=2436&action=edit
-* comment on [WP Tavern comments](https://wptavern.com/googles-new-perspective-project-filters-online-comments-based-on-toxicity), etc
-	* there's also https://wordpress.org/plugins/serious-toxic-comments/, which uses TensorFlow's Toxicity model and blocks rather than gives a chance to rephrase
-	* also https://wordpress.org/plugins/sift-ninja/
-* post fyi on a8c discussion
-* propose for all the Make blogs?
-	* propse to make/comm first, then if works well propose for others
-		* ask andrea for gut check first, b/c power dynamic / conflict of interest
-	* set api key for whole network via filter, store in config
-	* disable for systems and security sites
-* let jjj know might be something interesting for bbpress, but Serious Toxic Comments plugin might be better fit b/c don't need remote API
 
-#### Stretch goals
-
-* create video similar to QNI, link to both readmes - nice to have, not blocker
 
 
 
 ## Next Minor
 
 * can't restrict key b/c request comes from browser and referrer can be forged, so gonna have to proxy through rest api endpoint :(
-* fix minor todos left in code, or move them to this file if not worth fixing now
+	proxying will hide the key, but if return score then it's just giving abusers indirect access to api key, instead of direct access
+	so need to only return `nudge: true/false` to tell ui whether to show the warning or not
+	but then how do you log the scores?
+		maybe js generates a random "commentSessionId" every page load, and includes that in rest api request
+		then store scores in transient keyed to that commentSessionId. (different transient for each Id)
+		when comment is submitted, include commentSessionId, and pull the associated scores from transient and add them to comment meta
+		then delete the transient
+		seems like that'll work, but not very elegant. maybe wait a day or two and see if come up with a better idea
+
+
+* test api key automatically every time visit settings screen
+	much better ux than manual button + makes easier to catch errors
+	* send an existing comment (if there are some) or a fallback hardcoded comment
+		* probably set donotstore to true so that test comment doesn't get stored and distort Perspective's data
+	* show successful results or error
+	* probaly want to share the code between front and back ends at this point
+
 * add some "saved" text or something next to save button, b/c happens so fast that user doesn't have any visual feedback
 	make it fade out after 5-10 seconds?
 	or just have permenant "saved x minutess ago" that updates real time?
@@ -44,28 +43,27 @@
 		mostly complex b/c have to track original state after last save if want it to be perfect.
 			otherwise making change and undoing it would say it's unsaved, even though it's actually the asme values
 			could have simpler version though that just tracks if a change has been made, that would cover most cases, just wouldn't be perfect, maybe good enough, at least for first version, can iterate later to improve if think of a simple way
-* have a test button on the wp-admin to help users know if credentials setup correctly
-	* send an existing comment (if there are some) or a fallback hardcoded comment
-		* probably set donotstore to true so that test comment doesn't get stored and distort Perspective's data
-	* show successful results or error
-	* probaly want to share the code between front and back ends at this point
-* show comment scores on the comments list and/or when editing individiaual comments
-	* make color red if it's above the sensitivity threshhold, and green if it's below
+
 
 
 ## Future
 
-### High Impact and/or Low Effort
+Impact could be on UX _or_ devex.
 
-* let user choose between perspective and tensorflow toxicity, so have offline option
+
+### High Impact / Low Effort
+
+* fix minor todos left in code, or move them to this file if not worth fixing now
+
+* Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
+
+* show comment scores on the comments list and/or when editing individiaual comments
+	* make color red if it's above the sensitivity threshhold, and green if it's below
+	* update faq about prompt not showing, so that it says to compare the value of the comment on comment screen to the sensitivity setting
 
 * show avatar of person replying to, to put human face on it?
 	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
 	or would that backfire? how to make it not awkward?
-
-* reduce bundle sizes
-
-* Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
 
 * Update list of supported languages every ~6 months.
 
@@ -73,9 +71,13 @@
 	* https://github.com/WordPress/gutenberg/issues/14801
 
 
-### Low Impact and/or High Effort
+
+### High Impact / High Effort
 
 * have a stats dashboard that shows the impact of the plugin
+	Add tab for."impact" that shows stats
+	make default tab when API key entered, otherwise settings is default
+	Use page router so that history API is set and real deep links work
 	use some nifty js data visualization thingy
 	look at `commentmeta` table
 		% comments that scored high enough to trigger warning, but submitted anyway
@@ -84,18 +86,72 @@
 			also show average delta between first score and second (e.g., "of commenters that chose to make comment more kind, the toxicity level decreased from average of 64% to average of 33%")
 	average toxicity score across all comments
 	average score of comments below sensitivity threshold, and avg of those above it
-
-* have setting to not send comments to Perspective at all for private sites/posts, rather than sending them with `doNotTrack`
+	stats will be distorted when sensitivity changes, so maybe need to track that somehow and only show stats for comments rated w/ the current sensitivity or something?
+		maybe when saving sensitivity, store the newest comment_id, and only show stats for comments since then
+		would need to let user know only showing stats since last sensitivity change, otherwise they'd be confused why not seeing for older comments
+		might only affect some stats
 
 * Add way to report false positives back to Perspective, if they accept that kind of feedback
 	* > Users can leverage the [...] ‘SuggestCommentScore’ method to submit corrections to improve Perspective over time.
 	* maybe Let commenters report false positives too
 	* but how to take into account that different sites have different sensitivity?
 
-* Give the user details on what type of problem was detecting (sarcasm, insults, etc), and highlight the words that were flagged
+* let user choose between perspective and tensorflow toxicity, so have offline/private option
+	* after tensorflow added, Propose for anon p2
+
+* reduce bundle sizes
+
+* Warn admin when Perspective quota exceeded
+	* Those are currently available in the Cloud Console, but not (easily) accessible via API
+	* https://github.com/conversationai/perspectiveapi/issues/6
+
+* Consider sending `context` request param in future, once it actually impacts the score
+
+* Consider using React Context instead of passing props/state down several layers, but that seems pretty clunky in its own right too.
+
+
+### Low Impact / Low Effort
+
+* Add a cron job to test the API key periodically (once a week, maybe daily) and email the admin if it's not working
+	* Otherwise if it stops working the plugin will fail silently and comments will just be accepted without analysis
+
+* have setting to not send comments to Perspective at all for private sites/posts, rather than sending them with `doNotTrack`
+
+* lower api request timeout to 15 seconds b/c user won't wait 30?
+	* https://stackoverflow.com/questions/46946380/fetch-api-request-timeout
+	* https://davidwalsh.name/fetch-timeout
+
+
+* maybe have gradations, rather than just toxic or not toxic?
+	* e.g., at 40% user is shown warning, at 80% user is blocked from publishing until edits to below 80%?
+
+* Add option to not scan comments of logged-in users
+	* maybe also let choose which roles get scanned
+
+* Instead of showing sample comments in the Sensitivity card, show the site's real comments.
+	* that'd help identify a better default sensitivity when they first install plugin
+	* but maybe wouldn't have time to rank them before they go to the settings screen?
+	* would at least help if they come back later to tweak it
+	* would have to retroactively analyize old comments and score them
+		* would need to have 1 for every single value from 1-100 ?
+		* or could maybe use the sample comments as a base, but overwrite individual values w/ real comments where they exist
+			* e.g., [1] - sample, [2] - real, [3] - sample, [4] - sample, [5] - real
+	* privacy considerations? prob not b/c already agreeing to send? but maybe edge cases
+	* would need to somehow track which comments were scored before the plugin was active, and which after
+		* otherwise it'd heavily distort stats, because it'd look like nobody edited their comment after seeing the prompt
+		* maybe just an option that has the highest comment_id when the plugin was activated
+			* doesn't take into account that plugin could be activated/deactivate at times, but good enough
+	* add stat to show average toxicity before installed plugin, and average toxicity after
+		* need to wait until X comments after install, to have large enough sample size to draw meaningful conclusions
+
+
+### Low Impact / High Effort
+
+
+* Give the comment author details on what type of problem was detecting (sarcasm, insults, etc), and highlight the words that were flagged
 	* look at `spanScores` in api response, need to enable `spanAnnotations` option in api requst
 
-* Give the user live feedback as they're writing the comment, rather than waiting until they're done?
+* Give the comment author live feedback as they're writing the comment, rather than waiting until they're done?
 	* Can see good things about both. Maybe more effective to let them write it first, get it out of their system, then they'll be more open to rephrasing it?
 	* Or maybe if they've already gone to the trouble of writing it they'll be more resistant to throwing it away?
 	* Maybe offer both modes, and collect stats on each so the admin can see which works best for their community
@@ -108,20 +164,4 @@
 	* maybe not, since the Tune chrome extension already exists
 	* but maybe worth it so that users don't have to install something
 
-* lower api request timeout to 15 seconds b/c user won't wait 30?
-	* https://stackoverflow.com/questions/46946380/fetch-api-request-timeout
-	* https://davidwalsh.name/fetch-timeout
-
-* maybe have gradations, rather than just toxic or not toxic?
-	* e.g., at 40% user is shown warning, at 80% user is blocked from publishing until edits to below 80%?
-
-* Add option to not scan comments of logged-in users
-	* maybe also let choose which roles get scanned
-
-* Warn admin when Perspective quota exceeded
-	* Those are currently available in the Cloud Console, but not (easily) accessible via API
-	* https://github.com/conversationai/perspectiveapi/issues/6
-
-* Consider sending `context` request param in future, once it actually impacts the score
-
-* Consider using React Context instead of passing props/state down several layers, but that seems pretty clunky in its own right too.
+* create video similar to QNI, link to both readmes

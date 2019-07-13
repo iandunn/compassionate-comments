@@ -20,6 +20,8 @@ import { Sensitivity } from '../sensitivity';
  */
 function ApiKey( props ) {
 	const { onChange, apiKey } = props;
+	// todo use shorter format instead: `ApiKey( { onChange, apiKey } )` ? if so, do for all functions that just reference local props
+		// probably can't do for ones that reference this.props and this.state
 
 	return (
 		<Card title="Perspective API Key">

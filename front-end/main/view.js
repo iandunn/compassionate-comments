@@ -43,7 +43,7 @@ function Toxic( props ) {
 						 * See https://github.com/WordPress/gutenberg/issues/9846.
 						 * See https://github.com/WordPress/gutenberg/issues/13156.
 						 */
-						'Please remember that there\'s another human being on the other end of this conversation, and they\'ll be impacted by the words that you write. It\'s also worth considering that you may have <a href="%s">misinterpreted their intentions</a>. Please consider rephrasing your comment to be more kind.',
+						'Please remember that there\'s another human being on the other end of this conversation, and they\'ll be affected by the words that you write. It\'s also worth considering that you may have <a href="%s">misinterpreted their intentions</a>. Please consider rephrasing your comment to be more kind.',
 						'https://www.edutopia.org/blog/assuming-positive-intent-laura-thomas'
 					) }
 				</RawHTML>

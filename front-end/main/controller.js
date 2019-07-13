@@ -42,7 +42,10 @@ export class MainController extends Component {
 	 */
 	analyzeComment( event ) {
 		try {
-			// Intentionally not using the value, just making sure it exists so it can be used in the callback below.
+			/*
+			 * Intentionally not using the value, just making sure it exists so it can be used in the (out of
+			 * scope) callback below.
+			 */
 			document.getElementById( 'comment' ).value;
 		} catch ( Exception ) {
 			consoleError( Exception );
@@ -110,6 +113,7 @@ export class MainController extends Component {
 	 * @param {string} commentText
 	 *
 	 * @return {Promise}
+	 *  todo should be {Promise<Response>} ? probably
 	 */
 	sendScoreRequest( commentText ) {
 		const { perspectiveApiKey } = this.props;
@@ -137,6 +141,10 @@ export class MainController extends Component {
 		 * request through a REST API endpoint on the server, which would be much slower, and add extra
 		 * code/complexity. To mitigate the risk, a strong warning is shown on the Settings screen, asking the
 		 * admin to restrict the key to their server.
+		 *
+		 * todo this is wrong, key restrictions wont work, because the request comes from the browser. won't know
+		 * ip, and referrer can be spoofed. restricting to perspective api only helps, but ideally have to proxy
+		 * request through local rest api so that server is making the request rather than client :(
 		 */
 		const url = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${ perspectiveApiKey }`;
 

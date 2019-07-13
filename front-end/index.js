@@ -52,6 +52,8 @@ import { consoleError }                            from '../common/common';
 	function renderApp( container, props ) {
 		render(
 			createElement( CompassionateComments, props ),
+			// todo need createElement here, or just <CompassionateComments ...props> ?
+			// probably just do ^
 			container
 		);
 	}

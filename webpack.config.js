@@ -17,6 +17,7 @@ module.exports = {
 		'front-end' : './front-end/index',
 
 		// todo is this needed? if so, open an issue b/c wp-scripts should detect this common pattern and support it without needing custom config
+			// looks like that exists now, see https://github.com/WordPress/gutenberg/pull/15982
 		// just need to establish a convention for naming admin/front-end
 		// or maybe even just auto-define based on folder names - that'd probably be better
 		// or cli params?

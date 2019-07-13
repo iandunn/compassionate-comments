@@ -39,6 +39,7 @@ export class MainController extends Component {
 		this.setState( { savingSettings: true }, () => {
 			const { apiFetch } = wp;
 				// todo this shouldn't be necessary since imported above, but otherwise it's undefined. file bug report, or you're doing something wrong?
+				// maybe it's `import apiFetch` vs `import { apiFetch }` ?
 			const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 
 			const fetchParams = {
