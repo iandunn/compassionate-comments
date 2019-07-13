@@ -198,7 +198,7 @@ export function MainView( props ) {
 					<div className="notice notice-warning">
 						<p>
 							{ __(
-								'The Perspective API can only analyze comments written in English, French, and Spanish. Comments written in other languages will be accepted without any analysis or content warnings.',
+								'The Perspective API can only analyze comments written in English, Spanish, and French. Comments written in other languages will be accepted without any analysis or content warnings.',
 								'compassionate-comments'
 							) }
 						</p>

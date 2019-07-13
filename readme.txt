@@ -19,7 +19,7 @@ This plugin checks the intent of a comment before it's submitted. If the author 
 
 Google's free [Perspective API](https://www.perspectiveapi.com/) is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis. You can optionally request that they not store your comments for their future research.
 
-The Perspective API can only analyze comments written in English, French, and Spanish. Comments written in other languages will be accepted without any analysis or content warnings.
+The Perspective API can only analyze comments written in English, Spanish, and French. Comments written in other languages will be accepted without any analysis or content warnings.
 
 The inspiration for this comes from Tristan Harris' TED talk about [designing technology to reflect human values](https://www.youtube.com/watch?v=D55ctBYF3AY) and from [ReThink](http://www.rethinkwords.com/).
 
@@ -30,7 +30,7 @@ You can [report bugs and contribute on GitHub](https://github.com/iandunn/compas
 
 = Why isn't the prompt showing when I type a rude comment? =
 
-That might be expected behavior, if the comment score is lower than the Sensitivity setting.
+That might be expected behavior, if the comment score is lower than the Sensitivity setting, or if it were written in a language that the API doesn't support. It currently supports English, Spanish, and French.
 
 If the score is higher, try opening your browser's error console, click the `Perserve logs` checkbox, and then submit the rude comment. Check if any errors appear in the console. Also check the Network tab to see if any XHR requests failed.
 

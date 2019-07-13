@@ -6,7 +6,7 @@ This plugin checks the intent of a comment before it's submitted. If the author 
 
 Google's free [Perspective API](https://www.perspectiveapi.com/) is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis. You can optionally request that they not store your comments for their future research.
 
-The Perspective API can only analyze comments written in English, French, and Spanish. Comments written in other languages will be accepted without any analysis or content warnings.
+The Perspective API can only analyze comments written in English, Spanish, and French. Comments written in other languages will be accepted without any analysis or content warnings.
 
 The inspiration for this comes from Tristan Harris' TED talk about [designing technology to reflect human values](https://www.youtube.com/watch?v=D55ctBYF3AY) and from [ReThink](http://www.rethinkwords.com/).
 
