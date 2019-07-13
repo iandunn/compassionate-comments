@@ -54,6 +54,7 @@ import { consoleError }                            from '../common/common';
 			createElement( CompassionateComments, props ),
 			// todo need createElement here, or just <CompassionateComments ...props> ?
 			// probably just do ^
+			// do in admin too
 			container
 		);
 	}

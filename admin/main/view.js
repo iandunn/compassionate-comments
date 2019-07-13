@@ -30,7 +30,7 @@ function ApiKey( props ) {
 			</p>
 
 			{ ! apiKey &&
-				<p className="notice notice-error">
+				<p className="notice notice-error inline">
 					{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 					You have not entered an API key yet, and this plugin can't work until you do. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
 				</p>
@@ -191,10 +191,6 @@ export function MainView( props ) {
 
 			{ ! languageSupported &&
 				<Fragment>
-					<span className="wp-header-end">
-						{ /* This hidden element prevents WP from moving the notice below up into the typical admin_notice area. */ }
-					</span>
-
 					<div className="notice notice-warning">
 						<p>
 							{ __(
