@@ -43,7 +43,7 @@ function ApiKey( props ) {
 				placeholder="BJfjSyDRq7yoR2PK3DNB3sjkah1Z5ubOCq6HfMn"
 			/>
 
-			<p className="notice notice-warning">
+			<p className="notice notice-warning inline">
 				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> {}
 				to your server's domain name, IP address, or other unique identifier. If you don't, it's likely that the key will be abused and the plugin will stop working.
@@ -88,7 +88,7 @@ function StoreComments( props ) {
 				) }
 			</p>
 
-			<p className="notice notice-info">
+			<p className="notice notice-info inline">
 				{ __( 'Comments on private posts will never be stored, regardless of this setting.', 'compassionate-comments' ) }
 
 				{ /* todo phrase that more accurately, like,
@@ -126,7 +126,7 @@ function StoreCommentsDisabled( props ) {
 
 			{ /* todo why is ^ not styled correctly in core trunk environment, but is in latest stable environment? */}
 
-			<p className="notice notice-info">
+			<p className="notice notice-info inline">
 				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 				Because <a href="options-reading.php">your site is marked as private</a>, we will always ask Perspective to discard your comments after they've analyzed them.
 				{ /* todo might need to epxlain it's the "search engine" setting, b/c that's not obvious */}
@@ -191,7 +191,7 @@ export function MainView( props ) {
 
 			{ ! languageSupported &&
 				<Fragment>
-					<div className="notice notice-warning">
+					<div className="notice notice-warning inline">
 						<p>
 							{ __(
 								'The Perspective API can only analyze comments written in English, Spanish, and French. Comments written in other languages will be accepted without any analysis or content warnings.',

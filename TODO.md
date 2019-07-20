@@ -69,6 +69,7 @@ Impact could be on UX _or_ devex.
 
 * Switch to SASS once wp-scripts supports it
 	* https://github.com/WordPress/gutenberg/issues/14801
+	* Can do it now like wordcamp.org did? See https://github.com/WordPress/wordcamp.org/pull/157/
 
 
 
@@ -143,6 +144,8 @@ Impact could be on UX _or_ devex.
 			* doesn't take into account that plugin could be activated/deactivate at times, but good enough
 	* add stat to show average toxicity before installed plugin, and average toxicity after
 		* need to wait until X comments after install, to have large enough sample size to draw meaningful conclusions
+
+* add comment score to email notification
 
 
 ### Low Impact / High Effort
