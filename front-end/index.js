@@ -7,7 +7,7 @@ import { __ }                    from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { MainController as CompassionateComments } from './main/controller';
+import { MainController as CompassionateCommentsFront } from './main/controller';
 import { consoleError }                            from '../common/common';
 
 ( function() {
@@ -51,8 +51,8 @@ import { consoleError }                            from '../common/common';
 	 */
 	function renderApp( container, props ) {
 		render(
-			createElement( CompassionateComments, props ),
-			// todo need createElement here, or just <CompassionateComments ...props> ?
+			createElement( CompassionateCommentsFront, props ),
+			// todo need createElement here, or just <CompassionateCommentsFront ...props> ?
 			// probably just do ^
 			// do in admin too
 			container
