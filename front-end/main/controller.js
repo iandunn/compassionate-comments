@@ -70,8 +70,17 @@ export class MainController extends Component {
 					newState    = { isToxic : score > perspectiveSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
 
 					this.logScore( score );
-				} catch ( Exception ) {
-					newState = { error: Exception };
+
+				} catch ( ApiRequestException ) {
+					let badResponse;
+
+					try {
+						badResponse = data.error.message;
+					} catch ( e ) {
+						badResponse = ApiRequestException;
+					}
+
+					newState = { error : badResponse };
 				}
 
 			} ).catch( error => {
