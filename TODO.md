@@ -28,14 +28,6 @@
 		then delete the transient
 		seems like that'll work, but not very elegant. maybe wait a day or two and see if come up with a better idea
 
-
-* test api key automatically every time visit settings screen
-	much better ux than manual button + makes easier to catch errors
-	* send an existing comment (if there are some) or a fallback hardcoded comment
-		* probably set donotstore to true so that test comment doesn't get stored and distort Perspective's data
-	* show successful results or error
-	* probaly want to share the code between front and back ends at this point
-
 * add some "saved" text or something next to save button, b/c happens so fast that user doesn't have any visual feedback
 	make it fade out after 5-10 seconds?
 	or just have permenant "saved x minutess ago" that updates real time?
@@ -168,3 +160,6 @@ Impact could be on UX _or_ devex.
 	* but maybe worth it so that users don't have to install something
 
 * create video similar to QNI, link to both readmes
+
+* add e2e tests
+	* this should be low effort, but the tools still suck and there aren't any examples

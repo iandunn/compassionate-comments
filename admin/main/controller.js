@@ -8,7 +8,7 @@ import { Component } from '@wordpress/element';
  * Internal dependencies
  */
 import { MainView }     from './view';
-import { consoleError } from '../../common/common';
+import { consoleError, sendScoreRequest } from '../../common/common';
 
 
 /**
@@ -22,6 +22,7 @@ export class MainController extends Component {
 
 		this.state = {
 			savingSettings : false,
+			perspectiveApiKeyError : false,
 			perspectiveApiKey,
 			perspectiveStoreComments,
 			perspectiveSensitivity,
@@ -30,6 +31,35 @@ export class MainController extends Component {
 		// todo ^ feels weird b/c then you have props.sensitivity and state.sensitivity and they don't match
 			// maybe that's ok though?
 			// or maybe this is a smell that i'm doing something wrong?
+	}
+
+	componentDidMount() {
+		this.testApiKey( this.state.perspectiveApiKey );
+	}
+
+	/**
+	 * Test if the Perspective API key is valid.
+	 *
+	 * @param {string} apiKey
+	 */
+	testApiKey( apiKey ) {
+		const testMessage = "This is a test to see if the user set a valid API key.";
+
+		if ( ! apiKey ) {
+			return;
+		}
+
+		sendScoreRequest( apiKey, testMessage, true ).then( data => {
+			try {
+				// Intentionally not using the value, just check if it exists as a way to see if the key works.
+				const success = data.attributeScores.TOXICITY.summaryScore.value;
+			} catch ( Exception ) {
+				this.setState( { perspectiveApiKeyError : data.error.message } );
+			}
+
+		} ).catch( error => {
+			this.setState( { perspectiveApiKeyError : error.message } );
+		} );
 	}
 
 	/**
@@ -53,7 +83,7 @@ export class MainController extends Component {
 			};
 
 			apiFetch( fetchParams ).then( data => {
-				// what to do here? nothing? can just skip this then?
+				this.testApiKey( perspectiveApiKey );
 
 			} ).catch( error => {
 				consoleError( error );
@@ -66,17 +96,19 @@ export class MainController extends Component {
 
 	render() {
 		const { languageSupported, siteIsPublic } = this.props;
-		const { perspectiveApiKey, savingSettings, perspectiveStoreComments, perspectiveSensitivity } = this.state;
+		const { perspectiveApiKey, perspectiveApiKeyError, savingSettings, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 
 		return (
 			<MainView
-				handleApiKeyChange={                 perspectiveApiKey        => this.setState( { perspectiveApiKey        } ) }
+				/* The key is changing, so errors associated with the old key are no longer relevant. */
+				handleApiKeyChange={                 perspectiveApiKey        => this.setState( { perspectiveApiKey, perspectiveApiKeyError : false } ) }
 				handleStoreCommentsChange={          perspectiveStoreComments => this.setState( { perspectiveStoreComments } ) }
 				handlePerspectiveSensitivityChange={ perspectiveSensitivity   => this.setState( { perspectiveSensitivity   } ) }
 				handleSaveSettings={ () => this.saveSettings() }
 
 				languageSupported={ languageSupported }
 				perspectiveApiKey={ perspectiveApiKey }
+				perspectiveApiKeyError={ perspectiveApiKeyError }
 				savingSettings={ savingSettings }
 				perspectiveStoreComments={ perspectiveStoreComments }
 				siteIsPublic={ siteIsPublic }

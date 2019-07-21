@@ -19,7 +19,7 @@ import { Sensitivity } from '../sensitivity';
  * @return {Element}
  */
 function ApiKey( props ) {
-	const { onChange, apiKey } = props;
+	const { onChange, apiKey, apiKeyError } = props;
 	// todo use shorter format instead: `ApiKey( { onChange, apiKey } )` ? if so, do for all functions that just reference local props
 		// probably can't do for ones that reference this.props and this.state
 
@@ -28,6 +28,22 @@ function ApiKey( props ) {
 			<p>
 				{ __( 'Your API key allows Compassionate Comments to use the Perspective API in order to analyze comments for toxicity.', 'compassionate-comments' ) }
 			</p>
+
+			{ apiKeyError &&
+				<div className="notice notice-error inline">
+					<p>
+						{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */ }
+						Perspective API Error: <code>{ apiKeyError }</code>
+					</p>
+
+					<p>
+						{ __(
+							"Please make sure that your key is correct, not restricted by IP or referrer, and not over its quota.",
+							'compassionate-comments'
+						) }
+					</p>
+				</div>
+			}
 
 			{ ! apiKey &&
 				<p className="notice notice-error inline">
@@ -46,7 +62,7 @@ function ApiKey( props ) {
 			<p className="notice notice-warning inline">
 				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
 				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> {}
-				to your server's domain name, IP address, or other unique identifier. If you don't, it's likely that the key will be abused and the plugin will stop working.
+				to just the Perspective API. If you don't, any abuse of it can cause other services to stop working.
 			</p>
 		</Card>
 	);
@@ -168,8 +184,9 @@ function SaveButton( props ) {
  */
 export function MainView( props ) {
 	const {
-		languageSupported, perspectiveApiKey, savingSettings, siteIsPublic, perspectiveStoreComments, perspectiveSensitivity,
-		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handlePerspectiveSensitivityChange,
+		languageSupported, perspectiveApiKey, perspectiveApiKeyError, savingSettings, siteIsPublic,
+		perspectiveStoreComments, perspectiveSensitivity, handleApiKeyChange, handleStoreCommentsChange,
+		handleSaveSettings, handlePerspectiveSensitivityChange,
 	} = props;
 
 	// maybe all these should be wrapped in div instead of fragment? feels bad to have extra/unnecessary wrappers
@@ -205,6 +222,7 @@ export function MainView( props ) {
 			<div id="comcon-admin__settings">
 				<ApiKey
 					apiKey={ perspectiveApiKey }
+					apiKeyError={ perspectiveApiKeyError }
 					onChange={ handleApiKeyChange }
 				/>
 
