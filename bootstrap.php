@@ -61,9 +61,10 @@ if ( comcon_requirements_met() ) {
 	 */
 	if ( is_admin() || wp_is_json_request() ) {
 		require_once( dirname( __FILE__ ) . '/admin/admin.php' );
+		require_once( dirname( __FILE__ ) . '/admin/settings/settings.php' );
 	} else {
 		// todo does ^ guaranttet this this is only front end? not really, what can you check instead?
-		// no, it'll load for cron too.
+		// no, it'll load for cron too. what about login?
 
 		require_once( dirname( __FILE__ ) . '/front-end/front-end.php' );
 	}

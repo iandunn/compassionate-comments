@@ -7,7 +7,7 @@ import { __, sprintf }  from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { Card }           from '../card';
+import { Card }           from '../../card';
 import { sampleComments } from './sample-comments';
 
 
@@ -32,7 +32,7 @@ export function Sensitivity( props ) {
 	return (
 		<Card title="Sensitivity">
 			<p>
-				{ __( "Comment authors are warned when their comment's toxicity score exceeds this number.", 'compassionate-comments' ) }
+				{ __( "Comment authors will be warned when their comment's toxicity score exceeds this number.", 'compassionate-comments' ) }
 			</p>
 
 			<RangeControl

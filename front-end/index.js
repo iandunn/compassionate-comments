@@ -10,6 +10,7 @@ import { __ }                    from '@wordpress/i18n';
 import { MainController as CompassionateCommentsFront } from './main/controller';
 import { consoleError }                            from '../common/common';
 
+
 ( function() {
 	/**
 	 * Initialize the app.
@@ -34,7 +35,7 @@ import { consoleError }                            from '../common/common';
 		}
 
 		/*
-		 * The container won't actually be used by anything, since the view is wrapped in a Modal, which creates
+		 * The container won't actually be used by anything, since the view is wrapped in a `Modal`, which creates
 		 * its own container.
 		 *
 		 * See https://github.com/WordPress/gutenberg/issues/15875.
