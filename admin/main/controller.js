@@ -1,141 +1,101 @@
 /**
  * WordPress dependencies
  */
-import { apiFetch }  from '@wordpress/api-fetch';
-import { Component } from '@wordpress/element';
+import { Component }                 from '@wordpress/element';
+import { addQueryArgs, getQueryArg } from '@wordpress/url';
 
 /**
  * Internal dependencies
  */
-import { MainView }     from './view';
-import { consoleError, getErrorMessage, sendScoreRequest } from '../../common/common';
+import { MainView } from './view';
 
 
-/**
- * Manage the state and logic for the main interface.
- */
-export class MainController extends Component {
+export class Admin extends Component {
 	constructor( props ) {
 		super( props );
 
-		const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = props;
+		// If they've already configured the plugin, then it's more likely that they want to see stats than change settings again.
+		const defaultTab   = props.perspectiveApiKey ? 'impact' : 'settings';
+		const requestedTab = getQueryArg( window.location.href, 'tab' );
+		const currentTab   = requestedTab || defaultTab;
 
-		this.state = {
-			savingSettings         : false,
-			savedSettings          : false,
-			saveSettingsError      : '',
-			perspectiveApiKeyError : false,
-			perspectiveApiKey,
-			perspectiveStoreComments,
-			perspectiveSensitivity,
-		};
+		this.state = { currentTab };
 
-		// todo ^ feels weird b/c then you have props.sensitivity and state.sensitivity and they don't match
-			// maybe that's ok though?
-			// or maybe this is a smell that i'm doing something wrong?
-	}
+		Admin.pushTabState( currentTab );
 
-	componentDidMount() {
-		this.testApiKey( this.state.perspectiveApiKey );
+		// todo use experimental syntax for this to avoid these calls
+		this.switchTab = this.switchTab.bind( this );
 	}
 
 	/**
-	 * Test if the Perspective API key is valid.
-	 *
-	 * @param {string} apiKey
+	 * Initialization that can't be done until the component is mounted.
 	 */
-	testApiKey( apiKey ) {
-		const newState    = {};
-		const testMessage = 'This is a test to see if the user set a valid API key.';
+	componentDidMount() {
+		// This won't exist until the component has been mounted.
+		this.tabContainer = document.getElementById( 'comcon-admin__navigation-tabs' );
 
-		if ( ! apiKey ) {
+		this.tabContainer.addEventListener( 'click', this.switchTab );
+	}
+
+	/**
+	 * Clean up things before the component is unmounted.
+	 */
+	componentWillUnmount() {
+		this.tabContainer.removeEventListener( 'click', this.switchTab );
+	}
+
+	/**
+	 * Switch the current tab to the requested one.
+	 *
+	 * @param {object} event
+	 */
+	switchTab( event ) {
+		event.preventDefault();
+
+		// Don't do anything if they clicked somewhere inside the container that wasn't a link.
+		if ( ! event.target.href ) {
 			return;
 		}
 
-		// Set `doNotStore` to avoid distorting Perspective's data with test comments.
-		sendScoreRequest( apiKey, testMessage, true ).then( data => {
-			try {
-				// Intentionally not using the value, just check if it exists as a way to see if the key works.
-				const success = data.attributeScores.TOXICITY.summaryScore.value;
-				newState.perspectiveApiKeyError = false;
-			} catch ( Exception ) {
-				newState.perspectiveApiKeyError = getErrorMessage( data.error );
-			}
+		const tab = getQueryArg( event.target.href, 'tab' );
 
-		} ).catch( error => {
-			newState.perspectiveApiKeyError = getErrorMessage( error );
-
-		} ).finally( () => {
-			this.setState( newState );
+		this.setState( {
+			currentTab : tab,
 		} );
+
+		Admin.pushTabState( tab );
 	}
 
 	/**
-	 * Save the current settings to the database via the REST API.
+	 * Update the browser's location bar and history when changing to a new tab.
+	 *
+	 * @param {string} tab
 	 */
-	saveSettings() {
-		this.setState( { savingSettings: true }, () => {
-			const { apiFetch } = wp;
-				// todo this shouldn't be necessary since imported above, but otherwise it's undefined. file bug report, or you're doing something wrong?
-				// maybe it's `import apiFetch` vs `import { apiFetch }` ?
-			const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = this.state;
-			const newState = {
-				savedSettings  : true,
-				savingSettings : false,
-			};
-
-			const fetchParams = {
-				path   : '/wp/v2/settings',
-				method : 'PUT',
-				data   : {
-					comcon_perspective_api_key        : perspectiveApiKey,
-					comcon_perspective_sensitivity    : perspectiveSensitivity,
-					comcon_perspective_store_comments : perspectiveStoreComments,
-				},
-			};
-
-			apiFetch( fetchParams ).then( data => {
-				this.testApiKey( perspectiveApiKey );
-
-			} ).catch( error => {
-				consoleError( error ); // The full object might still be useful, even though the message will be displayed to the user.
-
-				newState.savedSettings     = false;
-				newState.saveSettingsError = getErrorMessage( error );
-
-			} ).finally( () => {
-				this.setState( newState );
-			} );
-		} );
+	static pushTabState( tab ) {
+		history.pushState(
+			null,
+			tab,
+			addQueryArgs( window.location.href, { tab } )
+		);
 	}
 
+	/**
+	 * Render the view for the main interface.
+	 *
+	 * @return {Element}
+	 */
 	render() {
-		const { languageSupported, siteIsPublic } = this.props;
-		const {
-			perspectiveApiKey, perspectiveApiKeyError, perspectiveStoreComments, perspectiveSensitivity,
-			savedSettings, saveSettingsError, savingSettings,
-		} = this.state;
+		const { languageSupported, perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity, siteIsPublic } = this.props;
+		const { currentTab } = this.state;
 
 		return (
 			<MainView
-				/*
-				 * The key is changing, so errors associated with the old key are no longer relevant.
-				 * `savedSettings` is always made false, because they've change a setting but it hasn't been saved yet.
-				 */
-				handleApiKeyChange={                 perspectiveApiKey        => this.setState( { perspectiveApiKey, perspectiveApiKeyError : false, savedSettings : false } ) }
-				handleStoreCommentsChange={          perspectiveStoreComments => this.setState( { perspectiveStoreComments, savedSettings : false } ) }
-				handlePerspectiveSensitivityChange={ perspectiveSensitivity   => this.setState( { perspectiveSensitivity, savedSettings : false   } ) }
-				handleSaveSettings={ () => this.saveSettings() }
-
+				currentTab={ currentTab }
 				languageSupported={ languageSupported }
 				perspectiveApiKey={ perspectiveApiKey }
-				perspectiveApiKeyError={ perspectiveApiKeyError }
-				savedSettings={ savedSettings }
-				saveSettingsError={ saveSettingsError }
-				savingSettings={ savingSettings }
 				perspectiveStoreComments={ perspectiveStoreComments }
-				siteIsPublic={ siteIsPublic }
 				perspectiveSensitivity={ perspectiveSensitivity }
+				siteIsPublic={ siteIsPublic }
 			/>
 		);
 	}

@@ -1,48 +1,15 @@
 # TODO
 
-## MVP
-
-
-### Launch
-
-* install on iandunn.name even though don't need it, just to dogfood / catch bugs
-	* wtf it's working on iandunn.name but not fightingforalostcause.net, not obvious why
-		maybe need to clone git repo to production so can troubleshoot, or at least step through debug in browser dev tools
+## Launch
 
 * Post about it on your blog
 	* just about the plugin concept/launch, not the react stuff, that'll be separate post
 	* https://iandunn.name/wordpress/wp-admin/post.php?post=2436&action=edit
 
 
-
-
 ## Next Minor
 
-* can't restrict key b/c request comes from browser and referrer can be forged, so gonna have to proxy through rest api endpoint :(
-	proxying will hide the key, but if return score then it's just giving abusers indirect access to api key, instead of direct access
-	so need to only return `nudge: true/false` to tell ui whether to show the warning or not
-	but then how do you log the scores?
-		maybe js generates a random "commentSessionId" every page load, and includes that in rest api request
-		then store scores in transient keyed to that commentSessionId. (different transient for each Id)
-		when comment is submitted, include commentSessionId, and pull the associated scores from transient and add them to comment meta
-		then delete the transient
-		seems like that'll work, but not very elegant. maybe wait a day or two and see if come up with a better idea
-
-* add some "saved" text or something next to save button, b/c happens so fast that user doesn't have any visual feedback
-	make it fade out after 5-10 seconds? - css animation?
-	or just have permenant "saved x minutess ago" that updates real time?
-		https://github.com/WordPress/gutenberg/issues/14486
-		just use Moment directly for now, but leave comment to replace with ^ when it's available, for future-proofing
-	or have a permenant "there are unsaved changes" / "all changes have been saved" thing? - tried that and it became a rabbit hole, so probably do one of the simpler options above
-		mostly complex b/c have to track original state after last save if want it to be perfect.
-			otherwise making change and undoing it would say it's unsaved, even though it's actually the asme values
-			could have simpler version though that just tracks if a change has been made, that would cover most cases, just wouldn't be perfect, maybe good enough, at least for first version, can iterate later to improve if think of a simple way
-
 * have a stats dashboard that shows the impact of the plugin
-	--this is already stated on the `stats` branch--
-	Add tab for."impact" that shows stats
-	make default tab when API key entered, otherwise settings is default
-	Use page router so that history API is set and real deep links work
 	use some nifty js data visualization thingy
 	look at `commentmeta` table
 		% comments that scored high enough to trigger warning, but submitted anyway
@@ -55,16 +22,63 @@
 		maybe when saving sensitivity, store the newest comment_id, and only show stats for comments since then
 		would need to let user know only showing stats since last sensitivity change, otherwise they'd be confused why not seeing for older comments
 		might only affect some stats
+	add screenshot of stats menu
+		update screenshot of settings menu too
+
+* update wp-scripts to v6 after merging impact bracnh to develop, make sure linting etc still work
+	see https://github.com/WordPress/gutenberg/blob/master/packages/scripts/CHANGELOG.md
+
+* lint js after merging impact branch to develop
 
 * Switch to SASS once wp-scripts supports it
 	* https://github.com/WordPress/gutenberg/issues/14801
 	* Can do it now like wordcamp.org did? See https://github.com/WordPress/wordcamp.org/pull/157/
 
+* implement `await` instead of promise handling crap
+
+* use shorter format instead destructuring props
+	`function( { foo, bar } )`
+	probably can't do for ones that reference this.props and this.state?
+
+
+* rename index.js files to be more meaningful, like from `card/index.js` to `card/card.js` and `sensitivity/index.js` to `sensitivity/sensitivity.js` ?
+	* would be better devex b/c ide tabs not all the same, or prefixed w/ directory name
+	* i don't think wp-scripts will care, but test
+	* maybe not "idiomatic", but like most things, that means it's better
+
+
+
+* fix bug where it works on iandunn.name but not fightingforalostcause.net, not obvious why
+	maybe need to clone git repo to production so can troubleshoot, or at least step through debug in browser dev tools
+
+* can't restrict key b/c request comes from browser and referrer can be forged, so gonna have to proxy through rest api endpoint :(
+	proxying will hide the key, but if return score then it's just giving abusers indirect access to api key, instead of direct access
+	so need to only return `nudge: true/false` to tell ui whether to show the warning or not
+	but then how do you log the scores?
+		maybe js generates a random "commentSessionId" every page load, and includes that in rest api request
+		then store scores in transient keyed to that commentSessionId. (different transient for each Id)
+		when comment is submitted, include commentSessionId, and pull the associated scores from transient and add them to comment meta
+		then delete the transient
+		seems like that'll work, but not very elegant. maybe wait a day or two and see if come up with a better idea
+
+* maybe use https://reactjs.org/docs/react-api.html#reactmemo and https://reactjs.org/docs/react-api.html#reactpurecomponent ?
+	* be careful b/c it's only a shallow compare
+
+
+* default to settings tab if `testApiKey()` fails
+	if landing on impact page, but then test reveals error in key, would want to show error notice that key has problem
+	otherwise they'll never see the notice on the settings page
+	will require soem refactoring
+	that'd be http request, so would need to go in didmount()
+
+* let user choose between perspective and tensorflow toxicity, so have offline/private option
+	* after tensorflow added, Propose for anon p2. setup demo so he can get a feel for it
 
 
 ## Future
 
 Impact could be on UX _or_ devex.
+
 
 ### High Impact / Low Effort
 
@@ -72,9 +86,13 @@ Impact could be on UX _or_ devex.
 
 * Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
 
-* show comment scores on the comments list and/or when editing individiaual comments
+* show comment scores on the comments list
 	* make color red if it's above the sensitivity threshhold, and green if it's below
-	* update faq about prompt not showing, so that it says to compare the value of the comment on comment screen to the sensitivity setting
+
+* show comment scores when editing individiaual comments
+	* make color red if it's above the sensitivity threshhold, and green if it's below
+	* update the faq entry about the prompt not showing; make it say to compare the value of the comment on the comment screen to the sensitivity score in the settings screen
+		* is ^ not necessary b/c we have example comments showing in sensitivity setting?
 
 * show avatar of person replying to, to put human face on it?
 	make text say something about remembering that there's a human being on the other side, don't say something you wouldn't say to their face
@@ -85,13 +103,14 @@ Impact could be on UX _or_ devex.
 
 ### High Impact / High Effort
 
+* Come up with better default toxic comment examples for sesntitivity setting
+	 instead of using the ones from wikipedia, find some public database like new york times or something
+	 use plugin to score those, and then save in sample-comments.js
+
 * Add way to report false positives back to Perspective, if they accept that kind of feedback
 	* > Users can leverage the [...] ‘SuggestCommentScore’ method to submit corrections to improve Perspective over time.
 	* maybe Let commenters report false positives too
 	* but how to take into account that different sites have different sensitivity?
-
-* let user choose between perspective and tensorflow toxicity, so have offline/private option
-	* after tensorflow added, Propose for anon p2
 
 * reduce bundle sizes
 
@@ -99,30 +118,12 @@ Impact could be on UX _or_ devex.
 	* Those are currently available in the Cloud Console, but not (easily) accessible via API
 	* https://github.com/conversationai/perspectiveapi/issues/6
 
-* Consider sending `context` request param in future, once it actually impacts the score
+* Consider sending persepective api `context` request param in future, once it actually impacts the score
 
-* Consider using React Context instead of passing props/state down several layers, but that seems pretty clunky in its own right too.
+* Consider using React Context instead of so much prop drilling, but that seems pretty clunky in its own right too.
+	* or maybe hooks are better? https://reactjs.org/docs/hooks-state.html
 
-
-### Low Impact / Low Effort
-
-* Add a cron job to test the API key periodically (once a week, maybe daily) and email the admin if it's not working
-	* Otherwise if it stops working the plugin will fail silently and comments will just be accepted without analysis
-
-* have setting to not send comments to Perspective at all for private sites/posts, rather than sending them with `doNotTrack`
-
-* lower api request timeout to 15 seconds b/c user won't wait 30?
-	* https://stackoverflow.com/questions/46946380/fetch-api-request-timeout
-	* https://davidwalsh.name/fetch-timeout
-
-
-* maybe have gradations, rather than just toxic or not toxic?
-	* e.g., at 40% user is shown warning, at 80% user is blocked from publishing until edits to below 80%?
-
-* Add option to not scan comments of logged-in users
-	* maybe also let choose which roles get scanned
-
-* Instead of showing sample comments in the Sensitivity card, show the site's real comments.
+* Override default toxic comment examples with real comments from the current site
 	* that'd help identify a better default sensitivity when they first install plugin
 	* but maybe wouldn't have time to rank them before they go to the settings screen?
 	* would at least help if they come back later to tweak it
@@ -141,7 +142,28 @@ Impact could be on UX _or_ devex.
 	* add stat to show average toxicity before installed plugin, and average toxicity after
 		* need to wait until X comments after install, to have large enough sample size to draw meaningful conclusions
 
+
+### Low Impact / Low Effort
+
+* Add a cron job to test the API key periodically (once a week, maybe daily) and email the admin if it's not working
+	* Otherwise if it stops working the plugin will fail silently and comments will just be accepted without analysis
+
+* have setting to not send comments to Perspective at all for private sites/posts, rather than sending them with `doNotTrack`
+
+* lower api request timeout to 15 seconds b/c user won't wait 30?
+	* https://stackoverflow.com/questions/46946380/fetch-api-request-timeout
+	* https://davidwalsh.name/fetch-timeout
+
+* maybe have gradations, rather than just toxic or not toxic?
+	* e.g., at 40% user is shown warning, at 80% user is blocked from publishing until edits to below 80%?
+
+* Add option to not scan comments of logged-in users
+	* maybe also let choose which roles get scanned
+
 * add comment score to email notification
+
+* if changing tabs and have changed settings, but haven't saved yet, then trigger a warning that browsing away
+	* quick glance seems like there ways to do this are pretty hacky, but there may be a good one that i missed
 
 
 ### Low Impact / High Effort
@@ -167,3 +189,6 @@ Impact could be on UX _or_ devex.
 
 * add e2e tests
 	* this should be low effort, but the tools still suck and there aren't any examples
+	* check out https://github.com/eventespresso/event-espresso-core (unit tests) and https://github.com/google/site-kit-wp (e2e tests) as examples
+	* they still require custom config, but use wp-scripts
+	* if those work, add them to the gutenberg-examples issue, along w/ this

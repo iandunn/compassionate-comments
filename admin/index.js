@@ -6,7 +6,7 @@ import { render, createElement } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { MainController as CompassionateCommentsAdmin } from './main/controller';
+import { Admin as CompassionateCommentsAdmin } from './main/controller';
 
 ( function() {
 	/**

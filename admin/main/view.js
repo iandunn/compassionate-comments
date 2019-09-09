@@ -1,226 +1,94 @@
 /**
  * WordPress dependencies
  */
-import { Button, Dashicon, ToggleControl, TextControl } from '@wordpress/components';
-import { Fragment }                                     from '@wordpress/element';
-import { __, sprintf }                                  from '@wordpress/i18n';
+import { Fragment }     from '@wordpress/element';
+import { __ }           from '@wordpress/i18n';
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
  */
-import { Card }        from '../card';
-import { Sensitivity } from '../sensitivity';
+import { Impact }                         from './../impact';
+import { SettingsController as Settings } from './../settings/controller';
+
 
 /**
- * Render the view for the API Key setting.
+ * Render the menu of tabs for different admin pages.
+ *
+ * @todo Gutenberg's `TabPanel` might be a better fit for this in the future; reusing a native component would be
+ * much better than reinventing the wheel, especially with an older Core design. It doesn't current work well for
+ * this use case, though. It uses a button instead of a link, which is semantically wrong in this situation. The
+ * styling also needs a lot of work to match what's desired here, and it doesn't seem like there's an easy way to
+ * apply existing styles to do that, instead of having to write a bunch myself.
+ *
+ * @todo Dig into reusing it so that you understand what it'd take, and then open an issue to request that it be
+ * abstracted enough to be useful in situations like this.
  *
  * @param {Array} props
  *
  * @return {Element}
  */
-function ApiKey( props ) {
-	const { onChange, apiKey, apiKeyError } = props;
-	// todo use shorter format instead: `ApiKey( { onChange, apiKey } )` ? if so, do for all functions that just reference local props
-		// probably can't do for ones that reference this.props and this.state
+function NavigationTabs( { currentTab } ) {
+	const tabs = [
+		{
+			slug  : 'impact',
+			label : __( 'Impact', 'compassionate-comments' ),
+		},
+
+		{
+			slug  : 'settings',
+			label : __( 'Settings', 'compassionate-comments' ),
+		}
+	];
 
 	return (
-		<Card title="Perspective API Key">
-			<p>
-				{ __( 'Your API key allows Compassionate Comments to use the Perspective API in order to analyze comments for toxicity.', 'compassionate-comments' ) }
-			</p>
+		// The classes apply the styles from `wp-admin/theme-install.php`.
+		<div id="comcon-admin__navigation-tabs" className="wp-filter">
+			<ul className="filter-links">
+				{
+					tabs.map( tab => {
+						const href    = addQueryArgs( window.location.href, { tab : tab.slug } );
+						const current = currentTab === tab.slug;
 
-			{ apiKeyError &&
-				<div className="notice notice-error inline">
-					<p>
-						{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */ }
-						Perspective API Error: <code>{ apiKeyError }</code>
-					</p>
-
-					<p>
-						{ __(
-							"Please make sure that your key is correct, not restricted by IP or referrer, and not over its quota.",
-							'compassionate-comments'
-						) }
-					</p>
-				</div>
-			}
-
-			{ ! apiKey &&
-				<p className="notice notice-error inline">
-					{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
-					You have not entered an API key yet, and this plugin can't work until you do. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
-				</p>
-			}
-
-			<TextControl
-				label="Perspective API Key"
-				value={ apiKey }
-				onChange={ onChange }
-				placeholder="BJfjSyDRq7yoR2PK3DNB3sjkah1Z5ubOCq6HfMn"
-			/>
-
-			<p className="notice notice-warning inline">
-				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
-				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> {}
-				to just the Perspective API. If you don't, any abuse of it can cause other services to stop working.
-			</p>
-		</Card>
-	);
-}
-
-/**
- * Render the view for the Store Comments setting.
- *
- * See `StoreCommentsDisabled` for when the setting is automatically disabled.
- *
- * @param {Array} props
- *
- * @return {Element}
- */
-function StoreComments( props ) {
-	const { checked, onChange } = props;
-
-	// todo clarify title that this stores comments on Perspective servers, not this local wp server
-
-	return (
-		<Card title="Store Comments">
-			<p>
-				{ __( 'Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.', 'compassionate-comments' ) }
-			</p>
-
-			<ToggleControl
-				label="Store Comments"
-				//help="describe here too?"
-				checked={ checked }
-				onChange={ onChange }
-			/>
-
-			{ /* todo why is ^ not styled correctly in core trunk environment, but is in latest stable environment? */}
-
-			<p>
-				{ __(
-					"If this is disabled, they will still receive and analyze the comment, but have promised to discard it after they've finished analyzing it, rather than retaining it.",
-					'compassionate-comments'
-				) }
-			</p>
-
-			<p className="notice notice-info inline">
-				{ __( 'Comments on private posts will never be stored, regardless of this setting.', 'compassionate-comments' ) }
-
-				{ /* todo phrase that more accurately, like,
-				we will always ask the api to disacard comments that belong to private posts, regardless of this setting
-				*/}
-			</p>
-		</Card>
-	);
-}
-
-/**
- * Render the view for when the Store Comments setting is automatically disabled.
- *
- * See `StoreComments` for when the setting is not disabled.
- *
- * @param {Array} props
- *
- * @return {Element}
- */
-function StoreCommentsDisabled( props ) {
-	// todo clarify title that this stores comments on Perspective servers, not this local wp server
-
-	return (
-		<Card title="Store Comments">
-			<p>
-				{ __( 'Allowing the Perspective API to store your comments permenantly helps them train their models to be more accurate.', 'compassionate-comments' ) }
-			</p>
-
-			{ /* todo add disabled field? but component just ignnores is. maybe open ticket that it should pass props to input field*/}
-			<ToggleControl
-				label="Store Comments"
-				//help="describe here too?"
-				checked={ false }
-			/>
-
-			{ /* todo why is ^ not styled correctly in core trunk environment, but is in latest stable environment? */}
-
-			<p className="notice notice-info inline">
-				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
-				Because <a href="options-reading.php">your site is marked as private</a>, we will always ask Perspective to discard your comments after they've analyzed them.
-				{ /* todo might need to epxlain it's the "search engine" setting, b/c that's not obvious */}
-			</p>
-		</Card>
-	);
-}
-
-/**
- * Render the view for the Save Settings button.
- *
- * @param {Array} props
- *
- * @return {Element}
- */
-function SaveButton( props ) {
-	const { onClick, savedSettings, saveSettingsError, savingSettings } = props;
-
-	return (
-		<div className="comcon-admin-main__save">
-			<Button
-				isPrimary
-				disabled={ savingSettings }
-				isBusy={ savingSettings }
-				onClick={ onClick }
-			>
-				{ __( 'Save Settings', 'compassionate-comments' ) }
-			</Button>
-
-			{ savedSettings &&
-				<span className="comcon-admin-main__save-notice is-success">
-					<Dashicon icon="saved" />
-					{ __( 'Saved.', 'compassionate-comments' ) }
-				</span>
-			}
-
-			{ saveSettingsError &&
-				<span className="comcon-admin-main__save-notice is-error">
-					<Dashicon icon="warning" />
-					{ sprintf(
-						__( 'Error: %s.', 'compassionate-comments' ),
-						saveSettingsError
-					) }
-				</span>
-			}
+						return (
+							<li>
+								<a
+									href={ href }
+									className={    current ? 'current' : '' }
+									aria-current={ current ? 'page'    : 'false' }
+								>
+									{ tab.label }
+								</a>
+							</li>
+						);
+					} )
+				}
+			</ul>
 		</div>
 	);
 }
 
 /**
- * Render the view for the main interface.
+ * Render the main admin view.
  *
  * @param {Array} props
  *
  * @return {Element}
  */
 export function MainView( props ) {
-	const {
-		languageSupported,
-		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handlePerspectiveSensitivityChange,
-		perspectiveApiKey, perspectiveApiKeyError, perspectiveStoreComments, perspectiveSensitivity,
-		savedSettings, saveSettingsError, savingSettings, siteIsPublic,
-	} = props;
-
-	// maybe all these should be wrapped in div instead of fragment? feels bad to have extra/unnecessary wrappers
-		// but also conceptually wrong for an isolated component to assume it's not reusable / used in other contexts / be aware of the container
+	const { currentTab, languageSupported, perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity, siteIsPublic } = props;
 
 	return (
 		<Fragment>
 			<p>
 				{ __(
-					"This plugin checks the intent of a comment before it's submitted. If the author is being rude or disrespectful, it will encourage them to think twice, and give them a chance to rephrase their comment to be more kind before they submit it.",
+					'This plugin checks the intent of a comment before it\'s submitted. If the author is being rude or disrespectful, it will encourage them to think twice, and give them a chance to rephrase their comment to be more kind before they submit it.',
 					'compassionate-comments'
 				) }
 			</p>
 
 			<p>
-				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
+				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */ }
 				Google's <a href="https://www.perspectiveapi.com/">Perspective API</a> is used to determine the characteristics of the comment, which means that all comments will be sent to their servers for analysis.
 			</p>
 
@@ -237,36 +105,20 @@ export function MainView( props ) {
 				</Fragment>
 			}
 
-			<div id="comcon-admin__settings">
-				<ApiKey
-					apiKey={ perspectiveApiKey }
-					apiKeyError={ perspectiveApiKeyError }
-					onChange={ handleApiKeyChange }
+			<NavigationTabs currentTab={ currentTab } />
+
+			{ 'settings' === currentTab &&
+				<Settings
+					perspectiveApiKey={ perspectiveApiKey }
+					perspectiveStoreComments={ perspectiveStoreComments }
+					perspectiveSensitivity={ perspectiveSensitivity }
+					siteIsPublic={ siteIsPublic }
 				/>
+			}
 
-				<Sensitivity
-					sensitivity={ perspectiveSensitivity }
-					onChange={ handlePerspectiveSensitivityChange }
-				/>
-
-				{ siteIsPublic &&
-					<StoreComments
-						checked={ perspectiveStoreComments }
-						onChange={ handleStoreCommentsChange }
-					/>
-				}
-
-				{ ! siteIsPublic &&
-					<StoreCommentsDisabled />
-				}
-			</div>
-
-			<SaveButton
-				onClick={ handleSaveSettings }
-				savedSettings={ savedSettings }
-				saveSettingsError={ saveSettingsError }
-				savingSettings={ savingSettings }
-			/>
+			{ 'impact' === currentTab &&
+				<Impact />
+			}
 		</Fragment>
 	);
 }

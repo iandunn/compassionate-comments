@@ -3,50 +3,8 @@
 namespace Compassionate_Comments\Admin;
 use function Compassionate_Comments\Common\add_inline_script;
 
-add_action( 'admin_init',            __NAMESPACE__ . '\register_settings' );
-add_action( 'rest_api_init',         __NAMESPACE__ . '\register_settings' );
 add_action( 'admin_menu',            __NAMESPACE__ . '\register_pages' );
-add_action( 'admin_notices',         __NAMESPACE__ . '\notify_key_missing' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
-
-
-/**
- * Register the settings for the Settings screen and REST API.
- */
-function register_settings() {
-	register_setting(
-		'compassionate-comments',
-		'comcon_perspective_api_key',
-		array(
-			'type'              => 'string',
-			'show_in_rest'      => true,
-			'sanitize_callback' => 'sanitize_text_field',
-			'default'           => '',
-		)
-	);
-
-	register_setting(
-		'compassionate-comments',
-		'comcon_perspective_sensitivity',
-		array(
-			'type'              => 'integer',
-			'show_in_rest'      => true,
-			'sanitize_callback' => 'absint',
-			'default'           => 40,
-		)
-	);
-
-	register_setting(
-		'compassionate-comments',
-		'comcon_perspective_store_comments',
-		array(
-			'type'              => 'boolean',
-			'show_in_rest'      => true,
-			'sanitize_callback' => 'wp_validate_boolean',
-			'default'           => true,
-		)
-	);
-}
 
 /**
  * Register the wp-admin pages.
@@ -94,32 +52,6 @@ function render_settings_page() {
 				<?php // todo it's probably not best practice to give user technical details like that? but what else to tell them? ?>
 			</div>
 		</form>
-	</div>
-
-	<?php
-}
-
-/**
- * Display an admin notice on the Plugins/Comments screens when the API key is not set.
- */
-function notify_key_missing() {
-	if ( ! in_array( get_current_screen()->base, array( 'plugins', 'edit-comments' ), true ) ) {
-		return;
-	}
-
-	if ( ! empty( get_option( 'comcon_perspective_api_key' ) ) ) {
-		return;
-	}
-
-	?>
-
-	<div class="notice notice-error">
-		<p>
-			<?php echo wp_kses_data( sprintf(
-				__( 'Compassionate Comments will not start working until you <a href="%s">configure an API key</a>.', 'compassionate-comments' ),
-				admin_url( 'options-general.php?page=compassionate-comments' )
-			) ); ?>
-		</p>
 	</div>
 
 	<?php
