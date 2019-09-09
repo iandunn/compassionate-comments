@@ -8,7 +8,7 @@ import { Component } from '@wordpress/element';
  * Internal dependencies
  */
 import { MainView }     from './view';
-import { consoleError, sendScoreRequest } from '../../common/common';
+import { consoleError, getErrorMessage, sendScoreRequest } from '../../common/common';
 
 
 /**
@@ -21,7 +21,9 @@ export class MainController extends Component {
 		const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = props;
 
 		this.state = {
-			savingSettings : false,
+			savingSettings         : false,
+			savedSettings          : false,
+			saveSettingsError      : '',
 			perspectiveApiKeyError : false,
 			perspectiveApiKey,
 			perspectiveStoreComments,
@@ -49,6 +51,7 @@ export class MainController extends Component {
 			return;
 		}
 
+		// Set `doNotStore` to avoid distorting Perspective's data with test comments.
 		sendScoreRequest( apiKey, testMessage, true ).then( data => {
 			try {
 				// Intentionally not using the value, just check if it exists as a way to see if the key works.
@@ -71,6 +74,10 @@ export class MainController extends Component {
 				// todo this shouldn't be necessary since imported above, but otherwise it's undefined. file bug report, or you're doing something wrong?
 				// maybe it's `import apiFetch` vs `import { apiFetch }` ?
 			const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = this.state;
+			const newState = {
+				savedSettings  : true,
+				savingSettings : false
+			};
 
 			const fetchParams = {
 				path   : '/wp/v2/settings',
@@ -86,29 +93,40 @@ export class MainController extends Component {
 				this.testApiKey( perspectiveApiKey );
 
 			} ).catch( error => {
-				consoleError( error );
+				consoleError( error ); // The full object might still be useful, even though the message will be displayed to the user.
+
+				newState.savedSettings     = false;
+				newState.saveSettingsError = getErrorMessage( error );
 
 			} ).finally( () => {
-				this.setState( { savingSettings: false } );
+				this.setState( newState );
 			} );
 		} );
 	}
 
 	render() {
 		const { languageSupported, siteIsPublic } = this.props;
-		const { perspectiveApiKey, perspectiveApiKeyError, savingSettings, perspectiveStoreComments, perspectiveSensitivity } = this.state;
+		const {
+			perspectiveApiKey, perspectiveApiKeyError, perspectiveStoreComments, perspectiveSensitivity,
+			savedSettings, saveSettingsError, savingSettings,
+		} = this.state;
 
 		return (
 			<MainView
-				/* The key is changing, so errors associated with the old key are no longer relevant. */
-				handleApiKeyChange={                 perspectiveApiKey        => this.setState( { perspectiveApiKey, perspectiveApiKeyError : false } ) }
-				handleStoreCommentsChange={          perspectiveStoreComments => this.setState( { perspectiveStoreComments } ) }
-				handlePerspectiveSensitivityChange={ perspectiveSensitivity   => this.setState( { perspectiveSensitivity   } ) }
+				/*
+				 * The key is changing, so errors associated with the old key are no longer relevant.
+				 * `savedSettings` is always made false, because they've change a setting but it hasn't been saved yet.
+				 */
+				handleApiKeyChange={                 perspectiveApiKey        => this.setState( { perspectiveApiKey, perspectiveApiKeyError : false, savedSettings : false } ) }
+				handleStoreCommentsChange={          perspectiveStoreComments => this.setState( { perspectiveStoreComments, savedSettings : false } ) }
+				handlePerspectiveSensitivityChange={ perspectiveSensitivity   => this.setState( { perspectiveSensitivity, savedSettings : false   } ) }
 				handleSaveSettings={ () => this.saveSettings() }
 
 				languageSupported={ languageSupported }
 				perspectiveApiKey={ perspectiveApiKey }
 				perspectiveApiKeyError={ perspectiveApiKeyError }
+				savedSettings={ savedSettings }
+				saveSettingsError={ saveSettingsError }
 				savingSettings={ savingSettings }
 				perspectiveStoreComments={ perspectiveStoreComments }
 				siteIsPublic={ siteIsPublic }

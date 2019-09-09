@@ -1,9 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { Button, ToggleControl, TextControl } from '@wordpress/components';
-import { Fragment }                           from '@wordpress/element';
-import { __ }                                 from '@wordpress/i18n';
+import { Button, Dashicon, ToggleControl, TextControl } from '@wordpress/components';
+import { Fragment }                                     from '@wordpress/element';
+import { __, sprintf }                                  from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -159,10 +159,10 @@ function StoreCommentsDisabled( props ) {
  * @return {Element}
  */
 function SaveButton( props ) {
-	const { onClick, savingSettings } = props;
+	const { onClick, savedSettings, saveSettingsError, savingSettings } = props;
 
 	return (
-		<Fragment>
+		<div className="comcon-admin-main__save">
 			<Button
 				isPrimary
 				disabled={ savingSettings }
@@ -171,7 +171,24 @@ function SaveButton( props ) {
 			>
 				{ __( 'Save Settings', 'compassionate-comments' ) }
 			</Button>
-		</Fragment>
+
+			{ savedSettings &&
+				<span className="comcon-admin-main__save-notice is-success">
+					<Dashicon icon="saved" />
+					{ __( 'Saved.', 'compassionate-comments' ) }
+				</span>
+			}
+
+			{ saveSettingsError &&
+				<span className="comcon-admin-main__save-notice is-error">
+					<Dashicon icon="warning" />
+					{ sprintf(
+						__( 'Error: %s.', 'compassionate-comments' ),
+						saveSettingsError
+					) }
+				</span>
+			}
+		</div>
 	);
 }
 
@@ -184,9 +201,10 @@ function SaveButton( props ) {
  */
 export function MainView( props ) {
 	const {
-		languageSupported, perspectiveApiKey, perspectiveApiKeyError, savingSettings, siteIsPublic,
-		perspectiveStoreComments, perspectiveSensitivity, handleApiKeyChange, handleStoreCommentsChange,
-		handleSaveSettings, handlePerspectiveSensitivityChange,
+		languageSupported,
+		handleApiKeyChange, handleStoreCommentsChange, handleSaveSettings, handlePerspectiveSensitivityChange,
+		perspectiveApiKey, perspectiveApiKeyError, perspectiveStoreComments, perspectiveSensitivity,
+		savedSettings, saveSettingsError, savingSettings, siteIsPublic,
 	} = props;
 
 	// maybe all these should be wrapped in div instead of fragment? feels bad to have extra/unnecessary wrappers
@@ -245,6 +263,8 @@ export function MainView( props ) {
 
 			<SaveButton
 				onClick={ handleSaveSettings }
+				savedSettings={ savedSettings }
+				saveSettingsError={ saveSettingsError }
 				savingSettings={ savingSettings }
 			/>
 		</Fragment>

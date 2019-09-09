@@ -29,19 +29,42 @@
 		seems like that'll work, but not very elegant. maybe wait a day or two and see if come up with a better idea
 
 * add some "saved" text or something next to save button, b/c happens so fast that user doesn't have any visual feedback
-	make it fade out after 5-10 seconds?
+	make it fade out after 5-10 seconds? - css animation?
 	or just have permenant "saved x minutess ago" that updates real time?
+		https://github.com/WordPress/gutenberg/issues/14486
+		just use Moment directly for now, but leave comment to replace with ^ when it's available, for future-proofing
 	or have a permenant "there are unsaved changes" / "all changes have been saved" thing? - tried that and it became a rabbit hole, so probably do one of the simpler options above
 		mostly complex b/c have to track original state after last save if want it to be perfect.
 			otherwise making change and undoing it would say it's unsaved, even though it's actually the asme values
 			could have simpler version though that just tracks if a change has been made, that would cover most cases, just wouldn't be perfect, maybe good enough, at least for first version, can iterate later to improve if think of a simple way
+
+* have a stats dashboard that shows the impact of the plugin
+	--this is already stated on the `stats` branch--
+	Add tab for."impact" that shows stats
+	make default tab when API key entered, otherwise settings is default
+	Use page router so that history API is set and real deep links work
+	use some nifty js data visualization thingy
+	look at `commentmeta` table
+		% comments that scored high enough to trigger warning, but submitted anyway
+			this will be distorted if change sensitivity level, so maybe only analyzie comments since the last change in level
+		% comments that scored high enough to trigger warning, then resubmitted w/ a lower score
+			also show average delta between first score and second (e.g., "of commenters that chose to make comment more kind, the toxicity level decreased from average of 64% to average of 33%")
+	average toxicity score across all comments
+	average score of comments below sensitivity threshold, and avg of those above it
+	stats will be distorted when sensitivity changes, so maybe need to track that somehow and only show stats for comments rated w/ the current sensitivity or something?
+		maybe when saving sensitivity, store the newest comment_id, and only show stats for comments since then
+		would need to let user know only showing stats since last sensitivity change, otherwise they'd be confused why not seeing for older comments
+		might only affect some stats
+
+* Switch to SASS once wp-scripts supports it
+	* https://github.com/WordPress/gutenberg/issues/14801
+	* Can do it now like wordcamp.org did? See https://github.com/WordPress/wordcamp.org/pull/157/
 
 
 
 ## Future
 
 Impact could be on UX _or_ devex.
-
 
 ### High Impact / Low Effort
 
@@ -59,30 +82,8 @@ Impact could be on UX _or_ devex.
 
 * Update list of supported languages every ~6 months.
 
-* Switch to SASS once wp-scripts supports it
-	* https://github.com/WordPress/gutenberg/issues/14801
-	* Can do it now like wordcamp.org did? See https://github.com/WordPress/wordcamp.org/pull/157/
-
-
 
 ### High Impact / High Effort
-
-* have a stats dashboard that shows the impact of the plugin
-	Add tab for."impact" that shows stats
-	make default tab when API key entered, otherwise settings is default
-	Use page router so that history API is set and real deep links work
-	use some nifty js data visualization thingy
-	look at `commentmeta` table
-		% comments that scored high enough to trigger warning, but submitted anyway
-			this will be distorted if change sensitivity level, so maybe only analyzie comments since the last change in level
-		% comments that scored high enough to trigger warning, then resubmitted w/ a lower score
-			also show average delta between first score and second (e.g., "of commenters that chose to make comment more kind, the toxicity level decreased from average of 64% to average of 33%")
-	average toxicity score across all comments
-	average score of comments below sensitivity threshold, and avg of those above it
-	stats will be distorted when sensitivity changes, so maybe need to track that somehow and only show stats for comments rated w/ the current sensitivity or something?
-		maybe when saving sensitivity, store the newest comment_id, and only show stats for comments since then
-		would need to let user know only showing stats since last sensitivity change, otherwise they'd be confused why not seeing for older comments
-		might only affect some stats
 
 * Add way to report false positives back to Perspective, if they accept that kind of feedback
 	* > Users can leverage the [...] ‘SuggestCommentScore’ method to submit corrections to improve Perspective over time.
@@ -129,7 +130,10 @@ Impact could be on UX _or_ devex.
 		* would need to have 1 for every single value from 1-100 ?
 		* or could maybe use the sample comments as a base, but overwrite individual values w/ real comments where they exist
 			* e.g., [1] - sample, [2] - real, [3] - sample, [4] - sample, [5] - real
+		* retroactivly analyzing could come in handy for stats as well, to show things like avg toxicity before and after install plugin
 	* privacy considerations? prob not b/c already agreeing to send? but maybe edge cases
+		* well, should use `doNotTrack` to be cautious, b/c it might score them before user's had a chance to learn about setting and enable `doNotTrack`
+
 	* would need to somehow track which comments were scored before the plugin was active, and which after
 		* otherwise it'd heavily distort stats, because it'd look like nobody edited their comment after seeing the prompt
 		* maybe just an option that has the highest comment_id when the plugin was activated

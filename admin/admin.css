@@ -55,6 +55,26 @@
 	}
 
 
+.comcon-admin-main__save-notice {
+	margin-left: 5px;
+	font-style: italic;
+}
+
+.comcon-admin-main__save-notice .dashicon {
+	position: relative;
+	top: 5px; /* todo related to inline display, maybe line-height; might be better way to align w/ text */
+	margin-right: 2px;
+}
+
+.comcon-admin-main__save-notice.is-success .dashicon {
+	color: #79ba49; /* Matches Core's .updated-message */
+}
+
+.comcon-admin-main__save-notice.is-error .dashicon {
+	color: #dc3232; /* Matches Core's .notice-error */
+}
+
+
 /*
  * Card component.
  *

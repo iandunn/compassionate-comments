@@ -73,3 +73,24 @@ export function consoleError( message ) {
 		message
 	);
 }
+
+/**
+ * Safely extract an error message from a variety of inputs.
+ *
+ * @param {mixed} error
+ *
+ * @return {string}
+ */
+export function getErrorMessage( error ) {
+	let message;
+
+	if ( 'string' === typeof error ) {
+		message = error;
+	} else if ( 'object' === typeof error && error.hasOwnProperty( 'message' ) ) {
+		message = error.message;
+	} else {
+		message = JSON.stringify( error );
+	}
+
+	return message;
+}
