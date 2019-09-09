@@ -45,7 +45,8 @@ export class MainController extends Component {
 	 * @param {string} apiKey
 	 */
 	testApiKey( apiKey ) {
-		const testMessage = "This is a test to see if the user set a valid API key.";
+		const newState    = {};
+		const testMessage = 'This is a test to see if the user set a valid API key.';
 
 		if ( ! apiKey ) {
 			return;
@@ -56,12 +57,16 @@ export class MainController extends Component {
 			try {
 				// Intentionally not using the value, just check if it exists as a way to see if the key works.
 				const success = data.attributeScores.TOXICITY.summaryScore.value;
+				newState.perspectiveApiKeyError = false;
 			} catch ( Exception ) {
-				this.setState( { perspectiveApiKeyError : data.error.message } );
+				newState.perspectiveApiKeyError = getErrorMessage( data.error );
 			}
 
 		} ).catch( error => {
-			this.setState( { perspectiveApiKeyError : error.message } );
+			newState.perspectiveApiKeyError = getErrorMessage( error );
+
+		} ).finally( () => {
+			this.setState( newState );
 		} );
 	}
 
@@ -76,7 +81,7 @@ export class MainController extends Component {
 			const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 			const newState = {
 				savedSettings  : true,
-				savingSettings : false
+				savingSettings : false,
 			};
 
 			const fetchParams = {
