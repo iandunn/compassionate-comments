@@ -6,8 +6,8 @@ import { Component } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { MainView }     from './view';
-import { consoleError, sendScoreRequest } from '../../common/common';
+import { MainView }                                        from './view';
+import { consoleError, getErrorMessage, sendScoreRequest } from '../../common/common';
 
 
 /**
@@ -75,7 +75,7 @@ export class MainController extends Component {
 					let badResponse;
 
 					try {
-						badResponse = data.error.message;
+						badResponse = getErrorMessage( data.error );
 					} catch ( e ) {
 						badResponse = ApiRequestException;
 					}
