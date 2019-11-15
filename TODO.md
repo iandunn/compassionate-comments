@@ -49,8 +49,6 @@
 * update wp-scripts to v6 after merging impact bracnh to develop, make sure linting etc still work
 	see https://github.com/WordPress/gutenberg/blob/master/packages/scripts/CHANGELOG.md
 
-* apiFetch todo import thing
-
 * implement `await` instead of promise handling crap
 
 * lint js & php
