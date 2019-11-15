@@ -47,12 +47,15 @@ function enqueue_assets() {
  */
 function inject_comment_meta( $comment_data ) {
 	/*
+	 * The key name contains the timestamp (in milliseconds) because that's easier for the client side to add to
+	 * the form POST.
+	 *
 	 * Arguably at this point we should parse the timestamp out of the key, and store it in the `meta_value` field
 	 * instead, so that all values would have a consistent `meta_key` of `comcon_perspective_score`. That would
 	 * allow querying them with `meta_key = 'comcon_perspective_score'` rather than `meta_key LIKE
 	 * 'comcon_perspective_score%'`.
 	 *
-	 * However, `wp_insert_comment` assigns the `meta_key` based on the key in the `comment_meta` array, and can't
+	 * However, `wp_insert_comment` assigns the `meta_key` based on the key in the `comment_meta` array, and
 	 * arrays can't have duplicate keys, so we couldn't have multiple entries per comment like we need.
 	 *
 	 * There are some benefits of doing it this way too, like being able to do efficient meta queries against

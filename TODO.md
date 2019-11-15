@@ -86,9 +86,6 @@ Impact could be on UX _or_ devex.
 
 * Add option to force moderation for any comments that were submitted with scores above sensitivity threshhold
 
-* show comment scores on the comments list
-	* make color red if it's above the sensitivity threshhold, and green if it's below
-
 * show comment scores when editing individiaual comments
 	* make color red if it's above the sensitivity threshhold, and green if it's below
 	* update the faq entry about the prompt not showing; make it say to compare the value of the comment on the comment screen to the sensitivity score in the settings screen
@@ -144,6 +141,8 @@ Impact could be on UX _or_ devex.
 
 
 ### Low Impact / Low Effort
+
+* comment list toxicity column - maybe make color red if it's above the sensitivity threshhold, and green if it's below
 
 * Add a cron job to test the API key periodically (once a week, maybe daily) and email the admin if it's not working
 	* Otherwise if it stops working the plugin will fail silently and comments will just be accepted without analysis
