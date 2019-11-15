@@ -9,6 +9,7 @@ import { __, sprintf }  from '@wordpress/i18n';
  */
 import { Card }           from '../../card';
 import { sampleComments } from './sample-comments';
+import './sensitivity.scss';
 
 
 /**

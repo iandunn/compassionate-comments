@@ -10,6 +10,8 @@ import { __, sprintf }                                  from '@wordpress/i18n';
  */
 import { Card }        from '../card';
 import { Sensitivity } from './sensitivity';
+import './settings.scss';
+
 
 /**
  * Render the view for the API Key setting.

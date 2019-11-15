@@ -4,6 +4,12 @@
 import { withInstanceId, compose } from '@wordpress/compose';
 
 /**
+ * Internal dependencies
+ */
+import './card.scss';
+
+
+/**
  * Render a card.
  *
  * This basically mimics a ModalFrame, since that's pretty close to a generic card already.

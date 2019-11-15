@@ -10,31 +10,53 @@
 ## Next Minor
 
 * have a stats dashboard that shows the impact of the plugin
-	use some nifty js data visualization thingy
-	look at `commentmeta` table
-		% comments that scored high enough to trigger warning, but submitted anyway
-			this will be distorted if change sensitivity level, so maybe only analyzie comments since the last change in level
-		% comments that scored high enough to trigger warning, then resubmitted w/ a lower score
-			also show average delta between first score and second (e.g., "of commenters that chose to make comment more kind, the toxicity level decreased from average of 64% to average of 33%")
-	average toxicity score across all comments
-	average score of comments below sensitivity threshold, and avg of those above it
-	stats will be distorted when sensitivity changes, so maybe need to track that somehow and only show stats for comments rated w/ the current sensitivity or something?
+	* ____need to think through consequences of all of the below before doing anything, because changes might destroy ability to do some of it if done in wrong order___
+
+	* track data of comments before plugin was installed
+		maybe have a `comcon_history` option like this:
+		array(
+			'installed' => [id of the newest comment when the plugin was first installed. have to populate _before_ retroroactively score old comments, b/c detect it based on absence of scores]
+			`sensitivyt_50` => [id of newest comment when the sensitivity was changed to 50]
+			`sensitivyt_60` => [id of newest comment when the sensitivity was changed to 60]
+			`sensitivyt_40` => [id of newest comment when the sensitivity was changed to 40]
+
+			// would probably want different keys than that
+		)
+		maybe have different options for `installed` and sensitivity changes; or maybe just treat `installed` as the first `sensitivity change` with it being set to the default sensitivity
+
+	* track data of when sensitivity changed?
+		stats will be distorted when sensitivity changes, so maybe need to track that somehow and only show stats for comments rated w/ the current sensitivity or something?
 		maybe when saving sensitivity, store the newest comment_id, and only show stats for comments since then
 		would need to let user know only showing stats since last sensitivity change, otherwise they'd be confused why not seeing for older comments
 		might only affect some stats
+
+	* track data of comments since plugin was installed
+
+		look at `commentmeta` table
+			% comments that scored high enough to trigger warning, but submitted anyway
+				this will be distorted if change sensitivity level, so maybe only analyzie comments since the last change in level
+			% comments that scored high enough to trigger warning, then resubmitted w/ a lower score
+				also show average delta between first score and second (e.g., "of commenters that chose to make comment more kind, the toxicity level decreased from average of 64% to average of 33%")
+		average toxicity score across all comments
+		average score of comments below sensitivity threshold, and avg of those above it
+
+	display data
+		use some nifty js data visualization thingy
+
 	add screenshot of stats menu
 		update screenshot of settings menu too
 
 * update wp-scripts to v6 after merging impact bracnh to develop, make sure linting etc still work
 	see https://github.com/WordPress/gutenberg/blob/master/packages/scripts/CHANGELOG.md
 
-* lint js after merging impact branch to develop
-
-* Switch to SASS once wp-scripts supports it
-	* https://github.com/WordPress/gutenberg/issues/14801
-	* Can do it now like wordcamp.org did? See https://github.com/WordPress/wordcamp.org/pull/157/
+* apiFetch todo import thing
 
 * implement `await` instead of promise handling crap
+
+* lint js & php
+
+* add file extentions to `import` statements, for explicitness
+	do for QNI too
 
 * use shorter format instead destructuring props
 	`function( { foo, bar } )`

@@ -5,6 +5,11 @@ import { Button, Modal, Spinner } from '@wordpress/components';
 import { RawHTML }                from '@wordpress/element';
 import { __, sprintf }            from '@wordpress/i18n';
 
+/**
+ * Internal dependencies
+ */
+import './main.scss';
+
 
 /**
  * Render the nudge that encourages commenters to be more compassionate.

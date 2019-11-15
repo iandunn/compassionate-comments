@@ -1,0 +1,15 @@
+#comcon-admin blockquote {
+	min-height: 8em; /* Always be as big as will be needed for the largest quote, since otherwise the rapid resizing while sliding the control is visually jarring. */
+
+		/* todo that's 4 lines of text, which works at desktop but not lower. maybe use media queries of JS to set to right height based on how many lines X chars would take up in the current size? calc() or something? */
+		/* longest entry is 280 characters, and need to figure out how many lines that will take up given the current width of the blockquote
+		maybe create a hidden div inside the card, then set the content to be 280 chars long, the get the height?
+
+		probably not an elegant way to do this, maybe just stick w/ 8em since it's big enough for all breakpoints. not perfect but simple.
+		*/
+	padding: 7px 8px;
+	margin: 5px 1px 0;
+	background: rgba( 0, 0, 0, .05 );
+	font-style: italic;
+	word-break: break-word;
+}

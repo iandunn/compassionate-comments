@@ -1,0 +1,43 @@
+@import '../_partials.scss';
+
+#comcon-admin .components-base-control__label {
+	font-weight: 700;
+	font-size: 1.4em;
+
+	/* todo maybe hide this if it's inside a card? */
+}
+
+#comcon-admin__settings {
+	margin-bottom: 2em;
+
+	@include breakpoint( $breakpoint-two-column ) {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 20px;
+	}
+
+	@include breakpoint( $breakpoint-three-column ) {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-gap: 20px;
+	}
+}
+
+.comcon-admin-main__save-notice {
+	margin-left: 5px;
+	font-style: italic;
+
+	.dashicon {
+		position: relative;
+		top: 5px; /* todo related to inline display, maybe line-height; might be better way to align w/ text */
+		margin-right: 2px;
+	}
+
+	&.is-success .dashicon {
+		color: #79ba49; /* Matches Core's .updated-message */
+	}
+
+	&.is-error .dashicon {
+		color: #dc3232; /* Matches Core's .notice-error */
+	}
+}

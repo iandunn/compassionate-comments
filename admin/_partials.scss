@@ -1,0 +1,15 @@
+/*
+ * Variables
+ */
+$breakpoint-two-column: 800px;
+$breakpoint-three-column: 1400px;
+
+
+/*
+ * Mixins
+ */
+@mixin breakpoint( $min_width ) {
+	@media screen and ( min-width: $min_width ) {
+		@content;
+	}
+}

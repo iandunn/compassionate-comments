@@ -1,7 +1,8 @@
 /**
  * External dependencies
  */
-const path = require( 'path' );
+const path                 = require( 'path' );
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 /**
  * WordPress dependencies
@@ -13,8 +14,8 @@ module.exports = {
 	...defaultConfig,
 
 	entry : {
-		'admin'     : './admin/index',
-		'front-end' : './front-end/index',
+		'admin'     : './admin/index.js',
+		'front-end' : './front-end/index.js',
 
 		// todo is this needed? if so, open an issue b/c wp-scripts should detect this common pattern and support it without needing custom config
 			// looks like that exists now, see https://github.com/WordPress/gutenberg/pull/15982
@@ -23,7 +24,36 @@ module.exports = {
 		// or cli params?
 	},
 
+	plugins : [
+		...defaultConfig.plugins,
+		new MiniCssExtractPlugin( {
+			filename : '[name].min.css',
+		} ),
+	],
+
+	/*
+	 * Compile SCSS to vanilla CSS.
+	 *
+	 * @todo Remove this when https://github.com/WordPress/gutenberg/issues/14801 is resolved.
+	 */
+	module : {
+		...defaultConfig.module,
+
+		rules : [
+			...defaultConfig.module.rules,
+			{
+				test    : /\.(sc|sa|c)ss$/,
+				exclude : [ /node_modules/ ],
+				use     : [ MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader' ],
+			},
+		],
+	},
+
 	output : {
+		...defaultConfig.output,
+
+		// @todo Can this be done via CLI param instead? If not open an issue for that and add URL here.
+		// IIRC there's a G issue/PR for that, and it works now. See wordcamp.org and other projects to check.
 		filename : '[name].js',
 
 		/*

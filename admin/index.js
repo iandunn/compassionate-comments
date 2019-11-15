@@ -7,6 +7,7 @@ import { render, createElement } from '@wordpress/element';
  * Internal dependencies
  */
 import { Admin as CompassionateCommentsAdmin } from './main/controller';
+import './admin.scss';
 
 ( function() {
 	/**

@@ -71,7 +71,7 @@ function enqueue_assets() {
 
 	wp_enqueue_style(
 		'compassionate-comments-admin',
-		plugins_url( 'admin.css', __FILE__ ),
+		plugins_url( 'build/admin.min.css', __DIR__ ),
 		array( 'wp-components' ),
 		COMCON_VERSION
 	);

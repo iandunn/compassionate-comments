@@ -20,7 +20,7 @@ function enqueue_assets() {
 
 	wp_enqueue_style(
 		'compassionate-comments-front',
-		plugins_url( 'front-end.css', __FILE__ ),
+		plugins_url( 'build/front-end.min.css', __DIR__ ),
 		array( 'wp-components' ),
 		COMCON_VERSION
 	);
