@@ -16,6 +16,7 @@
 		maybe have a `comcon_history` option like this:
 		array(
 			'installed' => [id of the newest comment when the plugin was first installed. have to populate _before_ retroroactively score old comments, b/c detect it based on absence of scores]
+				keep in mind that comments can have empty score even after plugin installed, if api key error, js error on page from other plugin, not supported language, etc
 			`sensitivyt_50` => [id of newest comment when the sensitivity was changed to 50]
 			`sensitivyt_60` => [id of newest comment when the sensitivity was changed to 60]
 			`sensitivyt_40` => [id of newest comment when the sensitivity was changed to 40]
@@ -48,8 +49,6 @@
 
 * update wp-scripts to v6 after merging impact bracnh to develop, make sure linting etc still work
 	see https://github.com/WordPress/gutenberg/blob/master/packages/scripts/CHANGELOG.md
-
-* implement `await` instead of promise handling crap
 
 * lint js & php
 
@@ -116,6 +115,8 @@ Impact could be on UX _or_ devex.
 	or would that backfire? how to make it not awkward?
 
 * Update list of supported languages every ~6 months.
+
+* Replace custom Card component with G version once 5.4 comes out
 
 
 ### High Impact / High Effort

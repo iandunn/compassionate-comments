@@ -44,37 +44,34 @@ export class SettingsController extends Component {
 	 *
 	 * @param {string} apiKey
 	 */
-	testApiKey( apiKey ) {
+	async testApiKey( apiKey ) {
 		const newState    = {};
 		const testMessage = 'This is a test to see if the user set a valid API key.';
 
 		if ( ! apiKey ) {
+			// Don't need to set an error here, because the `ApiKey` component already shows an error when the key is empty.
 			return;
 		}
 
 		// Set `doNotStore` to avoid distorting Perspective's data with test comments.
-		sendScoreRequest( apiKey, testMessage, true ).then( data => {
-			try {
-				// Intentionally not using the value, just check if it exists as a way to see if the key works.
-				const success = data.attributeScores.TOXICITY.summaryScore.value;
-				newState.perspectiveApiKeyError = false;
-			} catch ( Exception ) {
-				newState.perspectiveApiKeyError = getErrorMessage( data.error );
-			}
+		const results = await sendScoreRequest( apiKey, testMessage, true );
 
-		} ).catch( error => {
-			newState.perspectiveApiKeyError = getErrorMessage( error );
+		try {
+			// Intentionally not using the value, just check if it exists as a way to see if the key works.
+			const score = results.attributeScores.TOXICITY.summaryScore.value;
+		} catch ( exception ) {
+			// `results.error` is more meaningful than `exception`, so use that.
+			newState.perspectiveApiKeyError = getErrorMessage( results.error || results || exception );
+		}
 
-		} ).finally( () => {
-			this.setState( newState );
-		} );
+		this.setState( newState );
 	}
 
 	/**
 	 * Save the current settings to the database via the REST API.
 	 */
 	saveSettings() {
-		this.setState( { savingSettings: true }, () => {
+		this.setState( { savingSettings: true }, async () => {
 			const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = this.state;
 			const newState = {
 				savedSettings  : true,
@@ -91,18 +88,19 @@ export class SettingsController extends Component {
 				},
 			};
 
-			apiFetch( fetchParams ).then( data => {
-				this.testApiKey( perspectiveApiKey );
+			try {
+				await apiFetch( fetchParams );
+				await this.testApiKey( perspectiveApiKey );
 
-			} ).catch( error => {
+			} catch ( error ) {
 				consoleError( error ); // The full object might still be useful, even though the message will be displayed to the user.
 
 				newState.savedSettings     = false;
 				newState.saveSettingsError = getErrorMessage( error );
 
-			} ).finally( () => {
+			} finally {
 				this.setState( newState );
-			} );
+			};
 		} );
 	}
 

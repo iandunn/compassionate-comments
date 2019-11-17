@@ -16,10 +16,11 @@ import { __ } from '@wordpress/i18n';
  * @param {string} commentText
  * @param {string} doNotStore  If true, we'll ask the Perspective API to _not_ save the comment for their own research.
  *
- * @return {Promise}
- *  todo should be {Promise<Response>} ? probably
+ * @return {object} Either the API response object, or an object with an `error` key.
  */
-export function sendScoreRequest( apiKey, commentText, doNotStore ) {
+export async function sendScoreRequest( apiKey, commentText, doNotStore ) {
+	let results;
+
 	/*
 	 * The `languages` parameter is intentionally _not_ set, because we have no way of knowing what language
 	 * the comment is written in. On many sites it could easily be a different language than `get_locate()`.
@@ -58,7 +59,21 @@ export function sendScoreRequest( apiKey, commentText, doNotStore ) {
 		credentials : 'omit',
 	};
 
-	return fetch( url, requestParams ).then( response => response.json() );
+	try {
+		const response = await fetch( url, requestParams );
+		results        = await response.json();
+
+	} catch( error ) {
+		// This matches the format returned by the API for application-layer errors (e.g., invalid API key).
+		results = { error };
+
+	} finally {
+		if ( results.error ) {
+			consoleError( results.error );
+		}
+	}
+
+	return results;
 }
 
 /**

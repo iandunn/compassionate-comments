@@ -59,56 +59,45 @@ export class MainController extends Component {
 		this.setState( {
 			interfaceOpen : true,
 			loading       : true,
-		}, () => {
+		}, async () => {
 			const { perspectiveSensitivity } = this.props;
 			const comment                    = document.getElementById( 'comment' ).value;
 			let newState                     = {};
+			const results                    = await sendScoreRequest( perspectiveApiKey, comment, this.doNotStore() );
 
-			sendScoreRequest( perspectiveApiKey, comment, this.doNotStore() ).then( data => {
-				try {
-					const score = data.attributeScores.TOXICITY.summaryScore.value;
-					newState    = { isToxic : score > perspectiveSensitivity / 100 }; // Convert internal user-friendly sensitivity to match API 0-1 range.
+			try {
+				const score = results.attributeScores.TOXICITY.summaryScore.value;
+				newState    = { isToxic : score > perspectiveSensitivity / 100 }; // Convert internal user-friendly sensitivity to match the API's 0-1 range.
 
-					this.logScore( score );
+				this.logScore( score );
 
-				} catch ( ApiRequestException ) {
-					let badResponse;
+			} catch ( exception ) {
+				newState = {
+					// `results.error` is more meaningful than `exception`, so use that.
+					error : getErrorMessage( results.error || results || exception )
+				};
 
-					try {
-						badResponse = getErrorMessage( data.error );
-					} catch ( e ) {
-						badResponse = ApiRequestException;
-					}
+				consoleError( newState.error );
+			}
 
-					newState = { error : badResponse };
+			/*
+			 * If an error occured, then just submit the comment, since that's safer than potentially
+			 * preventing all comments from working.
+			 */
+			const submittingComment = newState.error || ! newState.isToxic ? true : false;
+
+
+			newState.loading       = false;
+			newState.interfaceOpen = ! submittingComment;
+
+			this.setState( newState, () => {
+				if ( submittingComment ) {
+					this.submitComment();
+
+					// todo this works, but the UX is pretty bad b/c of all the flashing
+					// modal pops up for split second, then closes, then page refreshes which causes another flash.
+					// maybe shouldn't pop up the modal unless the API request is taking longer than X seconds?
 				}
-
-			} ).catch( error => {
-				newState = { error };
-
-			} ).finally( () => {
-				if ( newState.error ) {
-					consoleError( newState.error );
-				}
-
-				/*
-				 * If an error occured, then just submit the comment, since that's safer than potentially
-				 * preventing all comments from working.
-				 */
-				const submittingComment = newState.error || ! newState.isToxic;
-
-				newState.loading       = false;
-				newState.interfaceOpen = ! submittingComment;
-
-				this.setState( newState, () => {
-					if ( submittingComment ) {
-						this.submitComment();
-
-						// todo this works, but the UX is pretty bad b/c of all the flashing
-						// modal pops up for split second, then closes, then page refreshes which causes another flash.
-						// maybe shouldn't pop up the modal unless the API request is taking longer than X seconds?
-					}
-				} );
 			} );
 		} );
 	}
