@@ -38,7 +38,7 @@ function NavigationTabs( { currentTab } ) {
 		{
 			slug  : 'settings',
 			label : __( 'Settings', 'compassionate-comments' ),
-		}
+		},
 	];
 
 	return (
@@ -51,7 +51,7 @@ function NavigationTabs( { currentTab } ) {
 						const current = currentTab === tab.slug;
 
 						return (
-							<li>
+							<li key={ tab.slug} >
 								<a
 									href={ href }
 									className={    current ? 'current' : '' }

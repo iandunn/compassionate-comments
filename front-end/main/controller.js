@@ -14,6 +14,11 @@ import { consoleError, getErrorMessage, sendScoreRequest } from '../../common/co
  * Manage the state and logic for the main interface.
  */
 export class MainController extends Component {
+	/**
+	 * Initialize the component.
+	 *
+	 * @param {Array} props
+	 */
 	constructor( props ) {
 		super( props );
 
@@ -45,12 +50,12 @@ export class MainController extends Component {
 
 		try {
 			/*
-			 * Intentionally not using the value, just making sure it exists so it can be used in the (out of
-			 * scope) callback below.
+			 * Intentionally not using the value, just making sure it exists so it can be used later in the (out
+			 * of scope) callback below.
 			 */
-			document.getElementById( 'comment' ).value;
-		} catch ( Exception ) {
-			consoleError( Exception );
+			const comment = document.getElementById( 'comment' ).value;
+		} catch ( exception ) {
+			consoleError( exception );
 			return;
 		}
 
@@ -60,9 +65,9 @@ export class MainController extends Component {
 			interfaceOpen : true,
 			loading       : true,
 		}, async () => {
+			let newState                     = {};
 			const { perspectiveSensitivity } = this.props;
 			const comment                    = document.getElementById( 'comment' ).value;
-			let newState                     = {};
 			const results                    = await sendScoreRequest( perspectiveApiKey, comment, this.doNotStore() );
 
 			try {
@@ -74,7 +79,7 @@ export class MainController extends Component {
 			} catch ( exception ) {
 				newState = {
 					// `results.error` is more meaningful than `exception`, so use that.
-					error : getErrorMessage( results.error || results || exception )
+					error : getErrorMessage( results.error || results || exception ),
 				};
 
 				consoleError( newState.error );
@@ -84,15 +89,14 @@ export class MainController extends Component {
 			 * If an error occured, then just submit the comment, since that's safer than potentially
 			 * preventing all comments from working.
 			 */
-			const submittingComment = newState.error || ! newState.isToxic ? true : false;
-
+			const submitComment = newState.error || ! newState.isToxic ? true : false;
 
 			newState.loading       = false;
-			newState.interfaceOpen = ! submittingComment;
+			newState.interfaceOpen = ! submitComment;
 
 			this.setState( newState, () => {
-				if ( submittingComment ) {
-					this.submitComment();
+				if ( submitComment ) {
+					MainController.submitComment();
 
 					// todo this works, but the UX is pretty bad b/c of all the flashing
 					// modal pops up for split second, then closes, then page refreshes which causes another flash.
@@ -104,6 +108,8 @@ export class MainController extends Component {
 
 	/**
 	 * Determine the `doNotStore` setting for the Perspective API request.
+	 *
+	 * @return {bool}
 	 */
 	doNotStore() {
 		const { isTestEnvironment, postIsPublic, siteIsPublic, perspectiveStoreComments } = this.props;
@@ -163,12 +169,8 @@ export class MainController extends Component {
 
 	/**
 	 * Submit a comment despite the compassion nudge
-	 *
-	 * @param {object} event
 	 */
-	submitComment( event ) {
-		// todo can be static unless below changes
-
+	static submitComment() {
 		/*
 		 * We can't just call form.submit(), because Core names the input button #submit, which overrides
 		 * the handler.
@@ -177,11 +179,16 @@ export class MainController extends Component {
 		 */
 		try {
 			document.createElement( 'form' ).submit.call( document.getElementById( 'commentform' ) );
-		} catch ( Exception ) {
-			consoleError( Exception );
+		} catch ( exception ) {
+			consoleError( exception );
 		}
 	}
 
+	/**
+	 * Render the component.
+	 *
+	 * @return {Element}
+	 */
 	render() {
 		const { error, interfaceOpen, isToxic, loading } = this.state;
 
@@ -193,7 +200,7 @@ export class MainController extends Component {
 
 		return (
 			<MainView
-				handleSubmitAnyway={ this.submitComment }
+				handleSubmitAnyway={ MainController.submitComment }
 				handleRephraseComment={ () => this.setState( { ...this.defaultState } ) }
 				handleModalClose={ () => this.setState( { ...this.defaultState } ) }
 				interfaceOpen={ interfaceOpen }

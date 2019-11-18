@@ -15,19 +15,24 @@ import { consoleError, getErrorMessage, sendScoreRequest } from '../../common/co
  * Manage the state and logic for the main interface.
  */
 export class SettingsController extends Component {
+	/**
+	 * Initialize the component.
+	 *
+	 * @param {Array} props
+	 */
 	constructor( props ) {
 		super( props );
 
 		const { perspectiveApiKey, perspectiveStoreComments, perspectiveSensitivity } = props;
 
 		this.state = {
-			savingSettings         : false,
-			savedSettings          : false,
-			saveSettingsError      : '',
-			perspectiveApiKeyError : false,
-			perspectiveApiKey,
-			perspectiveStoreComments,
-			perspectiveSensitivity,
+			perspectiveApiKeyError   : false,
+			perspectiveApiKey        : perspectiveApiKey,
+			perspectiveStoreComments : perspectiveStoreComments,
+			perspectiveSensitivity   : perspectiveSensitivity,
+			saveSettingsError        : '',
+			savedSettings            : false,
+			savingSettings           : false,
 		};
 
 		// todo ^ feels weird b/c then you have props.sensitivity and state.sensitivity and they don't match
@@ -35,6 +40,9 @@ export class SettingsController extends Component {
 			// or maybe this is a smell that i'm doing something wrong?
 	}
 
+	/**
+	 * Run initialization that can't happen until the component is mounted.
+	 */
 	componentDidMount() {
 		this.testApiKey( this.state.perspectiveApiKey );
 	}
@@ -100,7 +108,7 @@ export class SettingsController extends Component {
 
 			} finally {
 				this.setState( newState );
-			};
+			}
 		} );
 	}
 
@@ -121,6 +129,11 @@ export class SettingsController extends Component {
 		this.setState( newState );
 	}
 
+	/**
+	 * Render the component.
+	 *
+	 * @return {Element}
+	 */
 	render() {
 		const { siteIsPublic } = this.props;
 
@@ -132,7 +145,7 @@ export class SettingsController extends Component {
 		return (
 			<SettingsView
 				/* The key is changing, so errors associated with the old key are no longer relevant. */
-				handleApiKeyChange={                 perspectiveApiKey        => this.updateSetting( { perspectiveApiKey, perspectiveApiKeyError : false } ) }
+				handleApiKeyChange={                 perspectiveApiKey        => this.updateSetting( { perspectiveApiKey : perspectiveApiKey, perspectiveApiKeyError : false } ) }
 				handleStoreCommentsChange={          perspectiveStoreComments => this.updateSetting( { perspectiveStoreComments } ) }
 				handlePerspectiveSensitivityChange={ perspectiveSensitivity   => this.updateSetting( { perspectiveSensitivity} ) }
 

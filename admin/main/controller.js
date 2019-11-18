@@ -9,8 +9,15 @@ import { addQueryArgs, getQueryArg } from '@wordpress/url';
  */
 import { MainView } from './view';
 
+/* global history:false */
+
 
 export class Admin extends Component {
+	/**
+	 * Initialize the component.
+	 *
+	 * @param {Array} props
+	 */
 	constructor( props ) {
 		super( props );
 

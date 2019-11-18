@@ -36,7 +36,7 @@ function ApiKey( { onChange, apiKey, apiKeyError } ) {
 
 					<p>
 						{ __(
-							"Please make sure that your key is correct, not restricted by IP or referrer, and not over its quota.",
+							'Please make sure that your key is correct, not restricted by IP or referrer, and not over its quota.',
 							'compassionate-comments'
 						) }
 					</p>
@@ -45,7 +45,7 @@ function ApiKey( { onChange, apiKey, apiKeyError } ) {
 
 			{ ! apiKey &&
 				<p className="notice notice-error inline">
-					{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
+					{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */ }
 					You have not entered an API key yet, and this plugin can't work until you do. You can <a href="https://github.com/conversationai/perspectiveapi/blob/master/quickstart.md">get one for free</a>.
 				</p>
 			}
@@ -58,8 +58,8 @@ function ApiKey( { onChange, apiKey, apiKeyError } ) {
 			/>
 
 			<p className="notice notice-warning inline">
-				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
-				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> {}
+				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */ }
+				It's <strong>very important</strong> that you <a href="https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions">restrict your API key</a> { }
 				to just the Perspective API. If you don't, any abuse of it can cause other services to stop working.
 			</p>
 		</Card>
@@ -107,11 +107,9 @@ function StoreComments( { checked, onChange } ) {
  *
  * See `StoreComments` for when the setting is not disabled.
  *
- * @param {Array} props
- *
  * @return {Element}
  */
-function StoreCommentsDisabled( props ) {
+function StoreCommentsDisabled() {
 	// todo make this DRY with StoreComments
 
 	return (
@@ -120,14 +118,14 @@ function StoreCommentsDisabled( props ) {
 				{ __( 'Allowing the Perspective API to store your comments permenantly helps them train their machine learning models to be more accurate.', 'compassionate-comments' ) }
 			</p>
 
-			{ /* todo add `disabled` field? but component just ignores it. maybe open ticket that it should pass props to input field */}
+			{ /* todo add `disabled` field? but component just ignores it. maybe open ticket that it should pass props to input field */ }
 			<ToggleControl
 				label="Store Comments on Perspectives' servers"
 				checked={ false }
 			/>
 
 			<p className="notice notice-info inline">
-				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */}
+				{ /* Intentionally not i18n'd yet because of Gutenberg security issue. See Toxic component for details. */ }
 				Because <a href="options-reading.php">your site is marked as private</a> (from search engines), we will always ask Perspective to discard your comments after they've analyzed them.
 			</p>
 		</Card>

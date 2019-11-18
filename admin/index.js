@@ -9,6 +9,9 @@ import { render, createElement } from '@wordpress/element';
 import { Admin as CompassionateCommentsAdmin } from './main/controller';
 import './admin.scss';
 
+/* global comconOptions:false */
+
+
 ( function() {
 	/**
 	 * Initialize the app.

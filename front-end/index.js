@@ -10,6 +10,8 @@ import { __ }                    from '@wordpress/i18n';
 import { MainController as CompassionateCommentsFront } from './main/controller';
 import { consoleError }                            from '../common/common';
 
+/* global comconOptions:false */
+
 
 ( function() {
 	/**

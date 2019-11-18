@@ -3,6 +3,9 @@
  */
 import { __ } from '@wordpress/i18n';
 
+/* global fetch:false */
+/* global Headers:false */
+
 
 /**
  * Send a request to the Perspective API to analyse a comment.
@@ -26,7 +29,7 @@ export async function sendScoreRequest( apiKey, commentText, doNotStore ) {
 	 * the comment is written in. On many sites it could easily be a different language than `get_locate()`.
 	 * Perspective will automatically detect the language when an explicit value isn't passed.
 	 */
-	const data = {
+	const payload = {
 		comment : {
 			text : commentText,
 				// todo probably use wp.util.sanitize() to strip html tags?,
@@ -36,8 +39,8 @@ export async function sendScoreRequest( apiKey, commentText, doNotStore ) {
 					// probably need to consider multibyte chars
 		},
 
-		requestedAttributes : { TOXICITY: {} },
-		doNotStore
+		doNotStore          : doNotStore,
+		requestedAttributes : { TOXICITY : {} },
 	};
 
 	/*
@@ -54,7 +57,7 @@ export async function sendScoreRequest( apiKey, commentText, doNotStore ) {
 
 	const requestParams = {
 		method      : 'POST',
-		body        : JSON.stringify( data ),
+		body        : JSON.stringify( payload ),
 		headers     : new Headers( { 'Content-Type': 'application/json' } ),
 		credentials : 'omit',
 	};
@@ -63,7 +66,7 @@ export async function sendScoreRequest( apiKey, commentText, doNotStore ) {
 		const response = await fetch( url, requestParams );
 		results        = await response.json();
 
-	} catch( error ) {
+	} catch ( error ) {
 		// This matches the format returned by the API for application-layer errors (e.g., invalid API key).
 		results = { error };
 
