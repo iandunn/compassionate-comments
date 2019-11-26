@@ -54,10 +54,11 @@ module.exports = {
 
 		// @todo Can this be done via CLI param instead? If not open an issue for that and add URL here.
 		// IIRC there's a G issue/PR for that, and it works now. See wordcamp.org and other projects to check.
-		filename : '[name].js',
+		filename : '[name].min.js',
 
 		/*
 		 * @todo Move to package.json.scripts{} when possible
+		 * or is this needed at all? QNI doesn't use it
 		 *
 		 * See https://github.com/WordPress/gutenberg/issues/14891.
 		 */

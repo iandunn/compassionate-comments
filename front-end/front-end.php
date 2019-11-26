@@ -27,8 +27,8 @@ function enqueue_assets() {
 
 	wp_enqueue_script(
 		'compassionate-comments-front',
-		plugins_url( 'build/front-end.js', __DIR__ ),
-		json_decode( file_get_contents( dirname( __DIR__ ) . '/build/front-end.deps.json' ) ),
+		plugins_url( 'build/front-end.min.js', __DIR__ ),
+		json_decode( file_get_contents( dirname( __DIR__ ) . '/build/front-end.min.deps.json' ) ),
 		COMCON_VERSION,
 		true // Not needed until submit comment form, so no reason to block rendering.
 	);
