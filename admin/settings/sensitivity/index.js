@@ -48,14 +48,14 @@ export function Sensitivity( props ) {
 				value={ sensitivity }
 			/>
 
-			<p>
+			<div>
 				{ sprintf(
 					// Translators: %s is a number between 0 and 100.
 					__( 'Example of %s%% toxic:', 'compassionate-comments' ),
 					sensitivity
 				) }
 				<blockquote>{ sampleComments[ sensitivity ] }</blockquote>
-			</p>
+			</div>
 
 			<p className="notice notice-info">
 				{ __( 'Changing this will not have any effect retroactively, it will only determine the behavior for new comments.', 'compassionate-comments' ) }
