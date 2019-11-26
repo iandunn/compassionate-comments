@@ -47,10 +47,7 @@
 	add screenshot of stats menu
 		update screenshot of settings menu too
 
-* update wp-scripts to v6 after merging impact bracnh to develop, make sure linting etc still work
-	see https://github.com/WordPress/gutenberg/blob/master/packages/scripts/CHANGELOG.md
-
-* lint js & php
+* lint php
 
 * add file extentions to `import` statements, for explicitness
 	do for QNI too
@@ -118,6 +115,11 @@ Impact could be on UX _or_ devex.
 
 * Replace custom Card component with G version once 5.4 comes out
 
+* fix i18n crap?
+	https://github.com/WordPress/gutenberg/issues/9846#issuecomment-555583946
+
+* switch <Fragment> to <>
+	* looks like it works fine in 5.0, so don't need to bump required version
 
 ### High Impact / High Effort
 
@@ -138,8 +140,9 @@ Impact could be on UX _or_ devex.
 
 * Consider sending persepective api `context` request param in future, once it actually impacts the score
 
-* Consider using React Context instead of so much prop drilling, but that seems pretty clunky in its own right too.
-	* or maybe hooks are better? https://reactjs.org/docs/hooks-state.html
+* Use more composition to reduce prop drilling
+* Then consider using React Context + Hooks to get rid of the remaining ones
+	see QNI for notes
 
 * Override default toxic comment examples with real comments from the current site
 	* that'd help identify a better default sensitivity when they first install plugin
@@ -160,6 +163,7 @@ Impact could be on UX _or_ devex.
 	* add stat to show average toxicity before installed plugin, and average toxicity after
 		* need to wait until X comments after install, to have large enough sample size to draw meaningful conclusions
 
+* look at using https://reactjs.org/docs/hooks-state.html ?
 
 ### Low Impact / Low Effort
 

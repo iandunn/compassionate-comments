@@ -104,8 +104,13 @@ export function getErrorMessage( error ) {
 
 	if ( 'string' === typeof error ) {
 		message = error;
+
+	} else if ( 'object' === typeof error && 'statusText' in error ) {
+		message = error.statusText;
+
 	} else if ( 'object' === typeof error && error.hasOwnProperty( 'message' ) ) {
 		message = error.message;
+
 	} else {
 		message = JSON.stringify( error );
 	}
