@@ -42,7 +42,7 @@
 	<p>
 		<?php wp_kses_data( sprintf(
 			__( 'If you need to upgrade your version of PHP you can ask your hosting company for assistance, and if you need help upgrading WordPress you can refer to <a href="%s">the Codex</a>.', 'compassionate-comments' ),
-			'http://codex.wordpress.org/Upgrading_WordPress'
+			'https://wordpress.org/support/article/updating-wordpress/'
 		) ); ?>
 	</p>
 </div>
